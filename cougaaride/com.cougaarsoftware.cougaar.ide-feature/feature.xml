@@ -7,7 +7,7 @@
       nl="en"
       image="cougaar_logo.gif">
 
-   <description>
+   <description url="http://cougaaride.cougaar.org/">
       Cougaar Integrated Development Environment
    </description>
 
@@ -462,12 +462,13 @@ Public License instead of this License.
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.apache.xerces"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.jdt.launching"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.jdt.debug"/>
       <import plugin="org.eclipse.jdt.debug.ui"/>
-      <import plugin="org.eclipse.jdt.ui"/>
    </requires>
 
    <plugin
@@ -481,7 +482,7 @@ Public License instead of this License.
          download-size="0"
          install-size="0"
          version="1.1.0"/>
-   
+
    <plugin
          id="com.cougaarsoftware.cougaar.ide.ui"
          download-size="0"
@@ -499,7 +500,5 @@ Public License instead of this License.
          download-size="0"
          install-size="0"
          version="1.1.0"/>
-
-
 
 </feature>
