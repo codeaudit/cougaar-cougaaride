@@ -38,10 +38,9 @@ import org.eclipse.jdt.core.JavaCore;
 
 
 /**
- * DOCUMENT ME!
+ * Holds all required Cougaar jars for a particular version
  *
- * @version $Revision: 1.1 $
- * @author $author$
+ * @author soster
  */
 public class CougaarClasspathContainer implements IClasspathContainer {
     private String installPrefix;
@@ -50,7 +49,7 @@ public class CougaarClasspathContainer implements IClasspathContainer {
     /**
      * Creates a new CougaarClasspathContainer object.
      *
-     * @param installPrefix DOCUMENT ME!
+     * @param installPrefix install location (e.g. C:\COUGAAR10)
      */
     public CougaarClasspathContainer(String installPrefix) {
         this.installPrefix = installPrefix;
@@ -59,7 +58,7 @@ public class CougaarClasspathContainer implements IClasspathContainer {
     /**
      * Returns description
      *
-     * @return DOCUMENT ME!
+     * @return the description
      */
     public String toString() {
         return getDescription();
@@ -67,9 +66,9 @@ public class CougaarClasspathContainer implements IClasspathContainer {
 
 
     /**
-     * DOCUMENT ME!
+     * Returns classpath entries for each jar found in lib and sys
      *
-     * @return DOCUMENT ME!
+     * @return classpath entries for each jar found in lib and sys
      */
     public IClasspathEntry[] getClasspathEntries() {
         if (jarList == null) {
@@ -91,6 +90,7 @@ public class CougaarClasspathContainer implements IClasspathContainer {
             return;
         }
 
+		//check for a valid prefix
         File installHome = new File(installPrefix);
         if (installHome.exists() && installHome.isDirectory()
             && installHome.canRead()) {
@@ -102,11 +102,13 @@ public class CougaarClasspathContainer implements IClasspathContainer {
 
         }
 
+		//look in the sys dir
         File sys = null;
         try {
             sys = new File(installHome.getCanonicalPath() + File.separatorChar
                     + "sys");
 
+			//get a list of jars and zips and add them to the container
             if (sys.exists() && sys.isDirectory() && sys.canRead()) {
                 String[] filenamearr = sys.list(new FilenameFilter() {
                             public boolean accept(File dir, String name) {
@@ -127,11 +129,13 @@ public class CougaarClasspathContainer implements IClasspathContainer {
             CougaarPlugin.log(e);
         }
 
+		//get the lib dir
         File lib = null;
         try {
             lib = new File(installHome.getCanonicalPath() + File.separatorChar
                     + "lib");
 
+			//get a list of jars and add them to the container
             if (lib.exists() && lib.isDirectory() && lib.canRead()) {
                 String[] filenamearr = lib.list(new FilenameFilter() {
                             public boolean accept(File dir, String name) {
@@ -153,6 +157,12 @@ public class CougaarClasspathContainer implements IClasspathContainer {
     }
 
 
+    /**
+     * Add every jar in the directory to the library entry
+     *
+     * @param dir parent directory
+     * @param filenamearr the jar names
+     */
     private void addDirectoryListAsJars(File dir, String[] filenamearr) {
         for (int i = 0; i < filenamearr.length; i++) {
             String string = filenamearr[i];
@@ -164,9 +174,9 @@ public class CougaarClasspathContainer implements IClasspathContainer {
 
 
     /**
-     * DOCUMENT ME!
+     * Returns the classpath name
      *
-     * @return DOCUMENT ME!
+     * @return Cougaar Required Libraries
      */
     public String getDescription() {
         return "Cougaar Required Libraries";
@@ -174,9 +184,9 @@ public class CougaarClasspathContainer implements IClasspathContainer {
 
 
     /**
-     * DOCUMENT ME!
+     * Returns K_APPLICATION
      *
-     * @return DOCUMENT ME!
+     * @return K_APPLICATION
      */
     public int getKind() {
         return K_APPLICATION;
@@ -184,9 +194,9 @@ public class CougaarClasspathContainer implements IClasspathContainer {
 
 
     /**
-     * DOCUMENT ME!
+     * Gets the Container path
      *
-     * @return DOCUMENT ME!
+     * @return the Container path
      */
     public IPath getPath() {
         return new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);
