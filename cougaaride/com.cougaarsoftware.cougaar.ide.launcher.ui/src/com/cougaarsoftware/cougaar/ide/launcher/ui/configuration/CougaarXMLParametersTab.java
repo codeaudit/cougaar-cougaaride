@@ -28,21 +28,34 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.jdt.core.IJavaModel;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
+import org.eclipse.jdt.internal.debug.ui.actions.ControlAccessibleListener;
+import org.eclipse.jdt.internal.debug.ui.launcher.JavaLaunchConfigurationTab;
+import org.eclipse.jdt.internal.debug.ui.launcher.NameValuePairDialog;
+import org.eclipse.jdt.internal.debug.ui.launcher.WorkingDirectoryBlock;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -55,7 +68,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -73,138 +88,166 @@ import com.cougaarsoftware.cougaar.ide.launcher.core.constants.ICougaarLaunchCon
 import com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIMessages;
 
 /**
+ * A launch configuration tab that displays and edits program arguments, VM
+ * arguments, cougaar node name to launch, society xml file to use, and working
+ * directory launch configuration attributes.
+ * 
  * @author mabrams
  */
-public class CougaarXMLParametersTab extends CougaarINIParametersTab {
+public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
 
-    protected Text fSocietyNameText;
+    protected static final String COUGAAR_NODE_NAME = "-Dorg.cougaar.node.name";
 
     protected static final String COUGAAR_SOCIETY_NAME = "-Dorg.cougaar.society.file";
 
-    protected Button fArgumentsFromFileButton;
+    protected static final String COUGAAR_CONFIG_PATH = "-Dorg.cougaar.config.path";
 
-    protected Button fBrowseForSocietyXMLButton;
+    // Society arguments widgets
+    protected Label fSocietyXMLFileLabel;
 
+    protected Text fSocietyXMLFileText;
+
+    /** The last launch config this tab was initialized from */
+    protected ILaunchConfiguration fLaunchConfiguration;
+
+    protected Table fParametersTable;
+
+    private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+
+    private class CougaarParamsTabListener extends SelectionAdapter implements
+            ModifyListener {
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.swt.events.ModifyListener#modifyText(org.eclipse.swt.events.ModifyEvent)
+         */
+        public void modifyText(ModifyEvent e) {
+            updateLaunchConfigurationDialog();
+            setDirty(true);
+        }
+
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.swt.events.SelectionListener#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        public void widgetSelected(SelectionEvent e) {
+            Object source = e.getSource();
+            if (source == fParametersTable) {
+                setParametersButtonsEnableState();
+            } else if (source == fParametersAddButton) {
+                handleParametersAddButtonSelected();
+            } else if (source == fParametersEditButton) {
+                handleParametersEditButtonSelected();
+            } else if (source == fParametersRemoveButton) {
+                handleParametersRemoveButtonSelected();
+            }
+        }
+
+    }
+
+    private CougaarParamsTabListener fListener = new CougaarParamsTabListener();
+
+    //	Working directory
+    protected WorkingDirectoryBlock fWorkingDirectoryBlock;
+
+    private NodeSelectionComboBlock fNodeBlock;
+
+    private String tabName;
+
+    private Button fParametersEditButton;
+
+    private Button fParametersRemoveButton;
+
+    private Button fParametersAddButton;
+
+    private Button fLoadXMLArgumentsButton;
+
+    private Button fLoadDefaultArgumentsButton;
+
+    private String prevSocietyPath;
+
+    public CougaarXMLParametersTab() {
+        fWorkingDirectoryBlock = new WorkingDirectoryBlock();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#createControl(org.eclipse.swt.widgets.Composite)
+     */
     public void createControl(Composite parent) {
         Font font = parent.getFont();
-
-        Composite comp = new Composite(parent, SWT.NONE);
+        Composite comp = new Composite(parent, parent.getStyle());
         setControl(comp);
-        GridLayout topLayout = new GridLayout();
-        comp.setLayout(topLayout);
-        GridData gd;
+        GridLayout layout = new GridLayout(1, true);
+        comp.setLayout(layout);
+        comp.setFont(font);
 
-        createVerticalSpacer(comp);
+        Group group = new Group(comp, SWT.NONE);
+        group.setFont(font);
+        layout = new GridLayout(4, false);
+        group.setLayout(layout);
+        group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-        Composite nameComp = new Composite(comp, SWT.NONE);
-        gd = new GridData(GridData.FILL_HORIZONTAL);
-        nameComp.setLayoutData(gd);
-        GridLayout nameLayout = new GridLayout();
-        nameLayout.marginHeight = 0;
-        nameLayout.marginWidth = 0;
-        nameLayout.numColumns = 1;
-        nameComp.setLayout(nameLayout);
+        String controlName = (LauncherUIMessages
+                .getString("CougaarXMLParametersTab.SocietySelection")); //$NON-NLS-1$
+        group.setText(controlName);
 
-        fNameLabel = new Label(nameComp, SWT.NONE);
-        fNameLabel.setText(LauncherUIMessages
-                .getString("cougaarlauncher.argumenttab.namelabel.text")); //$NON-NLS-1$
-        fNameLabel.setFont(font);
+        fSocietyXMLFileLabel = new Label(group, SWT.SINGLE);
+        fSocietyXMLFileLabel.setText(LauncherUIMessages
+                .getString("CougaarXMLParametersTab.SocietyFile"));
+        GridData gd = new GridData(SWT.LEFT);
+        fSocietyXMLFileLabel.setLayoutData(gd);
 
-        fNameText = new Text(nameComp, SWT.SINGLE | SWT.BORDER);
-        gd = new GridData(GridData.FILL_HORIZONTAL);
-        fNameText.setLayoutData(gd);
-        fNameText.setFont(font);
-        fNameText.addModifyListener(new ModifyListener() {
+        fSocietyXMLFileText = new Text(group, SWT.SINGLE | SWT.WRAP
+                | SWT.BORDER);
+        fSocietyXMLFileText.setEditable(false);
+        gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+        fSocietyXMLFileText.setLayoutData(gd);
+        fSocietyXMLFileText.setFont(font);
+        fSocietyXMLFileText.addModifyListener(new ModifyListener() {
 
             public void modifyText(ModifyEvent evt) {
-                setDirty(true);
                 updateLaunchConfigurationDialog();
             }
         });
+        ControlAccessibleListener.addListener(fSocietyXMLFileText, group
+                .getText());
 
-        Composite societyXML = new Composite(comp, SWT.NULL);
-        societyXML.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 4;
-        layout.marginHeight = 0;
-        layout.marginWidth = 0;
-        societyXML.setLayout(layout);
-
-        fNameLabel = new Label(societyXML, SWT.NONE);
-        fNameLabel.setText(LauncherUIMessages
-                .getString("CougaarXMLParametersTab.(cougaar_society_name)_1")); //$NON-NLS-1$
-        fNameLabel.setFont(font);
-
-        fSocietyNameText = new Text(societyXML, SWT.SINGLE | SWT.BORDER);
-        gd = new GridData(GridData.FILL_HORIZONTAL);
-        gd.horizontalSpan = 2;
-        fSocietyNameText.setLayoutData(gd);
-        fSocietyNameText.setFont(font);
-        fSocietyNameText.addModifyListener(new ModifyListener() {
-
-            public void modifyText(ModifyEvent evt) {
-                setDirty(true);
-                updateLaunchConfigurationDialog();
-            }
-        });
-
-        fBrowseForSocietyXMLButton = new Button(societyXML, SWT.PUSH);
-        fBrowseForSocietyXMLButton.setText(LauncherUIMessages
-                .getString("CougaarXMLParametersTab.SocietyBrowse"));
-        gd = new GridData(GridData.CENTER);
-        fBrowseForSocietyXMLButton.setLayoutData(gd);
-        fBrowseForSocietyXMLButton.addSelectionListener(new SelectionAdapter() {
+        String buttonLabel = LauncherUIMessages
+                .getString("CougaarXMLParametersTab.SocietyBrowse"); //$NON-NLS-1$
+        Button browseSocietyButton = createPushButton(group, buttonLabel, null);
+        browseSocietyButton.setLayoutData(new GridData(SWT.END, SWT.CENTER,
+                false, false));
+        browseSocietyButton.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(SelectionEvent e) {
-                browseForInstallDir();
-
+                FileDialog dialog = new FileDialog(getShell());
+                String newPath = dialog.open();
+                if (newPath != null) {
+                    fSocietyXMLFileText.setText(newPath);
+                }
+                populateNodeNameList();
             }
-
         });
 
-        Label blank = new Label(nameComp, SWT.NONE);
-        blank.setText(EMPTY_STRING);
-        Label hint = new Label(nameComp, SWT.NONE);
-        hint.setText(LauncherUIMessages
-                .getString("CougaarINIParametersTab.(cougaar_node_name)_1")); //$NON-NLS-1$
-        gd = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
-        hint.setLayoutData(gd);
-        hint.setFont(font);
+        fNodeBlock = new NodeSelectionComboBlock();
+        fNodeBlock.createControl(group);
+        fNodeBlock.addSelectionChangedListener(new ISelectionChangedListener() {
+
+            public void selectionChanged(SelectionChangedEvent event) {
+                updateSelectedNode((String) ((StructuredSelection) event
+                        .getSelection()).getFirstElement());
+                updateLaunchConfigurationDialog();
+            }
+        });
+        Control control = fNodeBlock.getControl();
+        gd = new GridData(SWT.FILL, SWT.NONE, true, true);
+        control.setLayoutData(gd);
+
         createVerticalSpacer(comp, 1);
-
-        fArgumentsDefaultButton = new Button(comp, SWT.CHECK);
-
-        fArgumentsDefaultButton.setText(LauncherUIMessages
-                .getString("CougaarEnvironmentTab.Use_defau&lt_arguments_1")); //$NON-NLS-1$
-        gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-        gd.horizontalSpan = 2;
-        fArgumentsDefaultButton.setLayoutData(gd);
-        fArgumentsDefaultButton.setFont(font);
-
-        fArgumentsDefaultButton.addSelectionListener(new SelectionAdapter() {
-
-            public void widgetSelected(SelectionEvent evt) {
-                handleArgumentsDefaultButtonSelected();
-            }
-        });
-
-        fArgumentsFromFileButton = new Button(comp, SWT.CHECK);
-
-        fArgumentsFromFileButton.setText(LauncherUIMessages
-                .getString("CougaarEnvironmentTab.Use_file&lt_arguments_1")); //$NON-NLS-1$
-        gd = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
-        gd.horizontalSpan = 2;
-        fArgumentsFromFileButton.setLayoutData(gd);
-        fArgumentsFromFileButton.setFont(font);
-
-        fArgumentsFromFileButton.addSelectionListener(new SelectionAdapter() {
-
-            public void widgetSelected(SelectionEvent evt) {
-                handleArgumentsFromFileButtonSelected();
-            }
-        });
-
-        createVerticalSpacer(comp);
 
         Composite parametersComp = new Composite(comp, SWT.NONE);
         gd = new GridData(GridData.FILL_BOTH);
@@ -224,33 +267,28 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
         parameterLabel.setLayoutData(gd);
         parameterLabel.setFont(font);
 
-        fVMParametersTable = new Table(parametersComp, SWT.BORDER | SWT.MULTI);
-        fVMParametersTable
+        fParametersTable = new Table(parametersComp, SWT.BORDER | SWT.SINGLE
+                | SWT.V_SCROLL);
+        fParametersTable
                 .setData(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS);
         TableLayout tableLayout = new TableLayout();
-        fVMParametersTable.setLayout(tableLayout);
-        fVMParametersTable.setFont(font);
+        fParametersTable.setLayout(tableLayout);
         gd = new GridData(GridData.FILL_BOTH);
-        fVMParametersTable.setLayoutData(gd);
-        TableColumn column1 = new TableColumn(this.fVMParametersTable, SWT.NONE);
+        fParametersTable.setLayoutData(gd);
+        TableColumn column1 = new TableColumn(this.fParametersTable, SWT.NONE);
         column1
                 .setText(LauncherUIMessages
                         .getString("cougaarlauncher.argumenttab.parameterscolumn.name.text")); //$NON-NLS-1$
-        TableColumn column2 = new TableColumn(this.fVMParametersTable, SWT.NONE);
+        TableColumn column2 = new TableColumn(this.fParametersTable, SWT.NONE);
         column2
                 .setText(LauncherUIMessages
                         .getString("cougaarlauncher.argumenttab.parameterscolumn.value.text")); //$NON-NLS-1$
         tableLayout.addColumnData(new ColumnWeightData(100));
         tableLayout.addColumnData(new ColumnWeightData(100));
-        fVMParametersTable.setHeaderVisible(true);
-        fVMParametersTable.setLinesVisible(true);
-        fVMParametersTable.addSelectionListener(new SelectionAdapter() {
-
-            public void widgetSelected(SelectionEvent evt) {
-                setParametersButtonsEnableState();
-            }
-        });
-        fVMParametersTable.addMouseListener(new MouseAdapter() {
+        fParametersTable.setHeaderVisible(true);
+        fParametersTable.setLinesVisible(true);
+        fParametersTable.addSelectionListener(fListener);
+        fParametersTable.addMouseListener(new MouseAdapter() {
 
             public void mouseDoubleClick(MouseEvent e) {
                 setParametersButtonsEnableState();
@@ -269,10 +307,6 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                 | GridData.HORIZONTAL_ALIGN_FILL);
         envButtonComp.setLayoutData(gd);
         envButtonComp.setFont(font);
-
-        createVerticalSpacer(comp, 1);
-
-        fWorkingDirectoryBlock.createControl(comp);
 
         fParametersAddButton = createPushButton(
                 envButtonComp,
@@ -310,15 +344,136 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
             }
         });
 
+        fLoadDefaultArgumentsButton = createPushButton(
+                envButtonComp,
+                LauncherUIMessages
+                        .getString("CougaarXMLParametersTab.LoadDefaultArguments"),
+                null);
+
+        fLoadDefaultArgumentsButton
+                .addSelectionListener(new SelectionAdapter() {
+
+                    public void widgetSelected(SelectionEvent evt) {
+                        displayDefaultCougaarParameters();
+                    }
+                });
+
+        fLoadXMLArgumentsButton = createPushButton(envButtonComp,
+                LauncherUIMessages
+                        .getString("CougaarXMLParametersTab.LoadXMLArguments"),
+                null);
+        fLoadXMLArgumentsButton.addSelectionListener(new SelectionAdapter() {
+
+            public void widgetSelected(SelectionEvent evt) {
+                handleLoadArgumentsFromFileButtonSelected();
+            }
+        });
+
+        createVerticalSpacer(comp, 1);
+        fWorkingDirectoryBlock.createControl(comp);
     }
 
     /**
-     * DOCUMENT ME!
-     * 
-     * @param configuration
+     * @param firstElement
      */
-    protected void setDefaultCougaarParameters(
-            ILaunchConfigurationWorkingCopy configuration) {
+    protected void updateSelectedNode(String nodeName) {
+        TableItem nodeNameItem = getTableItemForName(COUGAAR_NODE_NAME);
+        if (nodeNameItem == null) {
+            nodeNameItem = new TableItem(this.fParametersTable, SWT.NONE);
+        }
+        String[] nameValuePair = new String[] { COUGAAR_NODE_NAME, nodeName};
+        nodeNameItem.setText(nameValuePair);
+        setDirty(true);
+    }
+
+    private void handleParametersAddButtonSelected() {
+        NameValuePairDialog dialog = new NameValuePairDialog(
+                getShell(),
+                LauncherUIMessages
+                        .getString("cougaarlauncher.argumenttab.parameters.dialog.add.title"), //$NON-NLS-1$
+                new String[] {
+                        LauncherUIMessages
+                                .getString("cougaarlauncher.argumenttab.parameters.dialog.add.name.text"),
+                        LauncherUIMessages
+                                .getString("cougaarlauncher.argumenttab.parameters.dialog.add.value.text")}, //$NON-NLS-1$ //$NON-NLS-2$
+                new String[] { EMPTY_STRING, EMPTY_STRING});
+        openNewParameterDialog(dialog, null);
+        setParametersButtonsEnableState();
+    }
+
+    private void handleParametersEditButtonSelected() {
+        TableItem selectedItem = this.fParametersTable.getSelection()[0];
+        String name = selectedItem.getText(0);
+        String value = selectedItem.getText(1);
+        NameValuePairDialog dialog = new NameValuePairDialog(
+                getShell(),
+                LauncherUIMessages
+                        .getString("cougaarlauncher.argumenttab.parameters.dialog.edit.title"), //$NON-NLS-1$
+                new String[] {
+                        LauncherUIMessages
+                                .getString("cougaarlauncher.argumenttab.parameters.dialog.edit.name.text"),
+                        LauncherUIMessages
+                                .getString("cougaarlauncher.argumenttab.parameters.dialog.edit.value.text")}, //$NON-NLS-1$ //$NON-NLS-2$
+                new String[] { name, value});
+        openNewParameterDialog(dialog, selectedItem);
+    }
+
+    private void handleParametersRemoveButtonSelected() {
+        int[] selectedIndices = this.fParametersTable.getSelectionIndices();
+        this.fParametersTable.remove(selectedIndices);
+        setParametersButtonsEnableState();
+        updateLaunchConfigurationDialog();
+    }
+
+    /**
+     * Set the enabled state of the three environment variable-related buttons
+     * based on the selection in the Table widget.
+     */
+    private void setParametersButtonsEnableState() {
+        int selectCount = this.fParametersTable.getSelectionIndices().length;
+        if (selectCount < 1) {
+            fParametersEditButton.setEnabled(false);
+            fParametersRemoveButton.setEnabled(false);
+        } else {
+            fParametersRemoveButton.setEnabled(true);
+            if (selectCount == 1) {
+                fParametersEditButton.setEnabled(true);
+            } else {
+                fParametersEditButton.setEnabled(false);
+            }
+        }
+        fParametersAddButton.setEnabled(true);
+    }
+
+    /**
+     * Helper method that indicates whether the specified parameter name is
+     * already present in the parameters table.
+     * 
+     * @param candidateName
+     *                 DOCUMENT ME!
+     * 
+     * @return DOCUMENT ME!
+     */
+    protected TableItem getTableItemForName(String candidateName) {
+        if (fParametersTable != null) {
+            TableItem[] items = this.fParametersTable.getItems();
+            for (int i = 0; i < items.length; i++) {
+                String name = items[i].getText(0);
+                if (name.equals(candidateName)) {
+                    return items[i];
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#setDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
+     */
+    public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
         HashMap map = new HashMap();
         Enumeration keys = CougaarXMLParameters.getKeys();
         IJavaProject project = getJavaProject(configuration);
@@ -341,128 +496,298 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                 map.put(pair[0], pair[1]);
             }
         }
-
         configuration
                 .setAttribute(
                         ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS,
                         map);
     }
 
-    protected void setCougaarSocietyFileName() {
-        TableItem societyNameItem = getTableItemForName(COUGAAR_SOCIETY_NAME);
-        if (societyNameItem == null) {
-            societyNameItem = new TableItem(this.fVMParametersTable, SWT.NONE);
-        }
-        String societyFile = fSocietyNameText.getText();
-        if (societyFile.indexOf("/") > 0) {
-            societyFile = societyFile
-                    .substring(societyFile.lastIndexOf("/") + 1);
-        } else {
-            societyFile = societyFile
-                    .substring(societyFile.lastIndexOf("\\") + 1);
-        }
-        String[] nameValuePair = new String[] { COUGAAR_SOCIETY_NAME,
-                societyFile};
-        societyNameItem.setText(nameValuePair);
-    }
-
-    /**
-     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#performApply(ILaunchConfigurationWorkingCopy)
-     */
-    public void performApply(ILaunchConfigurationWorkingCopy configuration) {
-        // if (isDirty()) {
-        configuration.setAttribute(
-                ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME, fNameText
-                        .getText());
-        configuration.setAttribute(
-                ICougaarLaunchConfigurationConstants.ATTR_SOCIETY_NAME,
-                fSocietyNameText.getText());
-        configuration.setAttribute(
-                IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
-                setProgramArguments());
-
-        setCougaarNodeName();
-
-        setCougaarSocietyFileName();
-        configuration
-                .setAttribute(
-                        ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS,
-                        getMapFromParametersTable());
-        configuration
-                .setAttribute(
-                        ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_DEFAULT_PARAMETERS,
-                        fArgumentsDefaultButton.getSelection());
-
-        configuration
-                .setAttribute(
-                        ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_LOAD_PARAMS_FROM_XML,
-                        fArgumentsDefaultButton.getSelection());
-        fWorkingDirectoryBlock.performApply(configuration);
-        setDirty(false);
-
-        // }
-    }
-
-    /**
-     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(ILaunchConfiguration)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(org.eclipse.debug.core.ILaunchConfiguration)
      */
     public void initializeFrom(ILaunchConfiguration config) {
-        boolean useDefault = true;
-        boolean useSocietyPrams = false;
-        try {
-            useDefault = config
-                    .getAttribute(
-                            ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_DEFAULT_PARAMETERS,
-                            true);
-            useSocietyPrams = config
-                    .getAttribute(
-                            ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_LOAD_PARAMS_FROM_XML,
-                            false);
-            fWorkingDirectoryBlock.initializeFrom(config);
-        } catch (CoreException e) {
-            JDIDebugUIPlugin.log(e);
-        }
-
-        if (config == getLaunchConfiguration()) {
-            if (!useDefault && !fArgumentsDefaultButton.getSelection()) {
-                setDirty(false);
-                return;
-            }
-
-        }
-
+        setParametersButtonsEnableState();
+        fWorkingDirectoryBlock.initializeFrom(config);
         setLaunchConfiguration(config);
-        fArgumentsDefaultButton.setSelection(useDefault);
-        fArgumentsFromFileButton.setSelection(useSocietyPrams);
         try {
-            fNameText
-                    .setText(config
-                            .getAttribute(
-                                    ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME,
-                                    LauncherUIMessages
-                                            .getString("cougaarlauncher.argumenttab.name.defaultvalue"))); //$NON-NLS-1$
-            fSocietyNameText
+            fSocietyXMLFileText
                     .setText(config
                             .getAttribute(
                                     ICougaarLaunchConfigurationConstants.ATTR_SOCIETY_NAME,
                                     LauncherUIMessages
                                             .getString("cougaarlauncher.argumenttab.name.defaultvalue"))); //$NON-NLS-1$
+            String nodeName = config
+                    .getAttribute(
+                            ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME,
+                            LauncherUIMessages
+                                    .getString(LauncherUIMessages
+                                            .getString("cougaarlauncher.argumenttab.name.defaultvalue")));
+            if (nodeName != null && !nodeName.equals("")) {
+                populateNodeNameList();
+                fNodeBlock.setNodeSelection(nodeName);
+            }
         } catch (CoreException ce) {
-            fNameText
-                    .setText(LauncherUIMessages
-                            .getString("cougaarlauncher.argumenttab.name.defaultvalue")); //$NON-NLS-1$
+            MessageDialog.openError(getShell(), "ERROR", ce.getMessage());
+        }
+        updateParametersFromConfig(config);
+        setDirty(false);
+
+    }
+
+    protected void updateParametersFromConfig(ILaunchConfiguration config) {
+        Map envVars = null;
+        try {
+            if (config != null) {
+                envVars = config
+                        .getAttribute(
+                                ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS,
+                                (Map) null);
+            }
+
+            updateTable(envVars, this.fParametersTable);
+            setParametersButtonsEnableState();
+        } catch (CoreException ce) {
+            JDIDebugUIPlugin.log(ce);
+        }
+    }
+
+    protected void updateTable(Map map, Table tableWidget) {
+        tableWidget.removeAll();
+        if (map == null) {
+            return;
         }
 
-        updateParametersFromConfig(config);
-        fVMParametersTable.setEnabled(!useDefault);
+        Iterator iterator = map.keySet().iterator();
+        while (iterator.hasNext()) {
+            String key = (String) iterator.next();
+            String value = (String) map.get(key);
+            TableItem tableItem = new TableItem(tableWidget, SWT.NONE);
+            tableItem.setText(new String[] { key, value});
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#performApply(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
+     */
+    public void performApply(ILaunchConfigurationWorkingCopy configuration) {
+        configuration.setAttribute(
+                ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME, fNodeBlock
+                        .getNodeName());
+        configuration.setAttribute(
+                ICougaarLaunchConfigurationConstants.ATTR_SOCIETY_NAME,
+                fSocietyXMLFileText.getText());
+        configuration.setAttribute(
+                IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
+                LauncherUIMessages.getString("cougaarLauncher.node.argument"));
+        setCougaarNodeName();
+        setCougaarSocietyFileName();
+        updateCougaarConfigPath();
+        configuration
+                .setAttribute(
+                        ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS,
+                        getMapFromParametersTable());
+
+        fWorkingDirectoryBlock.performApply(configuration);
         setDirty(false);
     }
 
-    /**
-     * The load paramets from file button has been toggled
+    protected Map getMapFromParametersTable() {
+        TableItem[] items = fParametersTable.getItems();
+
+        if (items.length == 0) {
+            return null;
+        }
+
+        Map map = new HashMap(items.length);
+        for (int i = 0; i < items.length; i++) {
+            TableItem item = items[i];
+            String key = item.getText(0);
+            String value = item.getText(1);
+            map.put(key, value);
+        }
+
+        return map;
+    }
+
+    protected void setCougaarNodeName() {
+        TableItem nodeNameItem = getTableItemForName(COUGAAR_NODE_NAME);
+        if (nodeNameItem == null) {
+            nodeNameItem = new TableItem(this.fParametersTable, SWT.NONE);
+        }
+
+        String[] nameValuePair = new String[] { COUGAAR_NODE_NAME,
+                fNodeBlock.getNodeName()};
+        nodeNameItem.setText(nameValuePair);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#getName()
      */
-    protected void handleArgumentsFromFileButtonSelected() {
-        String locationName = fSocietyNameText.getText();
+    public String getName() {
+        if (tabName == null) {
+            tabName = LauncherUIMessages
+                    .getString("CougaarXMLParametersTab.Name");
+        }
+        return tabName;
+    }
+
+    protected void populateNodeNameList() {
+        String locationName = fSocietyXMLFileText.getText();
+        if (locationName != null && !locationName.equals("")) {
+            File file = new File(locationName);
+            if (file.exists()) {
+                List nodeNameList = getNodeNameList(file);
+                fNodeBlock.setNodeNames(nodeNameList);
+            }
+        }
+        setDirty(true);
+    }
+
+    protected List getNodeNameList(File societyXMLFile) {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db;
+        List nodeNameList = null;
+        try {
+            db = dbf.newDocumentBuilder();
+            Document doc = db.parse(societyXMLFile);
+            NodeList list = doc.getChildNodes();
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                if (node.getNodeName().equalsIgnoreCase("society")) {
+                    nodeNameList = getNodeNameList(node.getChildNodes());
+                }
+            }
+        } catch (ParserConfigurationException e1) {
+            MessageDialog.openError(getShell(), "ERROR", e1.getMessage());
+        } catch (SAXException e) {
+            MessageDialog.openError(getShell(), "ERROR", e.getMessage());
+        } catch (IOException e) {
+            MessageDialog.openError(getShell(), "ERROR", e.getMessage());
+        }
+        return nodeNameList;
+    }
+
+    protected List getNodeNameList(NodeList nodeList) {
+        List nodeNameList = null;
+        if (nodeList != null) {
+            for (int j = 0; j < nodeList.getLength(); j++) {
+                Node childNode = nodeList.item(j);
+                if (childNode.getNodeName().equalsIgnoreCase("host")) {
+                    NodeList nList = childNode.getChildNodes();
+                    nodeNameList = getNodeNameList(nList);
+                } else if (childNode.getNodeName().equalsIgnoreCase("node")) {
+                    NamedNodeMap nnMap = childNode.getAttributes();
+                    Node nameNode = nnMap.getNamedItem("name");
+                    if (nodeNameList == null) {
+                        nodeNameList = new ArrayList();
+                    }
+                    nodeNameList.add(nameNode.getNodeValue());
+                }
+            }
+        }
+        return nodeNameList;
+    }
+
+    /**
+     * Show the specified dialog and update the parameter table based on its
+     * results.
+     * 
+     * @param updateItem
+     *                 the item to update, or <code>null</code> if adding a new
+     *                 item
+     */
+    private void openNewParameterDialog(NameValuePairDialog dialog,
+            TableItem updateItem) {
+        if (dialog.open() != Window.OK) {
+            return;
+        }
+        String[] nameValuePair = dialog.getNameValuePair();
+        TableItem tableItem = updateItem;
+        if (tableItem == null) {
+            tableItem = getTableItemForName(nameValuePair[0]);
+            if (tableItem == null) {
+                tableItem = new TableItem(this.fParametersTable, SWT.NONE);
+            }
+        }
+        tableItem.setText(nameValuePair);
+        this.fParametersTable.setSelection(new TableItem[] { tableItem});
+        updateLaunchConfigurationDialog();
+    }
+
+    public ILaunchConfiguration getLaunchConfiguration() {
+        return fLaunchConfiguration;
+    }
+
+    public void setLaunchConfiguration(ILaunchConfiguration launchConfiguration) {
+        fLaunchConfiguration = launchConfiguration;
+    }
+
+    protected void displayDefaultCougaarParameters() {
+        ILaunchConfiguration config = getLaunchConfiguration();
+        ILaunchConfigurationWorkingCopy wc = null;
+        try {
+            if (config.isWorkingCopy()) {
+                wc = (ILaunchConfigurationWorkingCopy) config;
+            } else {
+                wc = config.getWorkingCopy();
+            }
+        } catch (CoreException e) {
+            JDIDebugUIPlugin.log(e);
+        }
+
+        IJavaProject javaProject = getJavaProject(wc);
+
+        IProject project = null;
+        String defaultVersion = "";
+        if (javaProject != null) {
+            project = javaProject.getProject();
+            defaultVersion = CougaarPlugin.getCougaarPreference(project
+                    .getProject(), ICougaarConstants.COUGAAR_VERSION);
+        }
+
+        HashMap map = new HashMap();
+        Enumeration keys = CougaarINIParameters.getKeys();
+        while (keys.hasMoreElements()) {
+            String[] nameValuePair = new String[2];
+            nameValuePair[0] = (String) keys.nextElement();
+            if ((defaultVersion != null) && !defaultVersion.equals("")) {
+                String cip = "";
+                cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
+                if ((cip != null) && !cip.equals("")) {
+                    nameValuePair[1] = CougaarINIParameters.getString(
+                            nameValuePair[0]).replaceAll(
+                            ICougaarConstants.COUGAAR_INSTALL_PATH_STRING, cip);
+                }
+
+                map.put(nameValuePair[0], nameValuePair[1]);
+
+                TableItem tableItem = null;
+                if (tableItem == null) {
+                    tableItem = getTableItemForName(nameValuePair[0]);
+                    if (tableItem == null) {
+                        tableItem = new TableItem(this.fParametersTable,
+                                SWT.NONE);
+                    }
+                }
+
+                tableItem.setText(nameValuePair);
+                this.fParametersTable
+                        .setSelection(new TableItem[] { tableItem});
+            }
+        }
+
+        setDirty(true);
+        performApply(wc);
+    }
+
+    protected void handleLoadArgumentsFromFileButtonSelected() {
+        String locationName = fSocietyXMLFileText.getText();
         if (locationName != null && !locationName.equals("")) {
 
             File file = null;
@@ -475,24 +800,13 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                                         .getString("CougaarEnvironmentTab.SocietyFileDoesNotExistTitle"),
                                 LauncherUIMessages
                                         .getString("CougaarEnvironmentTab.SocietyFileDoesNotExistMessage"));
-                fArgumentsFromFileButton.setSelection(false);
             } else {
-                String nodeName = fNameText.getText();
+                String nodeName = fNodeBlock.getNodeName();
                 if (nodeName != null && !nodeName.equals("")) {
 
                     setDirty(true);
-                    boolean loadFromFile = fArgumentsFromFileButton
-                            .getSelection();
-                    fArgumentsFromFileButton.setSelection(loadFromFile);
-
-                    if (loadFromFile) {
-                        clearTableItems();
-                        displaySocietyXMLParameters(file, nodeName);
-                    }
-
-                    fVMParametersTable.setEnabled(true);
-
-                    fArgumentsDefaultButton.setSelection(false);
+                    this.fParametersTable.removeAll();
+                    displaySocietyXMLParameters(file, nodeName);
                     setParametersButtonsEnableState();
                     updateLaunchConfigurationDialog();
                 } else {
@@ -503,11 +817,9 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                                             .getString("CougaarEnvironmentTab.NoNodeSelectedTitle"),
                                     LauncherUIMessages
                                             .getString("CougaarEnvironmentTab.NoNodeSelectedMessage"));
-                    fArgumentsFromFileButton.setSelection(false);
                 }
             }
         } else {
-            fArgumentsFromFileButton.setSelection(false);
             MessageDialog
                     .openError(
                             getShell(),
@@ -516,26 +828,6 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                             LauncherUIMessages
                                     .getString("CougaarEnvironmentTab.NoSocietyFileMessage"));
         }
-
-    }
-
-    /**
-     * The default classpath button has been toggled
-     */
-    protected void handleArgumentsDefaultButtonSelected() {
-        setDirty(true);
-        boolean useDefault = fArgumentsDefaultButton.getSelection();
-        fArgumentsDefaultButton.setSelection(useDefault);
-
-        if (useDefault) {
-            displayDefaultCougaarParameters();
-        }
-
-        fVMParametersTable.setEnabled(!useDefault);
-        fArgumentsFromFileButton.setSelection(false);
-        setParametersButtonsEnableState();
-        updateLaunchConfigurationDialog();
-
     }
 
     protected void displaySocietyXMLParameters(File societyXMLFile,
@@ -552,7 +844,7 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                 Node node = list.item(i);
                 if (node.getNodeName().equalsIgnoreCase("society")) {
                     NodeList nodeList = node.getChildNodes();
-                    paramList = getNodeVMParams(nodeList, nodeName);                    
+                    paramList = getNodeVMParams(nodeList, nodeName);
                 }
 
             }
@@ -606,13 +898,13 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                     if (tableItem == null) {
                         tableItem = getTableItemForName(nameValuePair[0]);
                         if (tableItem == null) {
-                            tableItem = new TableItem(this.fVMParametersTable,
+                            tableItem = new TableItem(this.fParametersTable,
                                     SWT.NONE);
                         }
                     }
 
                     tableItem.setText(nameValuePair);
-                    this.fVMParametersTable
+                    this.fParametersTable
                             .setSelection(new TableItem[] { tableItem});
                 }
 
@@ -659,13 +951,98 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
         return paramList;
     }
 
-    private void browseForInstallDir() {
-        FileDialog dialog = new FileDialog(getShell());
+    /**
+     * Return the IJavaProject corresponding to the project name in the project
+     * name text field, or null if the text does not match a project name.
+     *  
+     */
+    protected IJavaProject getJavaProject(ILaunchConfigurationWorkingCopy config) {
+        String projectName = "";
+        try {
+            projectName = config.getAttribute(
+                    IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
+                    EMPTY_STRING);
+        } catch (CoreException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        String newPath = dialog.open();
-        if (newPath != null) {
-            fSocietyNameText.setText(newPath);
+        //        String projectName = fProjText.getText().trim();
+        if (projectName.length() < 1) {
+            return null;
+        }
+
+        return getJavaModel().getJavaProject(projectName);
+
+    }
+
+    protected IJavaModel getJavaModel() {
+        return JavaCore.create(getWorkspaceRoot());
+    }
+
+    protected IWorkspaceRoot getWorkspaceRoot() {
+        return ResourcesPlugin.getWorkspace().getRoot();
+    }
+
+    protected void setCougaarSocietyFileName() {
+        TableItem societyNameItem = getTableItemForName(COUGAAR_SOCIETY_NAME);
+        if (societyNameItem == null) {
+            societyNameItem = new TableItem(this.fParametersTable, SWT.NONE);
+        }
+        String societyFile = fSocietyXMLFileText.getText();
+        if (societyFile.indexOf("/") > 0) {
+            societyFile = societyFile
+                    .substring(societyFile.lastIndexOf("/") + 1);
+        } else {
+            societyFile = societyFile
+                    .substring(societyFile.lastIndexOf("\\") + 1);
+        }
+        String[] nameValuePair = new String[] { COUGAAR_SOCIETY_NAME,
+                societyFile};
+        societyNameItem.setText(nameValuePair);
+    }
+
+    protected void updateCougaarConfigPath() {
+        TableItem configPath = getTableItemForName(COUGAAR_CONFIG_PATH);
+        if (configPath == null) {
+            configPath = new TableItem(this.fParametersTable, SWT.NONE);
+        }
+        String societyPath = fSocietyXMLFileText.getText();
+        if (societyPath.indexOf("/") > 0) {
+            societyPath = societyPath
+                    .substring(0, societyPath.lastIndexOf("/"));
+        } else if (societyPath.indexOf("\\") > 0) {
+            societyPath = societyPath.substring(0, societyPath
+                    .lastIndexOf("\\"));
+        }
+        String oldPath = configPath.getText(1);
+        if (prevSocietyPath != null && !prevSocietyPath.equals("")
+                && !prevSocietyPath.equals(";")) {
+            StringBuffer sb = new StringBuffer(oldPath.length());
+            int start = 0;
+            int end = 0;
+            while ((end = oldPath.indexOf(prevSocietyPath, start)) != -1) {
+                sb.append(oldPath.substring(start, end)).append("");
+                start = end + prevSocietyPath.length();                             
+            }
+            sb.append(oldPath.substring(start));
+            oldPath = sb.toString();
+        }
+        prevSocietyPath = societyPath;
+        if (societyPath != null && !societyPath.equals("")) {
+            String newPath = oldPath + ";" + societyPath;
+            if (!newPath.equals(";")) {
+                String[] nameValuePair = new String[] { COUGAAR_CONFIG_PATH,
+                        newPath};
+                configPath.setText(nameValuePair);
+            }
         }
     }
 
+    /**
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#isValid(ILaunchConfiguration)
+     */
+    public boolean isValid(ILaunchConfiguration config) {
+        return fWorkingDirectoryBlock.isValid(config);
+    }
 }
