@@ -46,7 +46,7 @@
             id="com.cougaarsoftware.cougaar.ide.ui.wizards">
       </category>
       <wizard
-            name="New Cougaar Project"
+            name="Cougaar Project"
             icon="icons/cougaaride.gif"
             category="com.cougaarsoftware.cougaar.ide.ui.wizards"
             class="com.cougaarsoftware.cougaar.ide.ui.wizards.NewCougaarProjectWizard"
