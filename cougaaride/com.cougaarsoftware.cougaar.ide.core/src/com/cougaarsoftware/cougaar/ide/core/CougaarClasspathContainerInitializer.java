@@ -116,6 +116,7 @@ public class CougaarClasspathContainerInitializer
             CougaarClasspathContainer container = new CougaarClasspathContainer(installPrefix);
 
             IJavaProject[] javaProjects = new IJavaProject[] {
+                    //is this really necessary? or could we use javaProject
                     JavaCore.create(project)
                 };
             IClasspathContainer[] containers = new IClasspathContainer[] {
