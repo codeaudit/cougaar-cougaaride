@@ -5,7 +5,6 @@
 	<projects>
 		<project>com.cougaarsoftware.cougaar.ide.core</project>
 		<project>com.cougaarsoftware.cougaar.ide.launcher.core</project>
-		<project>com.cougaarsoftware.cougaar.ide.ui</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

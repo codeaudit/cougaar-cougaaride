@@ -22,10 +22,9 @@
       <import plugin="org.eclipse.jdt.debug.ui"/>
       <import plugin="org.eclipse.jdt.launching"/>
       <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="com.cougaarsoftware.cougaar.ide.launcher.core"/>
       <import plugin="com.cougaarsoftware.cougaar.ide.core"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="com.cougaarsoftware.cougaar.ide.ui"/>
    </requires>
 
 

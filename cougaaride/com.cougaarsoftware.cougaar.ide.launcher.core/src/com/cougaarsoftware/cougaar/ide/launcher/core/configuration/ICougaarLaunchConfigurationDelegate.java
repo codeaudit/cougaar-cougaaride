@@ -20,7 +20,7 @@
  */
 
 
-package com.cougaarsoftware.cougaar.ide.launcher.core;
+package com.cougaarsoftware.cougaar.ide.launcher.core.configuration;
 
 
 import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
