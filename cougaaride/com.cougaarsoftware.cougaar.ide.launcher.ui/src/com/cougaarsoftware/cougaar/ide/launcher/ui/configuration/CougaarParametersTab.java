@@ -41,7 +41,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 import org.eclipse.jdt.internal.debug.ui.JavaDebugImages;
 import org.eclipse.jdt.internal.debug.ui.launcher.JavaLaunchConfigurationTab;
-import org.eclipse.jdt.internal.debug.ui.launcher.NameValuePairDialog;
 import org.eclipse.jdt.internal.debug.ui.launcher.WorkingDirectoryBlock;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -70,6 +69,7 @@ import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.launcher.core.constants.ICougaarLaunchConfigurationConstants;
 import com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIMessages;
+import com.cougaarsoftware.cougaar.ide.launcher.ui.util.NameValuePairDialog;
 
 
 /**
@@ -311,7 +311,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
                     LauncherUIMessages.getString(
                         "cougaarlauncher.argumenttab.parameters.dialog.add.value.text")
                 }, //$NON-NLS-1$ //$NON-NLS-2$
-                new String[] { EMPTY_STRING, EMPTY_STRING });
+                new String[] { EMPTY_STRING, EMPTY_STRING }, true);
         openNewParameterDialog(dialog, null);
         setParametersButtonsEnableState();
     }
@@ -331,7 +331,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
                     LauncherUIMessages.getString(
                         "cougaarlauncher.argumenttab.parameters.dialog.edit.value.text")
                 }, //$NON-NLS-1$ //$NON-NLS-2$
-                new String[] { name, value });
+                new String[] { name, value }, true);
         openNewParameterDialog(dialog, selectedItem);
     }
 
