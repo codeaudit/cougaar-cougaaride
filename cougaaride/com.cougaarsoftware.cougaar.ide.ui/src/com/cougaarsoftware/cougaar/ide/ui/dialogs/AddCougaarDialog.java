@@ -115,7 +115,7 @@ public class AddCougaarDialog extends StatusDialog {
         l.setLayoutData(gd);
         l.setFont(font);
 
-        fCougaarInstallBlock = new CougaarInstallBlock(this);
+        fCougaarInstallBlock = new CougaarInstallBlock();
         Control block = fCougaarInstallBlock.createControl(parent);
         gd = new GridData(GridData.FILL_HORIZONTAL);
         gd.horizontalSpan = 3;

@@ -123,5 +123,19 @@
          </action>
       </objectContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Cougaar Views"
+            id="com.cougaarsoftware.cougaar.ide.ui">
+      </category>
+     <view
+            name="Cougaar Society Viewer"
+            icon="icons/cougaaride.gif"
+            category="com.cougaarsoftware.cougaar.ide.ui"
+            class="com.cougaarsoftware.cougaar.ide.ui.views.SocietyViewer"
+            id="com.cougaarsoftware.cougaar.ide.ui.views.SocietyViewer">
+      </view>
+   </extension>
 
 </plugin>

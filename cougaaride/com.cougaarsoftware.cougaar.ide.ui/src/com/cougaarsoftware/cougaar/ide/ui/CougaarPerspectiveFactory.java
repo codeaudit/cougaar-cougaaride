@@ -32,9 +32,13 @@ import org.eclipse.ui.IPerspectiveFactory;
 /**
  * Creates the Cougaar Perspective
  *
- * @author soster
+ * @author soster, mabrams
  */
 public class CougaarPerspectiveFactory implements IPerspectiveFactory {
+	
+	/** the id for the cougaar society viewer component */
+	public static String ID_COUGAAR_SOCIETY = "com.cougaarsoftware.cougaar.ide.ui.views.SocietyViewer";
+	
     /**
      * Creates a new CougaarPerspectiveFactory object.
      */
@@ -56,10 +60,12 @@ public class CougaarPerspectiveFactory implements IPerspectiveFactory {
         folder.addView(JavaUI.ID_PACKAGES);
         folder.addView(JavaUI.ID_TYPE_HIERARCHY);
         folder.addPlaceholder(IPageLayout.ID_RES_NAV);
+		folder.addView(CougaarPerspectiveFactory.ID_COUGAAR_SOCIETY);
 
         IFolderLayout outputfolder = layout.createFolder("bottom",
                 IPageLayout.BOTTOM, (float) 0.75, editorArea);
         outputfolder.addView(IPageLayout.ID_TASK_LIST);
+        
 
         //layout.addView(IPageLayout.ID_OUTLINE, IPageLayout.RIGHT, (float) 0.75, editorArea);
         // views - java
@@ -71,6 +77,7 @@ public class CougaarPerspectiveFactory implements IPerspectiveFactory {
         layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
         layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
         layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
+        layout.addShowViewShortcut(CougaarPerspectiveFactory.ID_COUGAAR_SOCIETY);
 
         //TODO change this to stuff like "New Agent.." etc
         // new actions - Cougaar project creation wizard

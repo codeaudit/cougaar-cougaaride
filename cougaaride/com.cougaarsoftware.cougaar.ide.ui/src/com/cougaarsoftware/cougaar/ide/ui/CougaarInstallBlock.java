@@ -35,7 +35,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
-import com.cougaarsoftware.cougaar.ide.ui.dialogs.*;
 
 
 /**
@@ -49,11 +48,9 @@ public class CougaarInstallBlock {
 
     /**
      * the constructor
-     *
-     * @param dialog
      */
-    public CougaarInstallBlock(AddCougaarDialog dialog) {
-        // TODO Auto-generated constructor stub
+    public CougaarInstallBlock() {
+        
     }
 
     /**
