@@ -28,10 +28,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.ILaunchConfigurationDialog;
+import org.eclipse.jdt.core.IJavaModel;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 import org.eclipse.jdt.internal.debug.ui.JavaDebugImages;
 import org.eclipse.jdt.internal.debug.ui.launcher.JavaLaunchConfigurationTab;
@@ -60,15 +66,17 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.launcher.core.constants.ICougaarLaunchConfigurationConstants;
 import com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIMessages;
-import com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIPlugin;
 
 
 /**
  * DOCUMENT ME!
  *
  * @author Matt Abrams
+ *
+ * @see JavaLaunchConfigurationTab
  */
 public class CougaarParametersTab extends JavaLaunchConfigurationTab {
     private static final String EMPTY_STRING = ""; //$NON-NLS-1$
@@ -482,19 +490,22 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         ILaunchConfigurationWorkingCopy configuration) {
         HashMap map = new HashMap();
         Enumeration keys = CougaarParameters.getKeys();
-        while (keys.hasMoreElements()) {
-            String[] pair = new String[2];
-            pair[0] = (String) keys.nextElement();
-            try {
-                pair[1] = CougaarParameters.getString(pair[0]).replaceAll("COUGAAR_INSTALL_PATH",
-                        configuration.getAttribute(
-                            ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_HOME_DIR,
-                            "COUGAAR_INSTALL_PATH"));
-            } catch (CoreException e) {
-                LauncherUIPlugin.log(e);
-            }
+        IJavaProject project = getJavaProject(configuration);
+        if (project != null) {
+            String defaultVersion = CougaarPlugin.getCougaarPreference(project
+                    .getProject(), "COUGAAR_VERSION");
+            while (keys.hasMoreElements()) {
+                String[] pair = new String[2];
+                pair[0] = (String) keys.nextElement();
+                String cip = "";
+                cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
+                if ((cip != null) && !cip.equals("")) {
+                    pair[1] = CougaarParameters.getString(pair[0]).replaceAll("COUGAAR_INSTALL_PATH",
+                            cip);
+                }
 
-            map.put(pair[0], pair[1]);
+                map.put(pair[0], pair[1]);
+            }
         }
 
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS,
@@ -515,34 +526,45 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
             JDIDebugUIPlugin.log(e);
         }
 
+        IJavaProject javaProject = (IJavaProject) getJavaProject(wc);
+
+        IProject project = null;
+        String defaultVersion = "";
+        if (javaProject != null) {
+            project = javaProject.getProject();
+            defaultVersion = CougaarPlugin.getCougaarPreference(project
+                    .getProject(), "COUGAAR_VERSION");
+        }
+
         HashMap map = new HashMap();
         Enumeration keys = CougaarParameters.getKeys();
         while (keys.hasMoreElements()) {
             String[] nameValuePair = new String[2];
             nameValuePair[0] = (String) keys.nextElement();
-            try {
-                nameValuePair[1] = CougaarParameters.getString(nameValuePair[0])
-                                                    .replaceAll("COUGAAR_INSTALL_PATH",
-                        config.getAttribute(
-                            ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_HOME_DIR,
-                            "COUGAAR_INSTALL_PATH"));
-            } catch (CoreException e) {
-                LauncherUIPlugin.log(e);
-            }
-
-            map.put(nameValuePair[0], nameValuePair[1]);
-
-            TableItem tableItem = null;
-            if (tableItem == null) {
-                tableItem = getTableItemForName(nameValuePair[0]);
-                if (tableItem == null) {
-                    tableItem = new TableItem(this.fVMParametersTable, SWT.NONE);
+            if ((defaultVersion != null) && !defaultVersion.equals("")) {
+                String cip = "";
+                cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
+                if ((cip != null) && !cip.equals("")) {
+                    nameValuePair[1] = CougaarParameters.getString(nameValuePair[0])
+                                                        .replaceAll("COUGAAR_INSTALL_PATH",
+					cip);
                 }
+
+
+                map.put(nameValuePair[0], nameValuePair[1]);
+
+                TableItem tableItem = null;
+                if (tableItem == null) {
+                    tableItem = getTableItemForName(nameValuePair[0]);
+                    if (tableItem == null) {
+                        tableItem = new TableItem(this.fVMParametersTable,
+                                SWT.NONE);
+                    }
+                }
+
+                tableItem.setText(nameValuePair);
+                this.fVMParametersTable.setSelection(new TableItem[] { tableItem });
             }
-
-            tableItem.setText(nameValuePair);
-            this.fVMParametersTable.setSelection(new TableItem[] { tableItem });
-
         }
 
         setDirty(true);
@@ -618,6 +640,55 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         updateParametersFromConfig(config);
         fVMParametersTable.setEnabled(!useDefault);
         setDirty(false);
+    }
+
+
+    /**
+     * Return the IJavaProject corresponding to the project name in the project
+     * name text field, or null if the text does not match a project name.
+     *
+     * @param config DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
+    protected IJavaProject getJavaProject(
+        ILaunchConfigurationWorkingCopy config) {
+        String projectName = "";
+        try {
+            projectName = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
+                    EMPTY_STRING);
+        } catch (CoreException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        //        String projectName = fProjText.getText().trim();
+        if (projectName.length() < 1) {
+            return null;
+        }
+
+        return getJavaModel().getJavaProject(projectName);
+
+    }
+
+
+    /**
+     * Convenience method to get the workspace root.
+     *
+     * @return DOCUMENT ME!
+     */
+    private IWorkspaceRoot getWorkspaceRoot() {
+        return ResourcesPlugin.getWorkspace().getRoot();
+    }
+
+
+    /**
+     * Convenience method to get access to the java model.
+     *
+     * @return DOCUMENT ME!
+     */
+    private IJavaModel getJavaModel() {
+        return JavaCore.create(getWorkspaceRoot());
     }
 
 

@@ -61,7 +61,7 @@ public class CougaarInstallBlock {
      * @param file
      */
     public void setHomeDirectory(File file) {
-        cougaarInstallPath = file;
+        cougaarInstallPath = file;     
     }
 
 

@@ -18,22 +18,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
+
 package com.cougaarsoftware.cougaar.ide.launcher.ui.configuration;
 
 
-import java.io.File;
-
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
-import org.eclipse.jdt.core.IJavaModel;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.debug.ui.launchConfigurations.JavaMainTab;
 import org.eclipse.jdt.internal.debug.ui.IJavaDebugHelpContextIds;
-import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 import org.eclipse.jdt.internal.debug.ui.launcher.LauncherMessages;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.swt.SWT;
@@ -46,15 +39,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.help.WorkbenchHelp;
 
-import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
-import com.cougaarsoftware.cougaar.ide.launcher.core.constants.ICougaarLaunchConfigurationConstants;
-import com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIMessages;
 
 
 /**
@@ -64,13 +53,8 @@ import com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIMessages;
  */
 public class CougaarMainTab extends JavaMainTab {
     /** DOCUMENT ME! */
-    public static String cougaarInstallPath = "";
-
-    //	Project UI widgets
-    protected Label fCougaarLabel;
-    protected Text fCougaarText;
-    protected Button fCougaarButton;
-
+    public static String projectName = "";
+    
     /**
      * DOCUMENT ME!
      *
@@ -194,53 +178,7 @@ public class CougaarMainTab extends JavaMainTab {
         cougaarComp.setLayoutData(gd);
         cougaarComp.setFont(font);
 
-        fCougaarLabel = new Label(projComp, SWT.NONE);
-        fCougaarLabel.setText(LauncherUIMessages.getString(
-                "CougaarMainTab.&Cougaar__1")); //$NON-NLS-1$
-        gd = new GridData();
-        gd.horizontalSpan = 2;
-        fCougaarLabel.setLayoutData(gd);
-        fCougaarLabel.setFont(font);
-
-        fCougaarText = new Text(projComp, SWT.SINGLE | SWT.BORDER);
-        gd = new GridData(GridData.FILL_HORIZONTAL);
-        fCougaarText.setLayoutData(gd);
-        fCougaarText.setFont(font);
-        fCougaarText.addModifyListener(new ModifyListener() {
-                public void modifyText(ModifyEvent evt) {
-                    updateLaunchConfigurationDialog();
-                }
-            });
-
-        fCougaarButton = createPushButton(projComp,
-                LauncherMessages.getString("JavaMainTab.&Browse_3"), null); //$NON-NLS-1$
-        fCougaarButton.addSelectionListener(new SelectionAdapter() {
-                public void widgetSelected(SelectionEvent evt) {
-                    handleCougaarButtonSelected();
-                }
-            });
-    }
-
-
-    /**
-     * DOCUMENT ME!
-     */
-    protected void handleCougaarButtonSelected() {
-        DirectoryDialog dialog = new DirectoryDialog(getShell());
-        dialog.setMessage(LauncherMessages.getString(
-                "JavaArgumentsTab.Select_a_&working_directory_for_the_launch_configuration__7")); //$NON-NLS-1$
-        String currentWorkingDir = fCougaarText.getText();
-        if (!currentWorkingDir.trim().equals("")) { //$NON-NLS-1$
-            File path = new File(currentWorkingDir);
-            if (path.exists()) {
-                dialog.setFilterPath(currentWorkingDir);
-            }
-        }
-
-        String selectedDirectory = dialog.open();
-        if (selectedDirectory != null) {
-            fCougaarText.setText(selectedDirectory);
-        }
+      
     }
 
 
@@ -252,65 +190,9 @@ public class CougaarMainTab extends JavaMainTab {
         config.setAttribute(IJavaLaunchConfigurationConstants.ATTR_MAIN_TYPE_NAME,
             ICougaarConstants.COUGAAR_MAIN_CLASS);
         config.setAttribute(JavaMainTab.ATTR_INCLUDE_EXTERNAL_JARS, true);
-        IJavaProject javaProject = getJavaProject(config);
-        if (javaProject != null) {
-            config.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_HOME_DIR,
-                CougaarPlugin.getCougaarPreference(javaProject.getProject(),
-                    "COUGAAR_VERSION"));
-        }
     }
 
 
-    /**
-     * Return the IJavaProject corresponding to the project name in the project
-     * name text field, or null if the text does not match a project name.
-     *
-     * @param config DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    protected IJavaProject getJavaProject(
-        ILaunchConfigurationWorkingCopy config) {
-        if (fProjText != null) {
-            String projectName = "";
-            try {
-                projectName = config.getAttribute(IJavaLaunchConfigurationConstants.ATTR_PROJECT_NAME,
-                        EMPTY_STRING);
-            } catch (CoreException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            //        String projectName = fProjText.getText().trim();
-            if (projectName.length() < 1) {
-                return null;
-            }
-
-            return getJavaModel().getJavaProject(projectName);
-        } else {
-            return null;
-        }
-    }
-
-
-    /**
-     * Convenience method to get the workspace root.
-     *
-     * @return DOCUMENT ME!
-     */
-    private IWorkspaceRoot getWorkspaceRoot() {
-        return ResourcesPlugin.getWorkspace().getRoot();
-    }
-
-
-    /**
-     * Convenience method to get access to the java model.
-     *
-     * @return DOCUMENT ME!
-     */
-    private IJavaModel getJavaModel() {
-        return JavaCore.create(getWorkspaceRoot());
-    }
 
 
     /**
@@ -319,24 +201,9 @@ public class CougaarMainTab extends JavaMainTab {
      * @param config DOCUMENT ME!
      */
     public void initializeFrom(ILaunchConfiguration config) {
-        super.initializeFrom(config);
-        try {
-            fCougaarText.setText(config.getAttribute(
-                    ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_HOME_DIR,
-                    ""));
-        } catch (CoreException e) {
-            JDIDebugUIPlugin.log(e);
-        }
+        super.initializeFrom(config);		
     }
 
 
-    /**
-     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#performApply(ILaunchConfigurationWorkingCopy)
-     */
-    public void performApply(ILaunchConfigurationWorkingCopy config) {
-        super.performApply(config);
-        config.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_HOME_DIR,
-            fCougaarText.getText());
-        CougaarMainTab.cougaarInstallPath = fCougaarText.getText();
-    }
+    
 }

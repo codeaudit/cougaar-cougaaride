@@ -222,8 +222,7 @@ public class CougaarConfigurationBlock extends PropertyPage
 
 
     private void setValues(String selectedVersion) {
-        //        String defaultVersion = CougaarPlugin.getDefault().getPreferenceStore()
-        //                                             .getString(CougaarPlugin.DEFAULT_COUGAAR_PREFERENCE);
+      
         int count = fCougaarCombo.getItemCount();
         for (int i = 0; i < count; i++) {
             String item = fCougaarCombo.getItem(i);

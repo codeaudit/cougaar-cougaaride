@@ -24,7 +24,6 @@ package com.cougaarsoftware.cougaar.ide.ui;
 
 
 import java.io.File;
-
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IResource;
@@ -271,9 +270,8 @@ public class AddCougaarDialog extends StatusDialog {
                     path);
             setFieldValuesToVM(cougaar);
             CougaarUI.setCougaarInstallPathLocation(cougaar.getId(),
-                cougaar.getInstallLocation().getAbsolutePath());
-            fRequestor.cougaarAdded(cougaar);
-
+            cougaar.getInstallLocation().getAbsolutePath());		
+            fRequestor.cougaarAdded(cougaar);			
         } else {
             setFieldValuesToVM(fEditedCougaar);
             String path = fEditedCougaar.getInstallLocation().getAbsolutePath()
