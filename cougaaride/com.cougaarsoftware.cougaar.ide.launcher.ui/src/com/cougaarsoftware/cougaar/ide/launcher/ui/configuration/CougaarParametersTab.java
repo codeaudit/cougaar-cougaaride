@@ -81,6 +81,7 @@ import com.cougaarsoftware.cougaar.ide.launcher.ui.util.NameValuePairDialog;
  */
 public class CougaarParametersTab extends JavaLaunchConfigurationTab {
     private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+    private static final String COUGAAR_NODE_NAME = "-Dorg.cougaar.node.name";
     private Label fNameLabel;
     private Text fNameText;
     private Table fVMParametersTable;
@@ -358,12 +359,17 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
      */
     private void setParametersButtonsEnableState() {
         int selectCount = this.fVMParametersTable.getSelectionIndices().length;
-        if (selectCount < 1) {
+		TableItem[] tableItems = fVMParametersTable.getSelection();
+		TableItem tableItem = null;
+		if (tableItems.length == 1) {
+			tableItem = fVMParametersTable.getItem(fVMParametersTable.getSelectionIndex());
+		}
+		if (selectCount < 1 || (tableItem != null && tableItem.getText(0).equals(COUGAAR_NODE_NAME))) {
             fParametersEditButton.setEnabled(false);
             fParametersRemoveButton.setEnabled(false);
         } else {
             fParametersRemoveButton.setEnabled(true);
-            if (selectCount == 1) {
+            if (selectCount == 1) {                        
                 fParametersEditButton.setEnabled(true);
             } else {
                 fParametersEditButton.setEnabled(false);
@@ -432,16 +438,26 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         // if (isDirty()) {
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME,
             fNameText.getText());
+		configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
+			setProgramArguments());      
+		setCougaarNodeName();      
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS,
             getMapFromParametersTable());
-        configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
-            setProgramArguments());
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_DEFAULT_PARAMETERS,
             fArgumentsDefaultButton.getSelection());
         fWorkingDirectoryBlock.performApply(configuration);
         setDirty(false);
 
         // }
+    }
+    
+    private void setCougaarNodeName() {
+    	TableItem nodeNameItem = getTableItemForName(COUGAAR_NODE_NAME);
+    	if (nodeNameItem == null) {
+			nodeNameItem = new TableItem(this.fVMParametersTable, SWT.NONE);
+    	}
+		String[] nameValuePair = new String[] {COUGAAR_NODE_NAME, fNameText.getText()};
+    	nodeNameItem.setText(nameValuePair);
     }
 
 
@@ -451,8 +467,8 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
      * @return
      */
     private String setProgramArguments() {
-        return LauncherUIMessages.getString("cougaarLauncher.node.argument")
-        	+ " -n " + "\"" + fNameText.getText() + "\"";
+        return LauncherUIMessages.getString("cougaarLauncher.node.argument");
+//        	+ " -n " + "\"" + fNameText.getText() + "\"";
     }
 
 
@@ -498,16 +514,15 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         if (project != null) {
             String defaultVersion = CougaarPlugin.getCougaarPreference(project
                     .getProject(), ICougaarConstants.COUGAAR_VERSION);
+			String cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
             while (keys.hasMoreElements()) {
                 String[] pair = new String[2];
                 pair[0] = (String) keys.nextElement();
-                String cip = "";
-                cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
+               
                 if ((cip != null) && !cip.equals("")) {
                     pair[1] = CougaarParameters.getString(pair[0]).replaceAll(ICougaarConstants.COUGAAR_INSTALL_PATH_STRING,
                             cip);
-                }
-
+                }				
                 map.put(pair[0], pair[1]);
             }
         }
