@@ -558,4 +558,24 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
         return null;
     }
+
+	/**
+	 * @param string
+	 */
+	public static void log(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @param string
+	 * @return
+	 */
+	public static boolean isDefaultCougaarVersion(String version) {
+		return CougaarLocations.isDefaultVersion(version);
+	}
+	
+	public static void setDefaultCougaarVersion(String version) {
+		CougaarLocations.setDefaultVersion(version);
+	}
 }

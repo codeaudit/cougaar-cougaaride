@@ -84,7 +84,5 @@ public abstract class AbstractCougaarInstall implements ICougaarInstall {
     public void setInstallLocation(File installLocation) {
         // TODO notify interested parties if location changes
         fInstallLocation = installLocation;
-
-
     }
 }

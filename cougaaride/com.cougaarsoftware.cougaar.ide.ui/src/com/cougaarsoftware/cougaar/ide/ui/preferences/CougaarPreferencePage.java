@@ -30,12 +30,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.util.ListenerList;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -78,7 +84,7 @@ import com.cougaarsoftware.cougaar.ide.ui.dialogs.AddCougaarDialog;
  * @author mabrams
  */
 public class CougaarPreferencePage extends PreferencePage
-    implements IWorkbenchPreferencePage, IAddCougaarDialogRequestor {
+    implements IWorkbenchPreferencePage, IAddCougaarDialogRequestor, ISelectionProvider {
     private CheckboxTableViewer fCougaarList;
     private Button fAddButton;
     private Button fRemoveButton;
@@ -86,7 +92,9 @@ public class CougaarPreferencePage extends PreferencePage
 
     //    private Button fSearchButton;
     private List fCougaarInstalls;
+    private ListenerList fSelectionListeners = new ListenerList();
     private IAddCougaarDialogRequestor requestor;
+    private ISelection fPrevSelection = new StructuredSelection();
     private ICougaarInstallChangeListener removedListener;
 
     /**
@@ -120,6 +128,13 @@ public class CougaarPreferencePage extends PreferencePage
      * @see IWorkbenchPreferencePage#init(IWorkbench)
      */
     public void init(IWorkbench workbench) {
+    }
+    
+    /**
+     * Find and verify the default cougaar installation
+     */
+    private void initDefaultCougaarInstall() {
+    
     }
 
 
@@ -215,6 +230,19 @@ public class CougaarPreferencePage extends PreferencePage
                     editCougaar();
                 }
             });
+        
+        fCougaarList.addCheckStateListener(new ICheckStateListener() {
+
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				if (event.getChecked()) {
+					setCheckedCougaar((ICougaarInstall)event.getElement());
+				} else {
+					setCheckedCougaar(null);
+				}
+				
+			}
+        	
+        });
         table.addKeyListener(new KeyAdapter() {
                 public void keyPressed(KeyEvent event) {
                     if ((event.character == SWT.DEL) && (event.stateMask == 0)) {
@@ -348,7 +376,7 @@ public class CougaarPreferencePage extends PreferencePage
         }
 
         fCougaarList.setInput(fCougaarInstalls);
-        initDefaultCougaar();
+		setDefaultCougaarSelection();
 
     }
 
@@ -397,26 +425,71 @@ public class CougaarPreferencePage extends PreferencePage
     }
 
 
-    private void initDefaultCougaar() {
-        //TODO: make default selection
+    private void setDefaultCougaarSelection() {
+        for (int i = 0; i < fCougaarInstalls.size(); i++) {
+        	ICougaarInstall cougaar = (ICougaarInstall)fCougaarInstalls.get(i);
+        	if (CougaarPlugin.isDefaultCougaarVersion(cougaar.getId())) {
+        		fCougaarList.setChecked(cougaar, true);
+        	} else {
+        		fCougaarList.setChecked(cougaar, false);
+        	}
+        }
+    }
+    
+    public void setCheckedCougaar(ICougaarInstall cougaar) {
+    	if (cougaar == null) {
+    		setSelection(new StructuredSelection());
+    	} else {
+    		setSelection(new StructuredSelection(cougaar));
+    	}
+    }
+    
+    public void setSelection(ISelection selection) {
+    	if (selection instanceof IStructuredSelection) {
+    		if (!selection.equals(fPrevSelection)) {
+    			fPrevSelection = selection;
+    			Object cougaar = ((IStructuredSelection)selection).getFirstElement();
+    			fCougaarList.setCheckedElements(new Object[]{cougaar});
+    			fCougaarList.reveal(cougaar);
+    			ICougaarInstall cInstall = (ICougaarInstall)cougaar;
+    			CougaarPlugin.setDefaultCougaarVersion(cInstall.getId());
+    			fireSelectionChanged();
+    		}
+    	}
+    }
+    
+    private void fireSelectionChanged() {
+    	SelectionChangedEvent event = new SelectionChangedEvent(this, getSelection());
+    	Object[] listeners = fSelectionListeners.getListeners();
+    	for (int i = 0; i < listeners.length; i++) {
+    		ISelectionChangedListener listener = (ISelectionChangedListener)listeners[i];
+    		listener.selectionChanged(event);
+    	}
+    }
+    
+    public ISelection getSelection() {
+    	return new StructuredSelection(fCougaarList.getCheckedElements());
     }
 
 
     private void editCougaar() {
         IStructuredSelection selection = (IStructuredSelection) fCougaarList
             .getSelection();
-
+     
         // assume it's length one, otherwise this will not be called
-        ICougaarInstall vm = (ICougaarInstall) selection.getFirstElement();
-
-        AddCougaarDialog dialog = new AddCougaarDialog(this, getShell(), vm);
+        ICougaarInstall cougaarInstall = (ICougaarInstall) selection.getFirstElement();
+		if (cougaarInstall == null) {
+			// not element selected, must have double clicked on the check box
+			return;
+		}
+        AddCougaarDialog dialog = new AddCougaarDialog(this, getShell(), cougaarInstall);
         dialog.setTitle(CougaarPreferencesMessages.getString(
                 "CougaarPreferencePage.editVersion.title"));
         if (dialog.open() != Window.OK) {
             return;
         }
 
-        fCougaarList.refresh(vm);
+        fCougaarList.refresh(cougaarInstall);
     }
 
 
@@ -445,18 +518,40 @@ public class CougaarPreferencePage extends PreferencePage
             requestor.cougaarAdded(cougaar);
         }
 
-        //TODO: check for default
+        if (fCougaarInstalls.size() == 1) {
+        	CougaarPlugin.setDefaultCougaarVersion(cougaar.getId());
+        	setDefaultCougaarSelection();
+        }
     }
 
 
     /**
-     * DOCUMENT ME!
+     * Notify cougaar removed listeners if a cougaar installation was
+     * removed
      *
-     * @param cougaar DOCUMENT ME!
+     * @param cougaar the cougaar installation that was removed
      */
     public void cougaarRemoved(ICougaarInstall cougaar) {
         if (removedListener != null) {
             removedListener.cougaarRemoved(cougaar);
         }
     }
+
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ISelectionProvider#addSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
+	 */
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		fSelectionListeners.add(listener);
+		
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.ISelectionProvider#removeSelectionChangedListener(org.eclipse.jface.viewers.ISelectionChangedListener)
+	 */
+	public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+		fSelectionListeners.remove(listener);
+		
+	}
 }

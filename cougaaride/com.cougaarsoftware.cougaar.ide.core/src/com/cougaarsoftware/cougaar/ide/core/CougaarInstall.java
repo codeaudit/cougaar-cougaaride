@@ -33,10 +33,10 @@ import java.io.IOException;
  */
 public class CougaarInstall extends AbstractCougaarInstall {
     /**
-     * DOCUMENT ME!
+     * constructor for CougaarInstall objects
      *
-     * @param id
-     * @param location DOCUMENT ME!
+     * @param id the id of the cougaar install
+     * @param location the location of the install
      */
     public CougaarInstall(String id, String location) {
         super(id, location);
@@ -51,11 +51,12 @@ public class CougaarInstall extends AbstractCougaarInstall {
 
 
     /**
-     * DOCUMENT ME!
+     * Checks to see if two CougaarInstall instances are equal.  Comaprison is
+     * based on the coanonical path for the install location of each object.
      *
-     * @param obj DOCUMENT ME!
+     * @param obj the object to compare two
      *
-     * @return DOCUMENT ME!
+     * @return true if the two objects are equal
      */
     public boolean equals(Object obj) {
         if (obj instanceof CougaarInstall) {
@@ -74,4 +75,5 @@ public class CougaarInstall extends AbstractCougaarInstall {
 
         return false;
     }
+
 }
