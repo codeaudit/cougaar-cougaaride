@@ -51,7 +51,8 @@
             category="com.cougaarsoftware.cougaar.ide.ui.wizards"
             class="com.cougaarsoftware.cougaar.ide.ui.wizards.NewCougaarProjectWizard"
             project="true"
-            id="com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject">
+            id="com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject"
+            finalPerspective="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective">
          <description>
             A New Cougaar Project Wizard
          </description>
