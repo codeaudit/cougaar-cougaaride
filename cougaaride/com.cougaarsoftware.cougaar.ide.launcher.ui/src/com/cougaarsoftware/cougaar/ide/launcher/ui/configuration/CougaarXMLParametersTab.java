@@ -659,9 +659,9 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
             NodeList list = doc.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
                 Node node = list.item(i);
-                if (node.getNodeName().equalsIgnoreCase("society")) {
+                if (node.getNodeName().equalsIgnoreCase("society") || node.getNodeName().equalsIgnoreCase("host")) {
                     nodeNameList = getNodeNameList(node.getChildNodes());
-                }
+                } 
             }
         } catch (ParserConfigurationException e1) {
             MessageDialog.openError(getShell(), "ERROR", e1.getMessage());
@@ -680,7 +680,14 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
                 Node childNode = nodeList.item(j);
                 if (childNode.getNodeName().equalsIgnoreCase("host")) {
                     NodeList nList = childNode.getChildNodes();
-                    nodeNameList = getNodeNameList(nList);
+                    if (nodeNameList == null) {
+                        nodeNameList = getNodeNameList(nList);
+                    } else {
+                        List tmpList = getNodeNameList(nList);
+                        if (tmpList != null) {
+                            nodeNameList.addAll(getNodeNameList(nList));
+                        }
+                    }
                 } else if (childNode.getNodeName().equalsIgnoreCase("node")) {
                     NamedNodeMap nnMap = childNode.getAttributes();
                     Node nameNode = nnMap.getNamedItem("name");
@@ -899,14 +906,13 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
                 String value = (String) iter.next();
                 String[] nameValuePair = new String[2];
                 nameValuePair = value.split("=");
-                if (nameValuePair[1] == null) {
-                    MessageDialog.openError(getShell(), "Invalide Argument",
-                            "There was an error parsing the argument " + value
-                                    + " from the society xml file.\n");
+                if (nameValuePair.length < 2) {
+                    String tmp = nameValuePair[0];
+                    nameValuePair = new String[] {tmp, tmp};
                 }
                 if ((defaultVersion != null) && !defaultVersion.equals("")) {
                     String cip = "";
-                    cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
+                    cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);                   
                     if ((cip != null) && !cip.equals("")) {                        
                         nameValuePair[1] = replaceCIP(cip, nameValuePair[1]);
                     }
@@ -941,9 +947,16 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
         List paramList = new ArrayList();
         for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
-            if (node.getNodeName().equalsIgnoreCase("host")) {
+            if (node.getNodeName().equalsIgnoreCase("host")) {                
                 NodeList nList = node.getChildNodes();
-                paramList = getNodeVMParams(nList, nodeName);
+                if (paramList == null) {
+                    paramList = getNodeVMParams(nList, nodeName); 
+                } else {
+                    List tmpList = getNodeVMParams(nList, nodeName); 
+                    if (tmpList != null) {
+                        paramList.addAll(tmpList);
+                    }
+                }
             } else if (node.getNodeName().equalsIgnoreCase("node")) {
                 NamedNodeMap nnMap = node.getAttributes();
                 Node nameNode = nnMap.getNamedItem("name");
