@@ -181,14 +181,14 @@
                     <standard>@todo|@created</standard>
                 </tags>
                 <templates>
-                    <class>/**| * DOCUMENT ME!| *| * @version $Revision: 1.1 $| * @author $author$| */</class>
+                    <class>/**| * DOCUMENT ME!| *| * @version $Revision: 1.2 $| * @author $author$| */</class>
                     <constructor>
                         <bottom> */</bottom>
                         <exception> * @throws $exceptionType$ DOCUMENT ME!</exception>
                         <param> * @param $paramType$ DOCUMENT ME!</param>
                         <top>/**| * Creates a new $objectType$ object.</top>
                     </constructor>
-                    <interface>/**| * DOCUMENT ME!| *| * @version $Revision: 1.1 $| * @author $author$| */</interface>
+                    <interface>/**| * DOCUMENT ME!| *| * @version $Revision: 1.2 $| * @author $author$| */</interface>
                     <method>
                         <bottom> */</bottom>
                         <exception> * @throws $exceptionType$ DOCUMENT ME!</exception>
@@ -227,9 +227,9 @@
             <use>false</use>
         </footer>
         <header>
-            <keys>&lt;copyright&gt;</keys>
+            <keys>Copyright (C)|&lt;copyright&gt;</keys>
             <smartMode>15</smartMode>
-            <text>/*| * &lt;copyright&gt;| *  Copyright 2000-2003 Cougaar Software, Inc.| *  All Rights Reserved| * &lt;/copyright&gt;| */</text>
+            <text>/*| * Cougaar IDE| *| * Copyright (C) 2003, Cougaar Software, Inc. &lt;tcarrico@cougaarsoftware.com&gt;| *| * This program is free software; you can redistribute it and/or modify| * it under the terms of the GNU General Public License as published by| * the Free Software Foundation; either version 2 of the License, or| * (at your option) any later version.| *| * This program is distributed in the hope that it will be useful,| * but WITHOUT ANY WARRANTY; without even the implied warranty of| * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the| * GNU General Public License for more details.| *| * You should have received a copy of the GNU General Public License| * along with this program; if not, write to the Free Software| * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA| *| */</text>
             <use>true</use>
         </header>
         <history>
