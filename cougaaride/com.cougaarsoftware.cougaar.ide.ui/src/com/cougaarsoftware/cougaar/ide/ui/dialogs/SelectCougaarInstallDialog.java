@@ -55,6 +55,7 @@ public class SelectCougaarInstallDialog extends StatusDialog {
         for (int i = 0; i < fStatus.length; i++) {
             fStatus[i] = new StatusInfo();
         }
+        this.setTitle("Select a Cougaar Installation");
     }
 
     /**

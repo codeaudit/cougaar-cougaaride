@@ -23,13 +23,19 @@
 package com.cougaarsoftware.cougaar.ide.ui.actions;
 
 
+import java.lang.reflect.InvocationTargetException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Shell;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
@@ -57,33 +63,61 @@ public class ConvertToCougaarProjectAction extends ResourceAction {
         }
 
         IJavaProject jproject = (IJavaProject) selectedObject;
+        List input = new ArrayList();
+        input.add(CougaarPlugin.getAllCougaarLocations().values().iterator());
+        Shell shell = CougaarUIPlugin.getDefault().getWorkbench()
+                                     .getActiveWorkbenchWindow().getShell();
+        SelectCougaarInstallDialog dlg = new SelectCougaarInstallDialog(shell);
+        dlg.open();
+
+        if (dlg.getReturnCode() != Window.OK) {
+            return;
+        }
+
+        String version = dlg.getValue();
+        if ((version == null) || version.trim().equals("")) {
+            resultError("Error!", "Empty or invalid Cougaar version selected!");
+            return;
+        }
+
+        CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION, version,
+            jproject.getProject());
+
         try {
-            List input = new ArrayList();
-            input.add(CougaarPlugin.getAllCougaarLocations().values().iterator());
-
-            SelectCougaarInstallDialog dlg = new SelectCougaarInstallDialog(CougaarUIPlugin.getDefault()
-                                                                                           .getWorkbench()
-                                                                                           .getActiveWorkbenchWindow()
-                                                                                           .getShell());
-            dlg.open();
-
-            if (dlg.getReturnCode() != Window.OK) {
-                return;
-            }
-
-            String version = dlg.getValue();
-            if ((version == null) || version.trim().equals("")) {
-                resultError("Error!", "Empty or invalid version selected!");
-                return;
-            }
-
-            CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION, version,
-                jproject.getProject());
-
-            CougaarPlugin.convertToCougaarProject(jproject, null);
-        } catch (CoreException e) {
+            IRunnableWithProgress op = new CougaarConversionWithProgress(jproject);
+            ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+            IProgressMonitor monitor = dialog.getProgressMonitor();
+            monitor.setTaskName("Converting project to Cougaar project.");
+            dialog.run(true, true, op);
+        } catch (InvocationTargetException e) {
             resultError("Error!", "Problems converting to Cougaar Project!");
             return;
+        } catch (InterruptedException e) {
+            resultInformation("Conversion Cancelled",
+                "Converstion to Cougaar project cancelled, please verify the classpath is still correct.");
+            return;
+        }
+    }
+
+    /**
+     * Used to do the work of conversion in a thread
+     *
+     * @author soster
+     */
+    private class CougaarConversionWithProgress implements IRunnableWithProgress {
+        private IJavaProject jproject;
+
+        public CougaarConversionWithProgress(IJavaProject jproject) {
+            this.jproject = jproject;
+        }
+
+        public void run(IProgressMonitor monitor)
+            throws InvocationTargetException, InterruptedException {
+            try {
+                CougaarPlugin.convertToCougaarProject(jproject, monitor);
+            } catch (CoreException e) {
+                throw new InvocationTargetException(e);
+            }
         }
     }
 }

@@ -89,15 +89,15 @@ public class CougaarPlugin extends AbstractUIPlugin {
         plugin = this;
         try {
             resourceBundle = ResourceBundle.getBundle(
-                    "com.ibm.lab.soln.resources.ResourcesPluginResources");
+                    "com.cougaarsoftware.cougaar.ide.core.CougaarPluginResources");
         } catch (MissingResourceException x) {
             resourceBundle = null;
         }
     }
 
     /**
-     * Method Stub.  Does nothing specific, but supports immediate integration
-     * of  plug-in into the running Workbench.
+     * Method Stub.  Does nothing specific, but supports immediate integration of plug-in
+     * into the running Workbench.
      *
      * @see org.eclipse.ui.IStartup#earlyStartup()
      */
@@ -146,8 +146,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
      * @param e the exception to be logged
      */
     public static void log(Throwable e) {
-        log(new Status(IStatus.ERROR, getUniqueIdentifier(), 0,
-                "Internal Error", e)); //$NON-NLS-1$
+        log(new Status(IStatus.ERROR, getUniqueIdentifier(), 0, "Internal Error", e)); //$NON-NLS-1$
     }
 
 
@@ -168,14 +167,13 @@ public class CougaarPlugin extends AbstractUIPlugin {
      * @param throwable Throwable to log
      */
     public static void logError(String message, Throwable throwable) {
-        log(new Status(IStatus.ERROR, getUniqueIdentifier(), 0, message,
-                throwable));
+        log(new Status(IStatus.ERROR, getUniqueIdentifier(), 0, message, throwable));
     }
 
 
     /**
-     * Returns the workspace instance using the platform  implementation of the
-     * Resources plugin. (names happen to be the same).
+     * Returns the workspace instance using the platform  implementation of the Resources
+     * plugin. (names happen to be the same).
      *
      * @return DOCUMENT ME!
      */
@@ -185,8 +183,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Returns the string from the plugin's resource bundle, or 'key' if not
-     * found.
+     * Returns the string from the plugin's resource bundle, or 'key' if not found.
      *
      * @param key DOCUMENT ME!
      *
@@ -254,8 +251,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Updates the classpath container when the cougaar install for the project
-     * changes, and performs a full rebuild.
+     * Updates the classpath container when the cougaar install for the project changes,
+     * and performs a full rebuild.
      *
      * @param jproject the IJavaProject
      * @param monitor DOCUMENT ME!
@@ -284,16 +281,15 @@ public class CougaarPlugin extends AbstractUIPlugin {
         SubProgressMonitor subMonitor = null;
         if (monitor != null) {
             subMonitor = new SubProgressMonitor(monitor, 1);
-            subMonitor.setTaskName("Setting Classpath");
+            subMonitor.setTaskName("Setting classpath");
         }
 
-        JavaCore.setClasspathContainer(path, javaProjects, containers,
-            subMonitor);
+        JavaCore.setClasspathContainer(path, javaProjects, containers, subMonitor);
 
         subMonitor = null;
         if (monitor != null) {
             subMonitor = new SubProgressMonitor(monitor, 1);
-            subMonitor.setTaskName("Performing Full Build");
+            subMonitor.setTaskName("Performing full build");
         }
 
         project.build(IncrementalProjectBuilder.FULL_BUILD, subMonitor);
@@ -301,9 +297,9 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Convert an existing javaproject to a cougaar project.  Does nothing if
-     * its already a cougaar project; aborts if no cougaar version preference
-     * is set for the project.
+     * Convert an existing javaproject to a cougaar project.  Does nothing if its already
+     * a cougaar project; aborts if no cougaar version preference is set for the
+     * project.
      *
      * @param jproject java project to convert
      * @param monitor progress monitor
@@ -318,8 +314,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
         }
 
         //abort if no cougaar version is found
-        String version = getCougaarPreference(project,
-                ICougaarConstants.COUGAAR_VERSION);
+        String version = getCougaarPreference(project, ICougaarConstants.COUGAAR_VERSION);
         if (version == null) {
             throw new CoreException(null);
         }
@@ -327,7 +322,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
         SubProgressMonitor subMonitor = null;
         if (monitor != null) {
             subMonitor = new SubProgressMonitor(monitor, 4);
-            subMonitor.setTaskName("Converting to Cougaar Project");
+            subMonitor.setTaskName("Converting to Cougaar project");
         }
 
         //add cougaarNature
@@ -336,22 +331,23 @@ public class CougaarPlugin extends AbstractUIPlugin {
         //remove jars in existing CP that are under selected install path
         String baseLocation = getCougaarBaseLocation(version);
         IPath basepath = new Path(baseLocation);
+        basepath = JavaProject.canonicalizedPath(basepath);
         IClasspathEntry[] entries = jproject.getRawClasspath();
+
         IClasspathEntry[] newentries;
         ArrayList keptEntries = new ArrayList();
 
         //look for the entry already in the classpath
         for (int i = 0; i < entries.length; i++) {
             IClasspathEntry entry = entries[i];
-            IPath path = entry.getPath();
+            IPath path = JavaProject.canonicalizedPath(entry.getPath());
             if (!basepath.isPrefixOf(path)) {
                 keptEntries.add(entry);
             }
         }
 
         newentries = new IClasspathEntry[keptEntries.size()];
-        System.arraycopy(keptEntries.toArray(), 0, newentries, 0,
-            keptEntries.size());
+        System.arraycopy(keptEntries.toArray(), 0, newentries, 0, keptEntries.size());
 
         //make sure we didn't screw up the classpath
         IJavaModelStatus validation = JavaConventions.validateClasspath(jproject,
@@ -381,8 +377,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
      *
      * @throws CoreException
      */
-    public static boolean addCougaarNature(IProject project,
-        IProgressMonitor monitor) throws CoreException {
+    public static boolean addCougaarNature(IProject project, IProgressMonitor monitor)
+        throws CoreException {
         IProjectDescription description = project.getDescription();
         String[] natures = description.getNatureIds();
         String[] newNatures = new String[natures.length + 1];
@@ -445,7 +441,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
         SubProgressMonitor subMonitor = null;
         if (monitor != null) {
             subMonitor = new SubProgressMonitor(monitor, 1);
-            subMonitor.setTaskName("Configure Classpath");
+            subMonitor.setTaskName("Configuring Cougaar classpath container");
         }
 
         javaProject.setRawClasspath(newentries, subMonitor);
@@ -464,8 +460,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Initializes a preference store with default preference values  for this
-     * plug-in.
+     * Initializes a preference store with default preference values  for this plug-in.
      *
      * @param store DOCUMENT ME!
      */
@@ -490,8 +485,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
      * @param value DOCUMENT ME!
      * @param project DOCUMENT ME!
      */
-    public static void savePreference(String preference, String value,
-        IProject project) {
+    public static void savePreference(String preference, String value, IProject project) {
         if (!JavaProject.hasJavaNature(project)) {
             return; // ignore
         }
@@ -523,8 +517,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Returns the project custom preference pool. Project preferences may
-     * include custom encoding.
+     * Returns the project custom preference pool. Project preferences may include custom
+     * encoding.
      *
      * @param project DOCUMENT ME!
      * @param key DOCUMENT ME!
