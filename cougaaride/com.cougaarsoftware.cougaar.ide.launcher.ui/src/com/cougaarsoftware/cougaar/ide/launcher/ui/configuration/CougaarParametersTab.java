@@ -287,7 +287,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         }
 
         fVMParametersTable.setEnabled(!useDefault);
-
+		setParametersButtonsEnableState();
         updateLaunchConfigurationDialog();
 
     }
@@ -367,16 +367,17 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
 		if (selectCount < 1 || (tableItem != null && tableItem.getText(0).equals(COUGAAR_NODE_NAME))) {
             fParametersEditButton.setEnabled(false);
             fParametersRemoveButton.setEnabled(false);
+            fParametersAddButton.setEnabled(false);
         } else {
             fParametersRemoveButton.setEnabled(true);
+            
             if (selectCount == 1) {                        
                 fParametersEditButton.setEnabled(true);
             } else {
                 fParametersEditButton.setEnabled(false);
             }
         }
-
-        fParametersAddButton.setEnabled(true);
+      
     }
 
 
