@@ -31,7 +31,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
 import com.cougaarsoftware.cougaar.ide.ui.widgets.CougaarInstallSelectionWidget;
+import com.cougaarsoftware.cougaar.ide.ui.widgets.ICougaarInstallSelectionChangeListener;
 
 
 /**
@@ -39,10 +41,13 @@ import com.cougaarsoftware.cougaar.ide.ui.widgets.CougaarInstallSelectionWidget;
  *
  * @author soster
  */
-public class SelectCougaarInstallDialog extends StatusDialog {
+public class SelectCougaarInstallDialog extends StatusDialog
+    implements ICougaarInstallSelectionChangeListener {
+    private static final String TITLE_KEY = "SelectCougaarInstallDialog.title";
     private IStatus[] fStatus;
     private CougaarInstallSelectionWidget control;
     private String installVersion;
+    private static final String INVALID_SELECTION_KEY="SelectCougaarInstallDialog.invalidSelection";
 
     /**
      * Constructor
@@ -55,7 +60,8 @@ public class SelectCougaarInstallDialog extends StatusDialog {
         for (int i = 0; i < fStatus.length; i++) {
             fStatus[i] = new StatusInfo();
         }
-        this.setTitle("Select a Cougaar Installation");
+
+        this.setTitle(CougaarUIMessages.getString(TITLE_KEY));
     }
 
     /**
@@ -66,7 +72,9 @@ public class SelectCougaarInstallDialog extends StatusDialog {
      * @return the control
      */
     protected Control createDialogArea(Composite ancestor) {
-        this.control = new CougaarInstallSelectionWidget(ancestor, SWT.NONE);
+        Composite composite = (Composite)super.createDialogArea(ancestor);
+
+        this.control = new CougaarInstallSelectionWidget(composite, SWT.NULL, this);
         return this.control;
     }
 
@@ -90,6 +98,7 @@ public class SelectCougaarInstallDialog extends StatusDialog {
         }
 
         updateStatus(max);
+        updateButtonsEnableState(max);
     }
 
 
@@ -109,5 +118,26 @@ public class SelectCougaarInstallDialog extends StatusDialog {
     protected void okPressed() {
         installVersion = this.control.getSelectedCougaarInstall();
         super.okPressed();
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param version DOCUMENT ME!
+     */
+    public void handleCougaarInstallSelected(String version) {
+        //set status
+        StatusInfo status = new StatusInfo();
+
+        if ((version == null) || (version.trim().length() == 0)) {
+            status.setWarning(CougaarUIMessages.getString(
+                    INVALID_SELECTION_KEY)); //$NON-NLS-1$
+        } else {
+            //TODO what?
+        }
+
+        fStatus[0] = status;
+        updateStatusLine();
     }
 }

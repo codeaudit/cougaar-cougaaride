@@ -35,6 +35,8 @@ import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -62,15 +64,19 @@ public class CougaarInstallSelectionWidget extends Composite
     implements IAddCougaarDialogRequestor, ICougaarInstallChangeListener {
     private Button fAddCougaarInstall;
     private Combo fCougaarCombo;
+    private ICougaarInstallSelectionChangeListener listener;
 
     /**
      * DOCUMENT ME!
      *
      * @param parent
      * @param style
+     * @param listener DOCUMENT ME!
      */
-    public CougaarInstallSelectionWidget(Composite parent, int style) {
-        super(parent, style);
+    public CougaarInstallSelectionWidget(Composite parent, int style,
+        ICougaarInstallSelectionChangeListener listener) {
+        super(parent, style);        
+        this.listener = listener;
         GridLayout topLayout = new GridLayout();
         topLayout.numColumns = 3;
         topLayout.marginWidth = 0;
@@ -84,6 +90,11 @@ public class CougaarInstallSelectionWidget extends Composite
         cougaarSelectionLabel.setLayoutData(new GridData());
 
         fCougaarCombo = new Combo(this, SWT.READ_ONLY);
+        fCougaarCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent evt) {
+                    handleCougaarComboBoxModified();
+                }
+            });
         if (cougaarNames.length > 0) {
             fCougaarCombo.setItems(cougaarNames);
         }
@@ -105,6 +116,15 @@ public class CougaarInstallSelectionWidget extends Composite
 
         setValues("");
     }
+
+    /**
+     * called when the user makes a selection from the combo box
+     */
+    protected void handleCougaarComboBoxModified() {
+        String version = fCougaarCombo.getText();
+        listener.handleCougaarInstallSelected(version);
+    }
+
 
     private void handleAddButtonSelected() {
         String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
