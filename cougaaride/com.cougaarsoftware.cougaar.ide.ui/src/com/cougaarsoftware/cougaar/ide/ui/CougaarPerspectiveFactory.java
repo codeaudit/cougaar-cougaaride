@@ -23,15 +23,16 @@
 package com.cougaarsoftware.cougaar.ide.ui;
 
 
+import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 
 /**
- * DOCUMENT ME!
+ * Creates the Cougaar Perspective
  *
- * @author $author$
- * @version $Revision: 1.1 $
+ * @author soster
  */
 public class CougaarPerspectiveFactory implements IPerspectiveFactory {
     /**
@@ -42,23 +43,39 @@ public class CougaarPerspectiveFactory implements IPerspectiveFactory {
     }
 
     /**
-     * DOCUMENT ME!
+     * Arrange the perspective defaults; for now mostly yanked from the Java
+     * Perspective
      *
-     * @param layout DOCUMENT ME!
+     * @param layout the default layout
      */
     public void createInitialLayout(IPageLayout layout) {
-        //		// Add "show views".
-        //		   layout.addShowViewShortcut(IPageLayout.ID_BOOKMARKS);
-        //		   layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
-        //
-        //		// Editors are placed for free.
-        //		String editorArea = layout.getEditorArea();
-        //
-        //		// Place navigator and outline to right of
-        //		// editor area.
-        //		IFolderLayout right =
-        //				layout.createFolder("right", IPageLayout.RIGHT, (float) 0.5, editorArea);
-        //		right.addView(IPageLayout.ID_RES_NAV);
-        //		right.addView(IPageLayout.ID_OUTLINE);
+        String editorArea = layout.getEditorArea();
+
+        IFolderLayout folder = layout.createFolder("left", IPageLayout.LEFT,
+                (float) 0.25, editorArea);
+        folder.addView(JavaUI.ID_PACKAGES);
+        folder.addView(JavaUI.ID_TYPE_HIERARCHY);
+        folder.addPlaceholder(IPageLayout.ID_RES_NAV);
+
+        IFolderLayout outputfolder = layout.createFolder("bottom",
+                IPageLayout.BOTTOM, (float) 0.75, editorArea);
+        outputfolder.addView(IPageLayout.ID_TASK_LIST);
+
+        //layout.addView(IPageLayout.ID_OUTLINE, IPageLayout.RIGHT, (float) 0.75, editorArea);
+        // views - java
+        layout.addShowViewShortcut(JavaUI.ID_PACKAGES);
+        layout.addShowViewShortcut(JavaUI.ID_TYPE_HIERARCHY);
+
+        //TODO put cougaar views here
+        // views - standard workbench
+        layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
+        layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
+        layout.addShowViewShortcut(IPageLayout.ID_RES_NAV);
+
+        //TODO change this to stuff like "New Agent.." etc
+        // new actions - Cougaar project creation wizard
+        layout.addNewWizardShortcut(
+            "com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject");
+
     }
 }
