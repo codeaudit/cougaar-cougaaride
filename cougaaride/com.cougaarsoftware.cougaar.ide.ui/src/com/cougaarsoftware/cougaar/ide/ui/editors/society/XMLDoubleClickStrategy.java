@@ -30,14 +30,17 @@
 package com.cougaarsoftware.cougaar.ide.ui.editors.society;
 
 
-import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextDoubleClickStrategy;
+import org.eclipse.jface.text.ITextViewer;
 
 
 /**
  * DOCUMENT ME!
  *
  * @author $author$
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class XMLDoubleClickStrategy implements ITextDoubleClickStrategy {
     protected ITextViewer fText;

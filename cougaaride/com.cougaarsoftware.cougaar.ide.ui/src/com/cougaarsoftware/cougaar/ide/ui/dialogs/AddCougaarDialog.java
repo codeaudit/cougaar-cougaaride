@@ -24,7 +24,6 @@ package com.cougaarsoftware.cougaar.ide.ui.dialogs;
 
 
 import java.io.File;
-
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IResource;

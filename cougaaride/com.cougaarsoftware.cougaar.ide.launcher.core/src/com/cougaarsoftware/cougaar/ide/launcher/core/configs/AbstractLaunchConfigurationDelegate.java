@@ -24,9 +24,7 @@ package com.cougaarsoftware.cougaar.ide.launcher.core.configs;
 
 
 import java.io.File;
-
 import java.text.MessageFormat;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -37,6 +35,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 import org.eclipse.jdt.internal.launching.LaunchingMessages;
 import org.eclipse.jdt.launching.AbstractJavaLaunchConfigurationDelegate;
 import org.eclipse.jdt.launching.ExecutionArguments;

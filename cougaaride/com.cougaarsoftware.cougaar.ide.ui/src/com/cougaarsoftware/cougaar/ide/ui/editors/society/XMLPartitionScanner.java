@@ -30,14 +30,18 @@
 package com.cougaarsoftware.cougaar.ide.ui.editors.society;
 
 
-import org.eclipse.jface.text.rules.*;
+import org.eclipse.jface.text.rules.IPredicateRule;
+import org.eclipse.jface.text.rules.IToken;
+import org.eclipse.jface.text.rules.MultiLineRule;
+import org.eclipse.jface.text.rules.RuleBasedPartitionScanner;
+import org.eclipse.jface.text.rules.Token;
 
 
 /**
  * DOCUMENT ME!
  *
  * @author $author$
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class XMLPartitionScanner extends RuleBasedPartitionScanner {
     /** DOCUMENT ME! */
