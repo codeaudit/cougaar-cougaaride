@@ -54,8 +54,8 @@
             category="com.cougaarsoftware.cougaar.ide.ui.wizards"
             class="com.cougaarsoftware.cougaar.ide.ui.wizards.NewCougaarProjectWizard"
             project="true"
-            id="com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject"
-            finalPerspective="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective">
+            finalPerspective="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective"
+            id="com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject">
          <description>
             A New Cougaar Project Wizard
          </description>
@@ -64,10 +64,15 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            objectClass="org.eclipse.jdt.core.IJavaProject"
+            objectClass="org.eclipse.core.resources.IProject"
+            adaptable="true"         
             name="Cougaar Properties"
             class="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage"
             id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage">
+         <filter
+               name="projectNature"
+               value="com.cougaarsoftware.cougaar.ide.core.cougaarnature">
+         </filter>
       </page>
    </extension>
    <extension
