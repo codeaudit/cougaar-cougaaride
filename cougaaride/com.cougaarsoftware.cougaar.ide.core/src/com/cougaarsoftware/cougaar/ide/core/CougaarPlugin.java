@@ -279,6 +279,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
         SubProgressMonitor subMonitor = null;
         if (monitor != null) {
             subMonitor = new SubProgressMonitor(monitor, 1);
+			subMonitor.setTaskName("Setting Classpath");
         }
 
         JavaCore.setClasspathContainer(path, javaProjects, containers,
@@ -287,6 +288,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
         subMonitor = null;
         if (monitor != null) {
             subMonitor = new SubProgressMonitor(monitor, 1);
+			subMonitor.setTaskName("Performing Full Build");
         }
 
         project.build(IncrementalProjectBuilder.FULL_BUILD, subMonitor);
