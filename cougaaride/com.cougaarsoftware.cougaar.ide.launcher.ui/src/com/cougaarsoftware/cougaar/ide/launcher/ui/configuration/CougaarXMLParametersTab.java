@@ -1,22 +1,22 @@
 /*
  * Cougaar IDE
- *
+ * 
  * Copyright (C) 2003, Cougaar Software, Inc. <tcarrico@cougaarsoftware.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ *  
  */
 
 package com.cougaarsoftware.cougaar.ide.launcher.ui.configuration;
@@ -33,7 +33,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.crimson.tree.TextNode;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
@@ -429,12 +428,12 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                 setDirty(false);
                 return;
             }
-            
+
         }
 
         setLaunchConfiguration(config);
         fArgumentsDefaultButton.setSelection(useDefault);
-		fArgumentsFromFileButton.setSelection(useSocietyPrams);
+        fArgumentsFromFileButton.setSelection(useSocietyPrams);
         try {
             fNameText
                     .setText(config
@@ -553,8 +552,7 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                 Node node = list.item(i);
                 if (node.getNodeName().equalsIgnoreCase("society")) {
                     NodeList nodeList = node.getChildNodes();
-                    paramList = getNodeVMParams(nodeList, nodeName);
-                    System.out.println(paramList.size());
+                    paramList = getNodeVMParams(nodeList, nodeName);                    
                 }
 
             }
@@ -649,10 +647,9 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
                                 paramList.add(pValue.trim());
                             } else {
                                 Node childNode = param.getFirstChild();
-                                if (childNode instanceof TextNode) {
-                                    paramList.add(childNode.getNodeValue()
-                                            .trim());
-                                }
+
+                                paramList.add(childNode.getNodeValue().trim());
+
                             }
                         }
                     }
