@@ -114,7 +114,7 @@ public class CougaarLocations {
         if (file.exists()) {
             Reader reader = null;
             try {
-                reader = new FileReader(getStoreFile());
+                reader = new FileReader(file);
                 loadFromStream(reader);
                 return true;
             } catch (IOException e) {

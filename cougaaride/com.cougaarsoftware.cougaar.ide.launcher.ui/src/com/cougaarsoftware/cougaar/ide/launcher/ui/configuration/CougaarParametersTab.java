@@ -374,11 +374,13 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
             fParametersRemoveButton.setEnabled(false);
             fParametersAddButton.setEnabled(false);
         } else {
-            fParametersRemoveButton.setEnabled(true);
+			fParametersAddButton.setEnabled(true);            
 
             if (selectCount == 1) {
+				fParametersRemoveButton.setEnabled(true);
                 fParametersEditButton.setEnabled(true);
             } else {
+				fParametersRemoveButton.setEnabled(false);
                 fParametersEditButton.setEnabled(false);
             }
         }
