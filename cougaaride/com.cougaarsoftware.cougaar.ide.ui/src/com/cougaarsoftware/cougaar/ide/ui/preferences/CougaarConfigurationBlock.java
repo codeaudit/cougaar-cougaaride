@@ -54,6 +54,7 @@ import org.eclipse.ui.dialogs.PropertyPage;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
+import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 
@@ -142,7 +143,7 @@ public class CougaarConfigurationBlock extends PropertyPage
 
         DialogField.createEmptySpace(topComp, 2);
         String defaultVersion = CougaarPlugin.getCougaarPreference(project,
-                "COUGAAR_VERSION");
+                ICougaarConstants.COUGAAR_VERSION);
 
         setValues(defaultVersion);
         control = topComp;
@@ -239,7 +240,7 @@ public class CougaarConfigurationBlock extends PropertyPage
      */
     public void performDefaults() {
         String defaultVersion = CougaarPlugin.getCougaarPreference(project,
-                "COUGAAR_VERSION");
+                ICougaarConstants.COUGAAR_VERSION);
         setValues(defaultVersion);
     }
 

@@ -32,6 +32,8 @@ import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
+import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
+
 
 /**
  * Initializes the cougaar classpath container
@@ -105,9 +107,9 @@ public class CougaarClasspathContainerInitializer
         throws CoreException {
         IProject project = javaProject.getProject();
         if (CougaarPlugin.isCougaarProject(project)) {
-            //TODO: matt: make a constant for this
+          
             String version = CougaarPlugin.getCougaarPreference(project,
-                    "COUGAAR_VERSION");
+                    ICougaarConstants.COUGAAR_VERSION);
             String installPrefix = CougaarPlugin.getCougaarBaseLocation(version);
 
             IPath path = new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);

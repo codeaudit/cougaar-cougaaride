@@ -43,6 +43,7 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import com.cougaarsoftware.cougaar.ide.core.CoreMessages;
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.IResourceIDs;
+import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
 
 
@@ -140,7 +141,7 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
 
             this.configure(jcp.getJavaProject());
 
-            CougaarPlugin.savePreference("COUGAAR_VERSION",
+            CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION,
                 projectCougaarVersion, jcp.getJavaProject().getProject());
 
         } catch (CoreException e) {

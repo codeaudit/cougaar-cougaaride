@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.PropertyPage;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
+import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 
 
 /**
@@ -111,13 +112,7 @@ public class CougaarPropertyPage extends PropertyPage
         CougaarPlugin.getDefault().getPreferenceStore().setValue(CougaarPlugin.DEFAULT_COUGAAR_PREFERENCE,
             cougaarVersion);
 
-        //       JavaProject project = (JavaProject)getProject();
-        //       Preferences prefs = project.getPreferences();
-        //       prefs.setValue("COUGAAR_VERSION", cougaarVersion);
-        //	   project.setPreferences(prefs);
-        //	   project.setOptions((Map)null);
-        //		project.setOption("COUGAAR_VERSION", cougaarVersion);
-        CougaarPlugin.savePreference("COUGAAR_VERSION", cougaarVersion,
+        CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION, cougaarVersion,
              getProject());
         if (cougaarVersion == null) {
             return false;

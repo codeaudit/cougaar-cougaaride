@@ -67,6 +67,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
+import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.launcher.core.constants.ICougaarLaunchConfigurationConstants;
 import com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIMessages;
 
@@ -493,14 +494,14 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         IJavaProject project = getJavaProject(configuration);
         if (project != null) {
             String defaultVersion = CougaarPlugin.getCougaarPreference(project
-                    .getProject(), "COUGAAR_VERSION");
+                    .getProject(), ICougaarConstants.COUGAAR_VERSION);
             while (keys.hasMoreElements()) {
                 String[] pair = new String[2];
                 pair[0] = (String) keys.nextElement();
                 String cip = "";
                 cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
                 if ((cip != null) && !cip.equals("")) {
-                    pair[1] = CougaarParameters.getString(pair[0]).replaceAll("COUGAAR_INSTALL_PATH",
+                    pair[1] = CougaarParameters.getString(pair[0]).replaceAll(ICougaarConstants.COUGAAR_INSTALL_PATH_STRING,
                             cip);
                 }
 
@@ -533,7 +534,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         if (javaProject != null) {
             project = javaProject.getProject();
             defaultVersion = CougaarPlugin.getCougaarPreference(project
-                    .getProject(), "COUGAAR_VERSION");
+                    .getProject(), ICougaarConstants.COUGAAR_VERSION);
         }
 
         HashMap map = new HashMap();
@@ -546,7 +547,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
                 cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
                 if ((cip != null) && !cip.equals("")) {
                     nameValuePair[1] = CougaarParameters.getString(nameValuePair[0])
-                                                        .replaceAll("COUGAAR_INSTALL_PATH",
+                                                        .replaceAll(ICougaarConstants.COUGAAR_INSTALL_PATH_STRING,
 					cip);
                 }
 

@@ -63,4 +63,8 @@ public interface ICougaarConstants {
     public static final String ATTR_NODE_NAME = "org.cougaar.nodeName";
     /** Cougaar Constant */
     public static final String COUGAAR_MAIN_CLASS = "org.cougaar.bootstrap.Bootstrapper";
+    /** Cougaar constant */
+    public static final String COUGAAR_VERSION = "COUGAAR_VERSION";
+    /** Cougaar constant */
+    public static final String COUGAAR_INSTALL_PATH_STRING = "COUGAAR_INSTALL_PATH";
 }
