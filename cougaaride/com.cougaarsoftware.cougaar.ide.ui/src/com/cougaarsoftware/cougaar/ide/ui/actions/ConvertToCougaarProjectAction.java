@@ -29,12 +29,12 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIPlugin;
+import com.cougaarsoftware.cougaar.ide.ui.dialogs.SelectCougaarInstallDialog;
 
 
 /**
@@ -60,22 +60,25 @@ public class ConvertToCougaarProjectAction extends ResourceAction {
         try {
             List input = new ArrayList();
             input.add(CougaarPlugin.getAllCougaarLocations().values().iterator());
-            //ask for cougaar version in a dialog
-            InputDialog dlg = new InputDialog(CougaarUIPlugin.getDefault()
-                                                                             .getWorkbench()
-                                                                             .getActiveWorkbenchWindow()
-                                                                             .getShell(),
-            "Cougaar Version", "Select the Cougaar Version to use.", "",null);
+
+            SelectCougaarInstallDialog dlg = new SelectCougaarInstallDialog(CougaarUIPlugin.getDefault()
+                                                                                           .getWorkbench()
+                                                                                           .getActiveWorkbenchWindow()
+                                                                                           .getShell());
             dlg.open();
 
             if (dlg.getReturnCode() != Window.OK) {
                 return;
             }
+
             String version = dlg.getValue();
+            if ((version == null) || version.trim().equals("")) {
+                resultError("Error!", "Empty or invalid version selected!");
+                return;
+            }
 
-
-            CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION,
-                version, jproject.getProject());
+            CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION, version,
+                jproject.getProject());
 
             CougaarPlugin.convertToCougaarProject(jproject, null);
         } catch (CoreException e) {
