@@ -23,27 +23,20 @@
 package com.cougaarsoftware.cougaar.ide.ui.wizards;
 
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
+import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaModelStatus;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaConventions;
-import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.JavaPluginImages;
+import org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter;
 import org.eclipse.jdt.internal.ui.wizards.NewProjectCreationWizard;
 import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 import com.cougaarsoftware.cougaar.ide.core.CoreMessages;
-import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
-import com.cougaarsoftware.cougaar.ide.core.IResourceIDs;
-import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
 
 
@@ -54,10 +47,6 @@ import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
  * @see org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard
  */
 public class NewCougaarProjectWizard extends NewProjectCreationWizard {
-    private String projectCougaarVersion;
-
-    // switch to control write of trace data
-    private boolean traceEnabled = false;
     private CougaarCapabilityConfigurationPage fCougaarPage;
 
     /**
@@ -82,7 +71,6 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
                 "CougaarCapabilityDescription"));
         addPage(fCougaarPage);
 
-
         //add the java pages
         super.addPages();
 
@@ -102,175 +90,35 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
 
 
     /**
-     * Customizes the project by adding a builder, the ReadmeBuilder in this
-     * scenario.
      *
-     * @see org.eclipse.core.resources.IProjectNature#configure()
-     */
-    public void configure(IJavaProject javaProject)
-        throws CoreException {
-        IPath path = new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);
-        IClasspathEntry conEntry = JavaCore.newContainerEntry(path, false);
-
-        IClasspathEntry[] entries = javaProject.getRawClasspath();
-        IClasspathEntry[] newentries;
-		int index=entries.length;
-		//look for the entry already in the classpath
-        for (int i = 0; i < entries.length; i++) {
-			if(entries[i].equals(conEntry)){
-				index=i;
-				break;
-			}
-		}
-		
-		//if we didnt find an existing entry
-		if(index==entries.length){
-			newentries = new IClasspathEntry[entries.length + 1];
-			System.arraycopy(entries, 0, newentries, 0, entries.length);
-			newentries[newentries.length - 1] = conEntry;
-		}else{
-			newentries=entries;
-		}
-		
-
-
-        IJavaModelStatus validation = JavaConventions.validateClasspath(javaProject,
-                newentries, javaProject.getOutputLocation());
-        if (!validation.isOK()) {
-            throw new CoreException(validation);
-        }
-
-        javaProject.setRawClasspath(newentries, null);
-
-    }
-
-
-    /**
-     * Called when user is finished setting up new project.  Creates the
-     * project with the specified preferences
-     *
-     * @return false if there are any problems creating the project
      */
     public boolean performFinish() {
-        boolean ret = super.performFinish();
-        JavaCapabilityConfigurationPage jcp = (JavaCapabilityConfigurationPage) this
-            .getPage("JavaCapabilityConfigurationPage");
-
-        //only continue if java thinks its ok, and we have a cougaar version
-        if (!ret) {
-            return false;
-        } else if (projectCougaarVersion == null) {
-			resultError("Create Cougaar Project",
-				"You must set a valid Cougaar Installation for the project.");
-            return false;
-        }
-
-        try {
-            if (!this.addCougaarNature(jcp.getJavaProject().getProject())) {
-                //bail out if couldn't add the cougaar nature
-                return false;
-            }
-
-            //add the cougaar class path
-            this.configure(jcp.getJavaProject());
-
-            CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION,
-                projectCougaarVersion, jcp.getJavaProject().getProject());
+        //let java finish first (need project to be setup)
+        boolean superReturn = super.performFinish();
+        if (superReturn) {
+            IWorkspaceRunnable op = new IWorkspaceRunnable() {
+                    public void run(IProgressMonitor monitor)
+                        throws CoreException, OperationCanceledException {
+                        try {
+                            fCougaarPage.finishPage(monitor);
+                        } catch (InterruptedException e) {
+                            throw new OperationCanceledException(e.getMessage());
+                        }
+                    }
+                };
 
             try {
-                CougaarPlugin.updateClasspathContainer(jcp.getJavaProject(),
-                    null);
-            } catch (CoreException e) {
-                resultError("Create Cougaar Project",
-                    "Failed to set and save classpath");
+                getContainer().run(false, true, new WorkbenchRunnableAdapter(op));
+            } catch (InvocationTargetException e) {
                 e.printStackTrace();
-                return false;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
-            CougaarPlugin.getDefault().savePluginSettings();
+            return true;
 
-        } catch (CoreException e) {
-            e.printStackTrace();
+        } else {
             return false;
         }
-
-        return ret;
-    }
-
-
-    /**
-     * Add the nature to the project.
-     *
-     * @param project DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws CoreException DOCUMENT ME!
-     */
-    public boolean addCougaarNature(IProject project)
-        throws CoreException {
-        try {
-            IProjectDescription description = project.getDescription();
-            String[] natures = description.getNatureIds();
-            String[] newNatures = new String[natures.length + 1];
-            System.arraycopy(natures, 0, newNatures, 0, natures.length);
-            newNatures[natures.length] = IResourceIDs.COUGAAR_NATURE_ID;
-            description.setNatureIds(newNatures);
-            project.setDescription(description, null);
-        } catch (CoreException e) {
-            // ie.- one of the steps resulted in a core exception
-            resultError("Create Project with CougaarNature Request",
-                "Adding CougaarNature to project " + project.getName()
-                + " failed");
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-    }
-
-
-    /**
-     * Used to show action results.
-     *
-     * @see org.eclipse.jface.dialogs.MessageDialog
-     */
-    protected void resultInformation(String title, String msg) {
-        // Confirm Result
-        if (traceEnabled) {
-            // trace only to console
-            System.out.println(title + msg);
-        } else {
-            // user interaction response
-            MessageDialog.openInformation(getShell(), title, msg);
-        }
-    }
-
-
-    /**
-     * Used to show action results.
-     *
-     * @see org.eclipse.jface.dialogs.MessageDialog
-     */
-    protected void resultError(String title, String msg) {
-        // Indicate Error
-        if (traceEnabled) {
-            // trace only to console
-            System.out.println(title + msg);
-        } else {
-            // user interaction response
-            MessageDialog.openError(getShell(), title, msg);
-        }
-    }
-
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param cougaarVersion
-     */
-    public void setCougaarVersion(String cougaarVersion) {
-        projectCougaarVersion = cougaarVersion;
-        this.getContainer().updateButtons();
     }
 }
