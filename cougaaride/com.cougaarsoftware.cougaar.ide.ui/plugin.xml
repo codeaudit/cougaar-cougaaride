@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
    name="%Plugin.name"
-   version="1.0.1"
+   version="1.0.2"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.ui.CougaarUIPlugin">
 
@@ -85,8 +85,6 @@
             id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage">
       </page>
    </extension>
-
-
 <!-- Popup menus to Convert Java Projects to Cougaar Projects      -->
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -104,20 +102,24 @@
          <action
                label="Convert To Cougaar Project"
                icon="icons/cougaaride.gif"
+               class="com.cougaarsoftware.cougaar.ide.ui.actions.ConvertToCougaarProjectAction"
                menubarPath="com.cougaarsoftware.cougaar.ide.ui.menu/convert"
                enablesFor="1"
-               class="com.cougaarsoftware.cougaar.ide.ui.actions.ConvertToCougaarProjectAction"
                id="com.cougaarsoftware.cougaar.ide.ui.actions.ConvertToCougaarProjectAction">
-               
-         	<enablement>
-         		<and>
-         			<not>
-         				<objectState name="projectNature" value="com.cougaarsoftware.cougaar.ide.core.cougaarnature"/>
-				  	</not>
-				  	<objectState name="projectNature" value="org.eclipse.jdt.core.javanature"/>
-         	  	</and>
-			 </enablement>
-
+            <enablement>
+               <and>
+                  <not>
+                     <objectState
+                           name="projectNature"
+                           value="com.cougaarsoftware.cougaar.ide.core.cougaarnature">
+                     </objectState>
+                  </not>
+                  <objectState
+                        name="projectNature"
+                        value="org.eclipse.jdt.core.javanature">
+                  </objectState>
+               </and>
+            </enablement>
          </action>
       </objectContribution>
    </extension>
