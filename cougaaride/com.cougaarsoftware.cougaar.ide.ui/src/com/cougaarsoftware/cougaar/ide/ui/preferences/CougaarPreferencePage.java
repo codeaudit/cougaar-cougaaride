@@ -69,7 +69,7 @@ import com.cougaarsoftware.cougaar.ide.ui.ListContentProvider;
 
 
 /**
- * DOCUMENT ME!
+ * Cougaar Preference page for adding new cougaar installs
  *
  * @author mabrams
  */
@@ -79,7 +79,8 @@ public class CougaarPreferencePage extends PreferencePage
     private Button fAddButton;
     private Button fRemoveButton;
     private Button fEditButton;
-    private Button fSearchButton;
+
+    //    private Button fSearchButton;
     private List fCougaarInstalls;
     private IAddCougaarDialogRequestor requestor;
 
@@ -93,17 +94,20 @@ public class CougaarPreferencePage extends PreferencePage
                 "CougaarPreferencePage.Installed_CougaarVersions_1"));
 
     }
-    
-	/**
-	   * Creates a new CougaarPreferencePage object.
-	   */
-	  public CougaarPreferencePage(IAddCougaarDialogRequestor req) {
-		  super();
-		  this.requestor = req;
-		  setTitle(CougaarPreferencesMessages.getString(
-				  "CougaarPreferencePage.Installed_CougaarVersions_1"));
 
-	  }
+
+    /**
+     * Creates a new CougaarPreferencePage object.
+     *
+     * @param req DOCUMENT ME!
+     */
+    public CougaarPreferencePage(IAddCougaarDialogRequestor req) {
+        super();
+        this.requestor = req;
+        setTitle(CougaarPreferencesMessages.getString(
+                "CougaarPreferencePage.Installed_CougaarVersions_1"));
+
+    }
 
     /**
      * @see IWorkbenchPreferencePage#init(IWorkbench)
@@ -255,18 +259,18 @@ public class CougaarPreferencePage extends PreferencePage
                 }
             });
 
-        fSearchButton = new Button(buttons, SWT.PUSH);
-        fSearchButton.setFont(font);
-        setButtonLayoutData(fSearchButton);
-        fSearchButton.setText(CougaarPreferencesMessages.getString(
-                "CougaarPreferencePage.&Search..._1")); //$NON-NLS-1$
-        fSearchButton.addListener(SWT.Selection,
-            new Listener() {
-                public void handleEvent(Event evt) {
-                    search();
-                }
-            });
-
+        //not implemented yet so commenting out for  now
+        //        fSearchButton = new Button(buttons, SWT.PUSH);
+        //        fSearchButton.setFont(font);       
+        //        setButtonLayoutData(fSearchButton);
+        //        fSearchButton.setText(CougaarPreferencesMessages.getString(
+        //                "CougaarPreferencePage.&Search..._1")); //$NON-NLS-1$
+        //        fSearchButton.addListener(SWT.Selection,
+        //            new Listener() {
+        //                public void handleEvent(Event evt) {
+        //                    search();
+        //                }
+        //            });
         configureTableResizing(parent, buttons, table, column2, column3);
 
         populateCougaarList();
@@ -274,14 +278,6 @@ public class CougaarPreferencePage extends PreferencePage
 
 
         return parent;
-    }
-
-
-    /**
-     * DOCUMENT ME!
-     */
-    public void search() {
-        //TODO: add search for cougaar
     }
 
 
@@ -419,6 +415,7 @@ public class CougaarPreferencePage extends PreferencePage
      * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#isDuplicateName(java.lang.String)
      */
     public boolean isDuplicateName(String name) {
+   
         for (int i = 0; i < fCougaarInstalls.size(); i++) {
             ICougaarInstall cougaar = (ICougaarInstall) fCougaarInstalls.get(i);
             if (cougaar.getId().equals(name)) {
@@ -437,8 +434,9 @@ public class CougaarPreferencePage extends PreferencePage
         fCougaarInstalls.add(cougaar);
         fCougaarList.refresh();
         if (requestor != null) {
-        	requestor.cougaarAdded(cougaar);
+            requestor.cougaarAdded(cougaar);
         }
+
         //TODO: check for default
     }
 }

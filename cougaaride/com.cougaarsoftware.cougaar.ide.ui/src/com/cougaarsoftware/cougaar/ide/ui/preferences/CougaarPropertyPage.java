@@ -49,6 +49,7 @@ import org.eclipse.ui.dialogs.PropertyPage;
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
+import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 
 
 /**
@@ -57,7 +58,7 @@ import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
  * @author Matt Abrams
  */
 public class CougaarPropertyPage extends PropertyPage
-    implements IStatusChangeListener {
+    implements IStatusChangeListener, IAddCougaarDialogRequestor {
     private CougaarConfigurationBlock fCougaarConfigurationBlock;
 
     /**
@@ -158,7 +159,7 @@ public class CougaarPropertyPage extends PropertyPage
             CougaarPlugin.getDefault().savePluginSettings();
             return super.performOk();
         } else {
-        	//TODO: roll back preference changes that were saved above
+            //TODO: roll back preference changes that were saved above
             return false;
         }
     }
@@ -213,5 +214,6 @@ public class CougaarPropertyPage extends PropertyPage
      */
     public void cougaarAdded(ICougaarInstall cougaar) {
         // TODO Auto-generated method stub
+        System.err.println("cougaar added: " + cougaar.getId());
     }
 }

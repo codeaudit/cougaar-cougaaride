@@ -226,18 +226,22 @@ public class CougaarConfigurationBlock extends PropertyPage
     private void setValues(String selectedVersion) {
       
         int count = fCougaarCombo.getItemCount();
-        for (int i = 0; i < count; i++) {
-            String item = fCougaarCombo.getItem(i);
-            if (item.equals(selectedVersion)) {
-                fCougaarCombo.select(i);
-                break;
-            }
+        if (count == 1) {
+        	fCougaarCombo.select(1);        	
+        } else {
+        	for (int i = 0; i < count; i++) {
+            	String item = fCougaarCombo.getItem(i);
+            	if (item.equals(selectedVersion)) {
+                	fCougaarCombo.select(i);
+                	break;
+            	}
+        	}
         }
     }
 
 
     /**
-     * DOCUMENT ME!
+     * perform defaults
      */
     public void performDefaults() {
         String defaultVersion = CougaarPlugin.getCougaarPreference(project,

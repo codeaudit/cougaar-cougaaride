@@ -184,7 +184,7 @@ public class AddCougaarDialog extends StatusDialog {
         IStatus s = null;
         File file = null;
         if (locationName.length() == 0) { //$NON-NLS-1$
-            s = new StatusInfo(IStatus.INFO,
+            s = new StatusInfo(IStatus.ERROR,
                     CougaarUIMessages.getString(
                         "addCougaarDialog.enterLocation")); //$NON-NLS-1$
         } else {
@@ -214,7 +214,7 @@ public class AddCougaarDialog extends StatusDialog {
         StatusInfo status = new StatusInfo();
         String name = fCougaarName.getText();
         if ((name == null) || (name.trim().length() == 0)) {
-            status.setInfo(CougaarUIMessages.getString(
+            status.setError(CougaarUIMessages.getString(
                     "addCougaarDialog.enterName")); //$NON-NLS-1$
         } else {
             if (fRequestor.isDuplicateName(name)
@@ -300,6 +300,7 @@ public class AddCougaarDialog extends StatusDialog {
             IStatus curr = fStatus[i];
             if (curr.matches(IStatus.ERROR)) {
                 updateStatus(curr);
+                super.updateButtonsEnableState(curr);
                 return;
             }
 
