@@ -128,8 +128,8 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
 
 
     /**
-     * Called when user is finished setting up new project.  Creates the project
-     * with the specified preferences
+     * Called when user is finished setting up new project.  Creates the
+     * project with the specified preferences
      *
      * @return false if there are any problems creating the project
      */
@@ -144,6 +144,23 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
 
             CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION,
                 projectCougaarVersion, jcp.getJavaProject().getProject());
+
+            CougaarPlugin.getDefault().getPreferenceStore().setValue(CougaarPlugin.DEFAULT_COUGAAR_PREFERENCE,
+                projectCougaarVersion);
+
+
+            if (projectCougaarVersion == null) {
+                return false;
+            }
+
+            try {
+                CougaarPlugin.updateClasspathContainer(jcp.getJavaProject());
+            } catch (CoreException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            CougaarPlugin.getDefault().savePluginSettings();
 
         } catch (CoreException e) {
             // TODO Auto-generated catch block

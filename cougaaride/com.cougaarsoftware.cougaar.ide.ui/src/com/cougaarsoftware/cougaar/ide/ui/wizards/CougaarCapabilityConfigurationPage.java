@@ -47,8 +47,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
+import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
+import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage;
 import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages;
 
@@ -58,7 +60,7 @@ import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages
  *
  * @author mabrams
  */
-public class CougaarCapabilityConfigurationPage extends WizardPage {
+public class CougaarCapabilityConfigurationPage extends WizardPage implements IAddCougaarDialogRequestor {
     private static final String PAGE_NAME = "CougaarCapabilityConfigurationPage"; //$NON-NLS-1$
     private Combo fCougaarCombo;
     private String cougaarVersion = "";
@@ -100,7 +102,9 @@ public class CougaarCapabilityConfigurationPage extends WizardPage {
         cougaarSelectionLabel.setLayoutData(new GridData());
 
         fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
+        if (cougaarNames.length > 0) {
         fCougaarCombo.setItems(cougaarNames);
+        }
 
         fCougaarCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
         fCougaarCombo.addModifyListener(new ModifyListener() {
@@ -132,7 +136,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage {
     private void handleAddButtonSelected() {
         String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
 
-        CougaarPreferencePage page = new CougaarPreferencePage();
+        CougaarPreferencePage page = new CougaarPreferencePage(this);
         showPreferencePage(id, page);
         fCougaarCombo.update();
     }
@@ -186,4 +190,20 @@ public class CougaarCapabilityConfigurationPage extends WizardPage {
         cougaarProjectWizard.setCougaarVersion(cougaarVersion);
         //		
     }
+
+	/* (non-Javadoc)
+	 * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#isDuplicateName(java.lang.String)
+	 */
+	public boolean isDuplicateName(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
+	 */
+	public void cougaarAdded(ICougaarInstall cougaar) {
+		String[] versions = getCougaarVersions();
+		fCougaarCombo.setItems(versions);			
+	}
 }

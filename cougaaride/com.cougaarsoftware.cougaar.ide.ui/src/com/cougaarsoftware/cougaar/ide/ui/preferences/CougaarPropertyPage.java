@@ -42,7 +42,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.PropertyPage;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
+import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
+import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 
 
 /**
@@ -167,4 +169,20 @@ public class CougaarPropertyPage extends PropertyPage
 
         return elem;
     }
+
+	/* (non-Javadoc)
+	 * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#isDuplicateName(java.lang.String)
+	 */
+	public boolean isDuplicateName(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
+	 */
+	public void cougaarAdded(ICougaarInstall cougaar) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -81,6 +81,7 @@ public class CougaarPreferencePage extends PreferencePage
     private Button fEditButton;
     private Button fSearchButton;
     private List fCougaarInstalls;
+    private IAddCougaarDialogRequestor requestor;
 
     /**
      * Creates a new CougaarPreferencePage object.
@@ -92,6 +93,17 @@ public class CougaarPreferencePage extends PreferencePage
                 "CougaarPreferencePage.Installed_CougaarVersions_1"));
 
     }
+    
+	/**
+	   * Creates a new CougaarPreferencePage object.
+	   */
+	  public CougaarPreferencePage(IAddCougaarDialogRequestor req) {
+		  super();
+		  this.requestor = req;
+		  setTitle(CougaarPreferencesMessages.getString(
+				  "CougaarPreferencePage.Installed_CougaarVersions_1"));
+
+	  }
 
     /**
      * @see IWorkbenchPreferencePage#init(IWorkbench)
@@ -424,6 +436,9 @@ public class CougaarPreferencePage extends PreferencePage
     public void cougaarAdded(ICougaarInstall cougaar) {
         fCougaarInstalls.add(cougaar);
         fCougaarList.refresh();
+        if (requestor != null) {
+        	requestor.cougaarAdded(cougaar);
+        }
         //TODO: check for default
     }
 }

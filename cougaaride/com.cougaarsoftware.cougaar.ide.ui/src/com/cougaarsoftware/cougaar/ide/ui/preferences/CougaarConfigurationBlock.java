@@ -71,6 +71,7 @@ public class CougaarConfigurationBlock extends PropertyPage
     private IStatusChangeListener fStatus;
     private Button fAddCougaarInstall;
     private IProject project;
+    
     private Control control;
 
     /**
@@ -80,7 +81,7 @@ public class CougaarConfigurationBlock extends PropertyPage
      * @param proj DOCUMENT ME!
      */
     public CougaarConfigurationBlock(IStatusChangeListener status, IProject proj) {
-        fStatus = status;
+        fStatus = status;        
         project = proj;
     }
 
@@ -183,7 +184,7 @@ public class CougaarConfigurationBlock extends PropertyPage
     private void handleAddButtonSelected() {
         String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
 
-        CougaarPreferencePage page = new CougaarPreferencePage();
+        CougaarPreferencePage page = new CougaarPreferencePage(this);
         showPreferencePage(id, page);
     }
 
@@ -264,6 +265,7 @@ public class CougaarConfigurationBlock extends PropertyPage
      * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
      */
     public void cougaarAdded(ICougaarInstall cougaar) {
-        //TODO
+       String[] versions = getCougaarVersions();
+       fCougaarCombo.setItems(versions);
     }
 }
