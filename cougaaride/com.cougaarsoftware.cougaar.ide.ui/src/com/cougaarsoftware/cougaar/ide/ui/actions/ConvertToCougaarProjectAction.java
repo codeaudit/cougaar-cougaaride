@@ -25,9 +25,6 @@ package com.cougaarsoftware.cougaar.ide.ui.actions;
 
 import java.lang.reflect.InvocationTargetException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
