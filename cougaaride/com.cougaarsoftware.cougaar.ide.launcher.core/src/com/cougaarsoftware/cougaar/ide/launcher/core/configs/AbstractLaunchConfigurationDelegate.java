@@ -180,6 +180,8 @@ public abstract class AbstractLaunchConfigurationDelegate
 					ret += (next + " " + (String) vmParameters.get(next) + " ");
 				} else if (next.indexOf("-Xbootclasspath") > -1) {
 					ret += ((String) vmParameters.get(next) + " ");
+				} else if (next.indexOf("-X") > -1) {
+					ret += ((String) vmParameters.get(next) + " ");
 				} else {
 					ret += (next + "=" + (String) vmParameters.get(next) + " ");
 				}

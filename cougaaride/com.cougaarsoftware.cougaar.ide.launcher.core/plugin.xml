@@ -29,6 +29,12 @@
             modes="run, debug"
             id="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarLaunchConfigurationType">
       </launchConfigurationType>
+      <launchConfigurationType
+            name="%com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarXMLLaunchConfigurationType"
+            delegate="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarLaunchConfigurationDelegate"
+            modes="run, debug"
+            id="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarXMLLaunchConfigurationType">
+      </launchConfigurationType>
    </extension>
 
 </plugin>

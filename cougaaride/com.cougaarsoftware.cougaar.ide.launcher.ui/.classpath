@@ -6,7 +6,11 @@
     <classpathentry kind="var"
         path="ECLIPSE_HOME/plugins/org.eclipse.ui_3.0.0/ui.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_SRC/org.eclipse.ui_3.0.0/uisrc.zip"/>
     <classpathentry kind="var"
-        path="ECLIPSE_HOME/plugins/org.eclipse.swt.win32_3.0.0/ws/win32/swt.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_WIN32_WIN32_X86_SRC/org.eclipse.swt.win32_3.0.0/ws/win32/swtsrc.zip"/>
+        path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk_3.0.0/ws/gtk/swt.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_LINUX_GTK_X86_SRC/org.eclipse.swt.gtk_3.0.0/ws/gtk/swtsrc.zip"/>
+    <classpathentry kind="var"
+        path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk_3.0.0/ws/gtk/swt-pi.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_LINUX_GTK_X86_SRC/org.eclipse.swt.gtk_3.0.0/ws/gtk/swt-pisrc.zip"/>
+    <classpathentry kind="var"
+        path="ECLIPSE_HOME/plugins/org.eclipse.swt.gtk_3.0.0/ws/gtk/swt-mozilla.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_LINUX_GTK_X86_SRC/org.eclipse.swt.gtk_3.0.0/ws/gtk/swt-mozillasrc.zip"/>
     <classpathentry kind="var"
         path="ECLIPSE_HOME/plugins/org.eclipse.text_3.0.0/text.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_SRC/org.eclipse.text_3.0.0/textsrc.zip"/>
     <classpathentry kind="var"
@@ -17,8 +21,6 @@
         path="ECLIPSE_HOME/plugins/org.eclipse.ui.views_3.0.0/views.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_SRC/org.eclipse.ui.views_3.0.0/viewssrc.zip"/>
     <classpathentry kind="var"
         path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench_3.0.0/workbench.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_SRC/org.eclipse.ui.workbench_3.0.0/workbenchsrc.zip"/>
-    <classpathentry kind="var"
-        path="ECLIPSE_HOME/plugins/org.eclipse.ui.win32_3.0.0/workbenchwin32.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_WIN32_WIN32_X86_SRC/org.eclipse.ui.win32_3.0.0/workbenchwin32src.zip"/>
     <classpathentry kind="var"
         path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench.texteditor_3.0.0/texteditor.jar" sourcepath="ORG_ECLIPSE_PLATFORM_SOURCE_SRC/org.eclipse.ui.workbench.texteditor_3.0.0/texteditorsrc.zip"/>
     <classpathentry kind="var"

@@ -32,8 +32,13 @@
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
             type="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarLaunchConfigurationType"
-            class="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarTabGroup"
-            id="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarTabGroup">
+            class="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarINITabGroup"
+            id="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarINITabGroup">
+      </launchConfigurationTabGroup>
+      <launchConfigurationTabGroup
+            type="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarXMLLaunchConfigurationType"
+            class="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarXMLTabGroup"
+            id="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarXMLTabGroup">
       </launchConfigurationTabGroup>
    </extension>
    <extension
@@ -42,7 +47,12 @@
             icon="icons/cougaaride.gif"
             configTypeID="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarLaunchConfigurationType"
             id="com.cougaarsoftware.cougaar.ide.launcher.ui.cougaarLaunchConfigurationTypeImage">
-      </launchConfigurationTypeImage>
+      </launchConfigurationTypeImage>    
+      <launchConfigurationTypeImage
+            icon="icons/cougaaride.gif"
+            configTypeID="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarXMLLaunchConfigurationType"
+            id="com.cougaarsoftware.cougaar.ide.launcher.ui.cougaarLaunchConfigurationTypeImage">
+      </launchConfigurationTypeImage>    
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">

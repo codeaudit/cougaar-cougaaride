@@ -35,13 +35,13 @@ import org.eclipse.jdt.debug.ui.launchConfigurations.JavaJRETab;
  *
  * @author mabrams
  */
-public class CougaarTabGroup extends AbstractCougaarTabGroup {
+public class CougaarINITabGroup extends AbstractCougaarTabGroup {
     /* (non-Javadoc)
      * @see org.eclipse.debug.ui.ILaunchConfigurationTabGroup#createTabs(org.eclipse.debug.ui.ILaunchConfigurationDialog, java.lang.String)
      */
     public void createTabs(ILaunchConfigurationDialog dialog, String mode) {
         ILaunchConfigurationTab[] tabs = new ILaunchConfigurationTab[] {
-                new CougaarMainTab(), new CougaarParametersTab(),
+                new CougaarMainTab(), new CougaarINIParametersTab(),
                 new JavaJRETab(), new JavaClasspathTab(), new CommonTab()
             };
         setTabs(tabs);

@@ -33,15 +33,15 @@ import java.util.ResourceBundle;
  *
  * @author mabrams
  */
-public class CougaarParameters {
-    private static final String BUNDLE_NAME = "com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarParameters";
+public class CougaarINIParameters {
+    private static final String BUNDLE_NAME = "com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarINIParameters";
     private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
         .getBundle(BUNDLE_NAME);
 
     /**
      * Constructor for the LauncherMessages object
      */
-    private CougaarParameters() {
+    private CougaarINIParameters() {
     }
 
     /**
