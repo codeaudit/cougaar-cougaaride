@@ -71,4 +71,6 @@ public class ICougaarLaunchConfigurationConstants {
     public static final String ATTR_COUGAAR_VM_PARAMETERS = "org.cougaar.launchParameters";
 	/** Cougaar Launch Constant */
 	public static final String ATTR_SOCIETY_NAME = "org.cougaar.society.fileName";
+	/** load params from xml */
+    public static final String ATTR_COUGAAR_LOAD_PARAMS_FROM_XML = "org.cougaar.society.userXMLParams";
 }
