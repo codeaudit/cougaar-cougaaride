@@ -102,7 +102,7 @@ public class CougaarVMArgumentsBlock extends VMArgumentsBlock {
         GridData gd = new GridData(GridData.FILL_HORIZONTAL);
         comp.setLayoutData(gd);
 
-        fVMArgumentsLabel = new Label(comp, SWT.NONE);
+        Label fVMArgumentsLabel = new Label(comp, SWT.NONE);
         fVMArgumentsLabel.setText(LauncherMessages.getString(
                 "JavaArgumentsTab.VM_ar&guments__6")); //$NON-NLS-1$
         fVMArgumentsLabel.setFont(font);

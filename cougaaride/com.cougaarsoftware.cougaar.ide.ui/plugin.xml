@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse version="3.0"?>
-<plugin
+<?eclipse version="3.0"?><plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
    name="%Plugin.name"
-   version="1.2.3"
+   version="1.2.4"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.ui.CougaarUIPlugin">
 
@@ -13,6 +12,7 @@
          <packages prefixes="com.cougaarsoftware.cougaar.ide.ui"/>
       </library>
    </runtime>
+
    <requires>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.jface.text"/>
@@ -27,7 +27,6 @@
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
    </requires>
 
-
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
@@ -41,14 +40,13 @@
          point="org.eclipse.ui.editors">
       <editor
             name="Cougaar Society XML Editor"
-            extensions="xml"
             icon="icons/cougaarsociety.gif"
-            class="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor"
+            extensions="xml"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor"
             id="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor">
       </editor>
    </extension>
-<!-- Wizard to create project with Cougaar nature            -->
    <extension
          point="org.eclipse.ui.newWizards">
       <category
@@ -60,8 +58,8 @@
             icon="icons/cougaaride.gif"
             category="com.cougaarsoftware.cougaar.ide.ui.wizards"
             class="com.cougaarsoftware.cougaar.ide.ui.wizards.NewCougaarProjectWizard"
-            finalPerspective="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective"
             project="true"
+            finalPerspective="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective"
             id="com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject">
          <description>
             A New Cougaar Project Wizard
@@ -71,8 +69,8 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            adaptable="true"
             objectClass="org.eclipse.core.resources.IProject"
+            adaptable="true"
             name="Cougaar Properties"
             class="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage"
             id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage">
@@ -90,7 +88,6 @@
             id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage">
       </page>
    </extension>
-<!-- Popup menus to Convert Java Projects to Cougaar Projects      -->
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
