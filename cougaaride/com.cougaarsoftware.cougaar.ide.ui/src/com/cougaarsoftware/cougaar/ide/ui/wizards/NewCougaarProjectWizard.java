@@ -74,14 +74,18 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
      * @see Wizard#addPages
      */
     public void addPages() {
-        super.addPages();
-
+        //add the page to prompt for the cougaar version
         fCougaarPage = new CougaarCapabilityConfigurationPage(this);
         fCougaarPage.setTitle(CougaarUIMessages.getString(
                 "CougaarCapabilityTitle"));
         fCougaarPage.setDescription(CougaarUIMessages.getString(
                 "CougaarCapabilityDescription"));
         addPage(fCougaarPage);
+
+
+        //add the java pages
+        super.addPages();
+
         JavaCapabilityConfigurationPage jcp = (JavaCapabilityConfigurationPage) this
             .getPage("JavaCapabilityConfigurationPage");
         WizardNewProjectCreationPage ncw = (WizardNewProjectCreationPage) this
@@ -94,7 +98,6 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
         ncw.setTitle(CougaarUIMessages.getString("CougaarCapabilityTitle"));
         ncw.setDescription(CougaarUIMessages.getString(
                 "CougaarCapabilityDescription"));
-
     }
 
 
@@ -106,7 +109,6 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
      */
     public void configure(IJavaProject javaProject)
         throws CoreException {
-
         IPath path = new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);
         IClasspathEntry conEntry = JavaCore.newContainerEntry(path, false);
 
@@ -136,25 +138,34 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
         boolean ret = super.performFinish();
         JavaCapabilityConfigurationPage jcp = (JavaCapabilityConfigurationPage) this
             .getPage("JavaCapabilityConfigurationPage");
-        try {
-            this.addCustomNature(jcp.getJavaProject().getProject());
 
+        //only continue if java thinks its ok, and we have a cougaar version
+        if (!ret) {
+            return false;
+        } else if (projectCougaarVersion == null) {
+			resultError("Create Cougaar Project",
+				"You must set a valid Cougaar Installation for the project.");
+            return false;
+        }
+
+        try {
+            if (!this.addCougaarNature(jcp.getJavaProject().getProject())) {
+                //bail out if couldn't add the cougaar nature
+                return false;
+            }
+
+            //add the cougaar class path
             this.configure(jcp.getJavaProject());
 
             CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION,
                 projectCougaarVersion, jcp.getJavaProject().getProject());
 
-            CougaarPlugin.getDefault().getPreferenceStore().setValue(CougaarPlugin.DEFAULT_COUGAAR_PREFERENCE,
-                projectCougaarVersion);
-
-
-            if (projectCougaarVersion == null) {
-                return false;
-            }
-
             try {
-                CougaarPlugin.updateClasspathContainer(jcp.getJavaProject(),null);
+                CougaarPlugin.updateClasspathContainer(jcp.getJavaProject(),
+                    null);
             } catch (CoreException e) {
+                resultError("Create Cougaar Project",
+                    "Failed to set and save classpath");
                 e.printStackTrace();
                 return false;
             }
@@ -162,8 +173,8 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
             CougaarPlugin.getDefault().savePluginSettings();
 
         } catch (CoreException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
+            return false;
         }
 
         return ret;
@@ -175,9 +186,11 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
      *
      * @param project DOCUMENT ME!
      *
+     * @return DOCUMENT ME!
+     *
      * @throws CoreException DOCUMENT ME!
      */
-    public void addCustomNature(IProject project)
+    public boolean addCougaarNature(IProject project)
         throws CoreException {
         try {
             IProjectDescription description = project.getDescription();
@@ -193,7 +206,10 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
                 "Adding CougaarNature to project " + project.getName()
                 + " failed");
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 
 
@@ -238,6 +254,6 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
      */
     public void setCougaarVersion(String cougaarVersion) {
         projectCougaarVersion = cougaarVersion;
-
+        this.getContainer().updateButtons();
     }
 }
