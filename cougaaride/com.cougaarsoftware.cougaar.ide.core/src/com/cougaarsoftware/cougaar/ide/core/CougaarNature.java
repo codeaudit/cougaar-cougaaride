@@ -87,7 +87,6 @@ public class CougaarNature implements IProjectNature {
      * @see org.eclipse.core.resources.IProjectNature#deconfigure()
      */
     public void deconfigure() throws CoreException {
-        System.err.println("About to deconfigure a Cougaar project!!!");
     }
 
 
