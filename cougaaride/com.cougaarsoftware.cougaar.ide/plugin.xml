@@ -2,10 +2,8 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide"
    name="%pluginName"
-   version="1.2.0"
+   version="1.2.1"
    provider-name="%providerName">
 
-   <runtime>
-   </runtime>
 
 </plugin>

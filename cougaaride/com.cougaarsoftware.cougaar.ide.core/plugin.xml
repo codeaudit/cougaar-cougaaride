@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.core"
    name="%Plugin.name"
-   version="1.2.0"
+   version="1.2.1"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.core.CougaarPlugin">
 
@@ -35,14 +35,14 @@
       </runtime>
    </extension>
 <!-- Nature Image                                           -->
-   <extension
+<!--  <extension
          point="org.eclipse.ui.projectNatureImages">
       <image
             icon="icons/CougaarNature.gif"
             natureId="com.cougaarsoftware.cougaar.ide.core.cougaarnature"
             id="com.cougaarsoftware.cougaar.ide.core.natureimage">
       </image>
-   </extension>
+   </extension>-->
 <!-- VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
 <!-- Classpath Container Initializer                         -->
 <!-- ======================================================= -->

@@ -2,7 +2,7 @@
 <feature
       id="com.cougaarsoftware.cougaar.ide"
       label="Cougaar Integrated Development Environment"
-      version="1.2.0"
+      version="1.2.1"
       provider-name="Cougaar Software, Inc."
       nl="en"
       image="cougaar_logo.gif">
@@ -59,14 +59,14 @@ Foundation
          download-size="0"
          install-size="0"
          version="1.2.0"/>
-         
-    <plugin
+
+   <plugin
          id="com.cougaarsoftware.cougaar.ide.ui"
          download-size="0"
          install-size="0"
          version="1.2.0"/>
-         
-            <plugin
+
+   <plugin
          id="com.cougaarsoftware.cougaar.ide.core"
          download-size="0"
          install-size="0"
@@ -83,6 +83,5 @@ Foundation
          download-size="0"
          install-size="0"
          version="1.2.0"/>
-
 
 </feature>

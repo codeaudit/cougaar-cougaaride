@@ -32,8 +32,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.JavaPluginImages;
 import org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter;
-import org.eclipse.jdt.internal.ui.wizards.NewProjectCreationWizard;
-import org.eclipse.jdt.internal.ui.wizards.NewProjectCreationWizardPage;
+import org.eclipse.jdt.internal.ui.wizards.JavaProjectWizard;
 import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
@@ -47,7 +46,7 @@ import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
  *
  * @see org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard
  */
-public class NewCougaarProjectWizard extends NewProjectCreationWizard {
+public class NewCougaarProjectWizard extends JavaProjectWizard {
     private CougaarCapabilityConfigurationPage fCougaarPage;
 
     /**
