@@ -86,4 +86,40 @@
       </page>
    </extension>
 
+
+<!-- Popup menus to Convert Java Projects to Cougaar Projects      -->
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaProject"
+            id="com.cougaarsoftware.cougaar.ide.ui.menu">
+         <menu
+               label="Cougaar Tools"
+               path="additions"
+               id="com.cougaarsoftware.cougaar.ide.ui.menu">
+            <separator
+                  name="resourceGroup">
+            </separator>
+         </menu>
+         <action
+               label="Convert To Cougaar Project"
+               icon="icons/cougaaride.gif"
+               menubarPath="com.cougaarsoftware.cougaar.ide.ui.menu/convert"
+               enablesFor="1"
+               class="com.cougaarsoftware.cougaar.ide.ui.actions.ConvertToCougaarProjectAction"
+               id="com.cougaarsoftware.cougaar.ide.ui.actions.ConvertToCougaarProjectAction">
+               
+         	<enablement>
+         		<and>
+         			<not>
+         				<objectState name="projectNature" value="com.cougaarsoftware.cougaar.ide.core.cougaarnature"/>
+				  	</not>
+				  	<objectState name="projectNature" value="org.eclipse.jdt.core.javanature"/>
+         	  	</and>
+			 </enablement>
+
+         </action>
+      </objectContribution>
+   </extension>
+
 </plugin>

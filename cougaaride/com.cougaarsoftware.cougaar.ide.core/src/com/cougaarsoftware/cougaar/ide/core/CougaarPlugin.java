@@ -32,12 +32,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
@@ -49,7 +51,10 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathContainer;
+import org.eclipse.jdt.core.IClasspathEntry;
+import org.eclipse.jdt.core.IJavaModelStatus;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaConventions;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -279,7 +284,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
         SubProgressMonitor subMonitor = null;
         if (monitor != null) {
             subMonitor = new SubProgressMonitor(monitor, 1);
-			subMonitor.setTaskName("Setting Classpath");
+            subMonitor.setTaskName("Setting Classpath");
         }
 
         JavaCore.setClasspathContainer(path, javaProjects, containers,
@@ -288,10 +293,163 @@ public class CougaarPlugin extends AbstractUIPlugin {
         subMonitor = null;
         if (monitor != null) {
             subMonitor = new SubProgressMonitor(monitor, 1);
-			subMonitor.setTaskName("Performing Full Build");
+            subMonitor.setTaskName("Performing Full Build");
         }
 
         project.build(IncrementalProjectBuilder.FULL_BUILD, subMonitor);
+    }
+
+
+    /**
+     * Convert an existing javaproject to a cougaar project.  Does nothing if
+     * its already a cougaar project; aborts if no cougaar version preference
+     * is set for the project.
+     *
+     * @param jproject java project to convert
+     * @param monitor progress monitor
+     *
+     * @throws CoreException
+     */
+    public static void convertToCougaarProject(IJavaProject jproject,
+        IProgressMonitor monitor) throws CoreException {
+        IProject project = jproject.getProject();
+        if (isCougaarProject(project)) {
+            return;
+        }
+
+        //abort if no cougaar version is found
+        String version = getCougaarPreference(project,
+                ICougaarConstants.COUGAAR_VERSION);
+        if (version == null) {
+            throw new CoreException(null);
+        }
+
+        SubProgressMonitor subMonitor = null;
+        if (monitor != null) {
+            subMonitor = new SubProgressMonitor(monitor, 4);
+            subMonitor.setTaskName("Converting to Cougaar Project");
+        }
+
+        //add cougaarNature
+        addCougaarNature(project, subMonitor);
+
+        //remove jars in existing CP that are under selected install path
+        String baseLocation = getCougaarBaseLocation(version);
+        IPath basepath = new Path(baseLocation);
+        IClasspathEntry[] entries = jproject.getRawClasspath();
+        IClasspathEntry[] newentries;
+        ArrayList keptEntries = new ArrayList();
+
+        //look for the entry already in the classpath
+        for (int i = 0; i < entries.length; i++) {
+            IClasspathEntry entry = entries[i];
+            IPath path = entry.getPath();
+            if (!basepath.isPrefixOf(path)) {
+                keptEntries.add(entry);
+            }
+        }
+
+        newentries = new IClasspathEntry[keptEntries.size()];
+        System.arraycopy(keptEntries.toArray(), 0, newentries, 0,
+            keptEntries.size());
+
+        //make sure we didn't screw up the classpath
+        IJavaModelStatus validation = JavaConventions.validateClasspath(jproject,
+                newentries, jproject.getOutputLocation());
+        if (!validation.isOK()) {
+            throw new CoreException(validation);
+        }
+
+        //save the CP (same, but with cougaar jars stripped)
+        jproject.setRawClasspath(newentries, subMonitor);
+
+        //add the cougaar classpath container
+        addCougaarClasspathContainer(jproject, subMonitor);
+
+        //finally populate the cougaar CP container and rebuild
+        updateClasspathContainer(jproject, subMonitor);
+    }
+
+
+    /**
+     * Add the nature to the project.
+     *
+     * @param project project to add nature to
+     * @param monitor progress monitor
+     *
+     * @return true for success
+     *
+     * @throws CoreException
+     */
+    public static boolean addCougaarNature(IProject project,
+        IProgressMonitor monitor) throws CoreException {
+        IProjectDescription description = project.getDescription();
+        String[] natures = description.getNatureIds();
+        String[] newNatures = new String[natures.length + 1];
+        System.arraycopy(natures, 0, newNatures, 0, natures.length);
+        newNatures[natures.length] = IResourceIDs.COUGAAR_NATURE_ID;
+        description.setNatureIds(newNatures);
+
+        SubProgressMonitor subMonitor = null;
+        if (monitor != null) {
+            subMonitor = new SubProgressMonitor(monitor, 1);
+            subMonitor.setTaskName("Adding Cougaar Nature");
+        }
+
+        project.setDescription(description, subMonitor);
+
+        return true;
+    }
+
+
+    /**
+     * Add classpath container for the cougaar project.
+     *
+     * @param javaProject the project
+     * @param monitor progress monitor
+     *
+     * @throws CoreException
+     */
+    public static void addCougaarClasspathContainer(IJavaProject javaProject,
+        IProgressMonitor monitor) throws CoreException {
+        IPath path = new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);
+        IClasspathEntry conEntry = JavaCore.newContainerEntry(path, false);
+
+        IClasspathEntry[] entries = javaProject.getRawClasspath();
+        IClasspathEntry[] newentries;
+        int index = entries.length;
+
+        //look for the entry already in the classpath
+        for (int i = 0; i < entries.length; i++) {
+            if (entries[i].equals(conEntry)) {
+                index = i;
+                break;
+            }
+        }
+
+        //if we didnt find an existing entry
+        if (index == entries.length) {
+            newentries = new IClasspathEntry[entries.length + 1];
+            System.arraycopy(entries, 0, newentries, 0, entries.length);
+            newentries[newentries.length - 1] = conEntry;
+        } else {
+            newentries = entries;
+        }
+
+        IJavaModelStatus validation = JavaConventions.validateClasspath(javaProject,
+                newentries, javaProject.getOutputLocation());
+        if (!validation.isOK()) {
+            throw new CoreException(validation);
+        }
+
+        SubProgressMonitor subMonitor = null;
+        if (monitor != null) {
+            subMonitor = new SubProgressMonitor(monitor, 1);
+            subMonitor.setTaskName("Configure Classpath");
+        }
+
+        javaProject.setRawClasspath(newentries, subMonitor);
+
     }
 
 

@@ -47,6 +47,7 @@ public class CougaarUIPlugin extends AbstractUIPlugin {
      */
     public CougaarUIPlugin(IPluginDescriptor descriptor) {
         super(descriptor);
+        plugin = this;
     }
 
     /**

@@ -26,18 +26,10 @@ package com.cougaarsoftware.cougaar.ide.ui.wizards;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.jdt.core.IClasspathEntry;
-import org.eclipse.jdt.core.IJavaModelStatus;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaConventions;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.DialogField;
 import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -64,7 +56,6 @@ import org.eclipse.swt.widgets.Label;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
-import com.cougaarsoftware.cougaar.ide.core.IResourceIDs;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
@@ -81,7 +72,6 @@ import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages
  */
 public class CougaarCapabilityConfigurationPage extends WizardPage
     implements IAddCougaarDialogRequestor, ICougaarInstallChangeListener {
-        
     private static final String PAGE_NAME = "CougaarCapabilityConfigurationPage"; //$NON-NLS-1$
     private Combo fCougaarCombo;
     private NewCougaarProjectWizard cougaarProjectWizard;
@@ -208,7 +198,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
      * called when the user makes a selection from the combo box
      */
     protected void handleCougaarComboBoxModified() {
-        String version= fCougaarCombo.getText();
+        String version = fCougaarCombo.getText();
         if ((version != null) && !version.trim().equals("")) {
             projectCougaarVersion = version;
             this.getContainer().updateButtons();
@@ -256,7 +246,8 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
      *
      */
     public boolean isPageComplete() {
-        return super.isPageComplete() && projectCougaarVersion!=null && !projectCougaarVersion.trim().equals("");
+        return super.isPageComplete() && (projectCougaarVersion != null)
+        && !projectCougaarVersion.trim().equals("");
     }
 
 
@@ -282,11 +273,12 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
             subMonitor = new SubProgressMonitor(monitor, 3);
         }
 
-        addCougaarNature(javaProject.getProject(), subMonitor);
+        CougaarPlugin.addCougaarNature(javaProject.getProject(), subMonitor);
 
         //add the cougaar class path
         try {
-            this.configureClasspath(jcp.getJavaProject(), subMonitor);
+            CougaarPlugin.addCougaarClasspathContainer(jcp.getJavaProject(),
+                subMonitor);
         } catch (CoreException e) {
             e.printStackTrace();
         }
@@ -305,95 +297,6 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
         }
 
         CougaarPlugin.getDefault().savePluginSettings();
-    }
-
-
-    /**
-     * Customizes the project by adding a builder, the ReadmeBuilder in this
-     * scenario.
-     *
-     * @see org.eclipse.core.resources.IProjectNature#configure()
-     */
-    public void configureClasspath(IJavaProject javaProject,
-        IProgressMonitor monitor) throws CoreException {
-        IPath path = new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);
-        IClasspathEntry conEntry = JavaCore.newContainerEntry(path, false);
-
-        IClasspathEntry[] entries = javaProject.getRawClasspath();
-        IClasspathEntry[] newentries;
-        int index = entries.length;
-
-        //look for the entry already in the classpath
-        for (int i = 0; i < entries.length; i++) {
-            if (entries[i].equals(conEntry)) {
-                index = i;
-                break;
-            }
-        }
-
-        //if we didnt find an existing entry
-        if (index == entries.length) {
-            newentries = new IClasspathEntry[entries.length + 1];
-            System.arraycopy(entries, 0, newentries, 0, entries.length);
-            newentries[newentries.length - 1] = conEntry;
-        } else {
-            newentries = entries;
-        }
-
-        IJavaModelStatus validation = JavaConventions.validateClasspath(javaProject,
-                newentries, javaProject.getOutputLocation());
-        if (!validation.isOK()) {
-            throw new CoreException(validation);
-        }
-
-        SubProgressMonitor subMonitor = null;
-        if (monitor != null) {
-            subMonitor = new SubProgressMonitor(monitor, 1);
-            subMonitor.setTaskName("Configure Classpath");
-        }
-
-        javaProject.setRawClasspath(newentries, subMonitor);
-
-    }
-
-
-    /**
-     * Add the nature to the project.
-     *
-     * @param project DOCUMENT ME!
-     * @param monitor DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws CoreException DOCUMENT ME!
-     */
-    public boolean addCougaarNature(IProject project, IProgressMonitor monitor)
-        throws CoreException {
-        try {
-            IProjectDescription description = project.getDescription();
-            String[] natures = description.getNatureIds();
-            String[] newNatures = new String[natures.length + 1];
-            System.arraycopy(natures, 0, newNatures, 0, natures.length);
-            newNatures[natures.length] = IResourceIDs.COUGAAR_NATURE_ID;
-            description.setNatureIds(newNatures);
-
-            SubProgressMonitor subMonitor = null;
-            if (monitor != null) {
-                subMonitor = new SubProgressMonitor(monitor, 1);
-                subMonitor.setTaskName("Adding Cougaar Nature");
-            }
-
-            project.setDescription(description, subMonitor);
-        } catch (CoreException e) {
-            // ie.- one of the steps resulted in a core exception
-            resultError("Create Project with CougaarNature Request",
-                "Adding CougaarNature to project " + project.getName()
-                + " failed");
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
     }
 
 
@@ -429,6 +332,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
             MessageDialog.openInformation(getShell(), title, msg);
         }
     }
+
 
     /* (non-Javadoc)
      * @see com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener#cougaarRemoved(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
