@@ -301,6 +301,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
 
 
     private void handleParametersAddButtonSelected() {
+    	//TODO: 2.1 -> 3.0 this constructor takes a boolean in 3.0 
         NameValuePairDialog dialog = new NameValuePairDialog(getShell(),
                 LauncherUIMessages.getString(
                     "cougaarlauncher.argumenttab.parameters.dialog.add.title"), //$NON-NLS-1$
@@ -310,7 +311,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
                     LauncherUIMessages.getString(
                         "cougaarlauncher.argumenttab.parameters.dialog.add.value.text")
                 }, //$NON-NLS-1$ //$NON-NLS-2$
-                new String[] { EMPTY_STRING, EMPTY_STRING }, true);
+                new String[] { EMPTY_STRING, EMPTY_STRING });
         openNewParameterDialog(dialog, null);
         setParametersButtonsEnableState();
     }
@@ -320,6 +321,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         TableItem selectedItem = this.fVMParametersTable.getSelection()[0];
         String name = selectedItem.getText(0);
         String value = selectedItem.getText(1);
+		//TODO: 2.1 -> 3.0 this constructor takes a boolean in 3.0
         NameValuePairDialog dialog = new NameValuePairDialog(getShell(),
                 LauncherUIMessages.getString(
                     "cougaarlauncher.argumenttab.parameters.dialog.edit.title"), //$NON-NLS-1$
@@ -329,7 +331,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
                     LauncherUIMessages.getString(
                         "cougaarlauncher.argumenttab.parameters.dialog.edit.value.text")
                 }, //$NON-NLS-1$ //$NON-NLS-2$
-                new String[] { name, value }, false);
+                new String[] { name, value });
         openNewParameterDialog(dialog, selectedItem);
     }
 
