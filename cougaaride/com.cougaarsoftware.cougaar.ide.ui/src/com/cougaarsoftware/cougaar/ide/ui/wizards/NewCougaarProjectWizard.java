@@ -128,9 +128,10 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
 
 
     /**
-     * DOCUMENT ME!
+     * Called when user is finished setting up new project.  Creates the project
+     * with the specified preferences
      *
-     * @return DOCUMENT ME!
+     * @return false if there are any problems creating the project
      */
     public boolean performFinish() {
         boolean ret = super.performFinish();

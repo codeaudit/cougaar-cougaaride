@@ -53,11 +53,11 @@ public class ListContentProvider implements IStructuredContentProvider {
     }
 
     /**
-     * DOCUMENT ME!
+     * Gets all the elements
      *
-     * @param input DOCUMENT ME!
+     * @param input input
      *
-     * @return DOCUMENT ME!
+     * @return an array of objects
      */
     public Object[] getElements(Object input) {
         ICougaarInstall[] installs = new ICougaarInstall[fInput.size()];
@@ -66,11 +66,11 @@ public class ListContentProvider implements IStructuredContentProvider {
 
 
     /**
-     * DOCUMENT ME!
+     * Called when the input to the list has changed
      *
-     * @param viewer DOCUMENT ME!
-     * @param oldInput DOCUMENT ME!
-     * @param newInput DOCUMENT ME!
+     * @param viewer the viewer that needs to be notified of the change
+     * @param oldInput old input
+     * @param newInput new input
      */
     public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
         fInput = (List) newInput;
@@ -78,7 +78,7 @@ public class ListContentProvider implements IStructuredContentProvider {
 
 
     /**
-     * DOCUMENT ME!
+     * dispose
      */
     public void dispose() {
         fViewer = null;
@@ -87,11 +87,11 @@ public class ListContentProvider implements IStructuredContentProvider {
 
 
     /**
-     * DOCUMENT ME!
+     * checks to see if an object has been deleted from the list
      *
-     * @param o DOCUMENT ME!
+     * @param o the object to check for deletion
      *
-     * @return DOCUMENT ME!
+     * @return true if the object has been deleted
      */
     public boolean isDeleted(Object o) {
         return fInput.contains(o);

@@ -29,7 +29,7 @@ import com.cougaarsoftware.cougaar.ide.core.CougaarLocations;
 
 
 /**
- * DOCUMENT ME!
+ * A utility class to call core functions
  *
  * @author Matt Abrams
  */
@@ -39,10 +39,10 @@ public class CougaarUI {
     }
 
     /**
-     * DOCUMENT ME!
+     * Set the cougaar install path for a cougaar version
      *
-     * @param version DOCUMENT ME!
-     * @param cougaarInstallPath DOCUMENT ME!
+     * @param version the version to set the path for
+     * @param cougaarInstallPath the cougaar install path
      */
     public static void setCougaarInstallPathLocation(String version,
         String cougaarInstallPath) {
@@ -51,7 +51,7 @@ public class CougaarUI {
 
 
     /**
-     * DOCUMENT ME!
+     * get the cougaar install path for a specific version
      *
      * @param version
      *
@@ -63,9 +63,9 @@ public class CougaarUI {
 
 
     /**
-     * DOCUMENT ME!
+     * get all of the cougaar locations stored in the workspace
      *
-     * @return DOCUMENT ME!
+     * @return map of cougaar installs
      */
     public static Map getCougaarLocations() {
         return CougaarLocations.getAllCougaarLocations();

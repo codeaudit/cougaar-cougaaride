@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 
 
 /**
- * DOCUMENT ME!
+ * Cougaar Preference messages
  *
  * @author Matt Abrams
  */

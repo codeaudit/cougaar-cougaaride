@@ -38,7 +38,7 @@ import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 
 
 /**
- * DOCUMENT ME!
+ * A dialog block for cougaar installations
  *
  * @author mabrams
  */
@@ -47,7 +47,7 @@ public class CougaarInstallBlock {
     protected File cougaarInstallPath;
 
     /**
-     * DOCUMENT ME!
+     * the constructor
      *
      * @param dialog
      */
@@ -56,17 +56,17 @@ public class CougaarInstallBlock {
     }
 
     /**
-     * DOCUMENT ME!
+     * Set the home directory
      *
      * @param file
      */
     public void setHomeDirectory(File file) {
-        cougaarInstallPath = file;     
+        cougaarInstallPath = file;
     }
 
 
     /**
-     * DOCUMENT ME!
+     * get the home directory
      *
      * @return DOCUMENT ME!
      */
@@ -84,11 +84,11 @@ public class CougaarInstallBlock {
 
 
     /**
-     * DOCUMENT ME!
+     * create the install control
      *
      * @param parent
      *
-     * @return
+     * @return the control
      */
     public Control createControl(Composite parent) {
         Font font = parent.getFont();
@@ -120,7 +120,7 @@ public class CougaarInstallBlock {
 
 
     /**
-     * DOCUMENT ME!
+     * initialize from (does nothing for now)
      *
      * @param object
      */
@@ -144,7 +144,7 @@ public class CougaarInstallBlock {
 
 
     /**
-     * DOCUMENT ME!
+     * perform apply, does nothing for now.
      *
      * @param cougaar
      */

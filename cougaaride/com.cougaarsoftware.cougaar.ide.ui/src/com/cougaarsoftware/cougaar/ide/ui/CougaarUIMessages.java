@@ -28,7 +28,7 @@ import java.util.ResourceBundle;
 
 
 /**
- * DOCUMENT ME!
+ * Cougaar UI Messages
  *
  * @author mabrams
  */

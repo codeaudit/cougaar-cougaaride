@@ -27,23 +27,24 @@ import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 
 
 /**
- * DOCUMENT ME!
+ * Interface for dialogs requesting to add cougaar installs
  *
  * @author mabrams
  */
 public interface IAddCougaarDialogRequestor {
     /**
-     * DOCUMENT ME!
+     * Check to see if the user is trying to add a cougaar name that
+     * is already in the system
      *
-     * @param name
+     * @param name the name to check
      *
-     * @return
+     * @return true if the name is a duplicate
      */
     boolean isDuplicateName(String name);
 
 
     /**
-     * DOCUMENT ME!
+     * called when the user adds a new cougaar install to the system
      *
      * @param cougaar
      */

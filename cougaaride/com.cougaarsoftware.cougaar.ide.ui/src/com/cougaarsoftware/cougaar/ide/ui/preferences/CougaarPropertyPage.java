@@ -19,6 +19,7 @@
  *
  */
 
+
 package com.cougaarsoftware.cougaar.ide.ui.preferences;
 
 
@@ -45,7 +46,7 @@ import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 
 
 /**
- * DOCUMENT ME!
+ * Page for specifing cougaar properties
  *
  * @author Matt Abrams
  */
@@ -74,7 +75,8 @@ public class CougaarPropertyPage extends PropertyPage
      * @see org.eclipse.jface.preference.IPreferencePage#createContents(Composite)
      */
     protected Control createContents(Composite parent) {
-        fCougaarConfigurationBlock = new CougaarConfigurationBlock(this, getProject());
+        fCougaarConfigurationBlock = new CougaarConfigurationBlock(this,
+                getProject());
         Control control = fCougaarConfigurationBlock.createContents(parent);
 
         control.setVisible(true);
@@ -102,7 +104,7 @@ public class CougaarPropertyPage extends PropertyPage
 
 
     /**
-     * DOCUMENT ME!
+     * Check to see if the selection is valid
      *
      * @return DOCUMENT ME!
      */
@@ -112,8 +114,8 @@ public class CougaarPropertyPage extends PropertyPage
         CougaarPlugin.getDefault().getPreferenceStore().setValue(CougaarPlugin.DEFAULT_COUGAAR_PREFERENCE,
             cougaarVersion);
 
-        CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION, cougaarVersion,
-             getProject());
+        CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION,
+            cougaarVersion, getProject());
         if (cougaarVersion == null) {
             return false;
         }
@@ -132,15 +134,14 @@ public class CougaarPropertyPage extends PropertyPage
     }
 
 
-	/**
-	 * Method getProject.
-	 *
-	 * @return DOCUMENT ME!
-	 */
-	private IProject getProject() {
-		return (IProject) getElement().getAdapter(IProject.class);
-	}
-	
+    /**
+     * Method getProject.
+     *
+     * @return the <code>IProject</code> object
+     */
+    private IProject getProject() {
+        return (IProject) getElement().getAdapter(IProject.class);
+    }
 
 
     private IJavaElement getJavaElement() {

@@ -54,7 +54,7 @@ import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages
 
 
 /**
- * DOCUMENT ME!
+ * Capability page for cougaar projects
  *
  * @author mabrams
  */
@@ -67,9 +67,9 @@ public class CougaarCapabilityConfigurationPage extends WizardPage {
     private Control control;
 
     /**
-     * DOCUMENT ME!
+     * constructor
      *
-     * @param ncpw DOCUMENT ME!
+     * @param ncpw the <code>NewCougaarProjectWizard</code> that created this page
      */
     public CougaarCapabilityConfigurationPage(NewCougaarProjectWizard ncpw) {
         super(PAGE_NAME);
@@ -160,9 +160,9 @@ public class CougaarCapabilityConfigurationPage extends WizardPage {
 
 
     /**
-     * DOCUMENT ME!
+     * get the cougaar versions
      *
-     * @return
+     * @return an array of currently configured cougaar versions
      */
     private String[] getCougaarVersions() {
         Map versions = CougaarUI.getCougaarLocations();
@@ -179,7 +179,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage {
 
 
     /**
-     * DOCUMENT ME!
+     * called when the user makes a selection from the combo box
      */
     protected void handleCougaarComboBoxModified() {
         cougaarVersion = fCougaarCombo.getText();

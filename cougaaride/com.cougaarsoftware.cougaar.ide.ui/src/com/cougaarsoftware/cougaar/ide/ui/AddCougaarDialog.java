@@ -24,6 +24,7 @@ package com.cougaarsoftware.cougaar.ide.ui;
 
 
 import java.io.File;
+
 import java.text.MessageFormat;
 
 import org.eclipse.core.resources.IResource;
@@ -52,7 +53,7 @@ import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 
 
 /**
- * DOCUMENT ME!
+ * Dialog to add a new cougaar install
  *
  * @author mabrams
  */
@@ -65,11 +66,11 @@ public class AddCougaarDialog extends StatusDialog {
     private IStatus[] fStatus;
 
     /**
-     * DOCUMENT ME!
+     * Constructor
      *
-     * @param requestor DOCUMENT ME!
-     * @param parent
-     * @param cougaarInstall DOCUMENT ME!
+     * @param requestor the requestor (so we can notify them of changes)
+     * @param parent the parent Shell
+     * @param cougaarInstall the cougaarInstall being edited (can be NULL)
      */
     public AddCougaarDialog(IAddCougaarDialogRequestor requestor, Shell parent,
         ICougaarInstall cougaarInstall) {
@@ -84,11 +85,11 @@ public class AddCougaarDialog extends StatusDialog {
     }
 
     /**
-     * DOCUMENT ME!
+     * create the add dialog
      *
-     * @param ancestor DOCUMENT ME!
+     * @param ancestor ancestor composite
      *
-     * @return DOCUMENT ME!
+     * @return the control
      */
     protected Control createDialogArea(Composite ancestor) {
         Font font = ancestor.getFont();
@@ -147,7 +148,7 @@ public class AddCougaarDialog extends StatusDialog {
 
 
     /**
-     * DOCUMENT ME!
+     * create the dialog fields
      */
     protected void createDialogFields() {
         fCougaarName = new StringDialogField();
@@ -270,8 +271,8 @@ public class AddCougaarDialog extends StatusDialog {
                     path);
             setFieldValuesToVM(cougaar);
             CougaarUI.setCougaarInstallPathLocation(cougaar.getId(),
-            cougaar.getInstallLocation().getAbsolutePath());		
-            fRequestor.cougaarAdded(cougaar);			
+                cougaar.getInstallLocation().getAbsolutePath());
+            fRequestor.cougaarAdded(cougaar);
         } else {
             setFieldValuesToVM(fEditedCougaar);
             String path = fEditedCougaar.getInstallLocation().getAbsolutePath()
@@ -282,7 +283,7 @@ public class AddCougaarDialog extends StatusDialog {
 
 
     /**
-     * DOCUMENT ME!
+     * called when user tries to add a new cougaar install
      */
     protected void okPressed() {
         doOkPressed();
@@ -291,7 +292,7 @@ public class AddCougaarDialog extends StatusDialog {
 
 
     /**
-     * DOCUMENT ME!
+     * lets the user know if the current input is valid
      */
     protected void updateStatusLine() {
         IStatus max = null;
