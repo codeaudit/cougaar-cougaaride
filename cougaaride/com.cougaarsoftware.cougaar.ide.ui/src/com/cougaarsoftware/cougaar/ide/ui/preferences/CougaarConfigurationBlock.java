@@ -73,18 +73,19 @@ public class CougaarConfigurationBlock extends PropertyPage
     private Button fAddCougaarInstall;
     private IAddCougaarDialogRequestor requestor;
     private IProject project;
-    
     private Control control;
 
     /**
      * Creates a new CougaarConfigurationBlock object.
      *
      * @param status DOCUMENT ME!
+     * @param req DOCUMENT ME!
      * @param proj DOCUMENT ME!
      */
-    public CougaarConfigurationBlock(IStatusChangeListener status, IAddCougaarDialogRequestor req, IProject proj) {
-        fStatus = status;  
-        requestor = req;      
+    public CougaarConfigurationBlock(IStatusChangeListener status,
+        IAddCougaarDialogRequestor req, IProject proj) {
+        fStatus = status;
+        requestor = req;
         project = proj;
     }
 
@@ -127,6 +128,7 @@ public class CougaarConfigurationBlock extends PropertyPage
         fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
         fCougaarCombo.setItems(cougaarNames);
 
+
         fCougaarCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         fCougaarCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent evt) {
@@ -136,7 +138,8 @@ public class CougaarConfigurationBlock extends PropertyPage
 
 
         fAddCougaarInstall = new Button(topComp, SWT.NONE);
-        fAddCougaarInstall.setText(CougaarPreferencesMessages.getString("CougaarConfigurationBlock.addCougaarInstallButton"));
+        fAddCougaarInstall.setText(CougaarPreferencesMessages.getString(
+                "CougaarConfigurationBlock.addCougaarInstallButton"));
         fAddCougaarInstall.setLayoutData(new GridData());
         fAddCougaarInstall.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent evt) {
@@ -227,18 +230,14 @@ public class CougaarConfigurationBlock extends PropertyPage
 
 
     private void setValues(String selectedVersion) {
-      
         int count = fCougaarCombo.getItemCount();
-        if (count == 1) {
-        	fCougaarCombo.select(0);        	
-        } else {
-        	for (int i = 0; i < count; i++) {
-            	String item = fCougaarCombo.getItem(i);
-            	if (item.equals(selectedVersion)) {
-                	fCougaarCombo.select(i);
-                	break;
-            	}
-        	}
+
+        for (int i = 0; i < count; i++) {
+            String item = fCougaarCombo.getItem(i);
+            if (item.equals(selectedVersion)) {
+                fCougaarCombo.select(i);
+                break;
+            }
         }
     }
 
@@ -272,20 +271,20 @@ public class CougaarConfigurationBlock extends PropertyPage
      * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
      */
     public void cougaarAdded(ICougaarInstall cougaar) {
-       String[] versions = getCougaarVersions();
-       fCougaarCombo.setItems(versions);
-       setValues(cougaar.getId());
-       if (requestor != null) {
-       	requestor.cougaarAdded(cougaar);
-       }
+        String[] versions = getCougaarVersions();
+        fCougaarCombo.setItems(versions);
+        setValues(cougaar.getId());
+        if (requestor != null) {
+            requestor.cougaarAdded(cougaar);
+        }
     }
 
-	/* (non-Javadoc)
-	 * @see com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener#cougaarRemoved(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
-	 */
-	public void cougaarRemoved(ICougaarInstall removed) {
-		String[] versions = getCougaarVersions();
-		fCougaarCombo.setItems(versions);
-		
-	}
+
+    /* (non-Javadoc)
+     * @see com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener#cougaarRemoved(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
+     */
+    public void cougaarRemoved(ICougaarInstall removed) {
+        String[] versions = getCougaarVersions();				
+        fCougaarCombo.setItems(versions);                    
+    }
 }

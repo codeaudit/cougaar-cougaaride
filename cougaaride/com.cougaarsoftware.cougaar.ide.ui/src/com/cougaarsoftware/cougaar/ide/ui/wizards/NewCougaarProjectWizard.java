@@ -68,7 +68,7 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
         fCougaarPage.setTitle(CougaarUIMessages.getString(
                 "CougaarCapabilityTitle"));
         fCougaarPage.setDescription(CougaarUIMessages.getString(
-                "CougaarCapabilityDescription"));
+                "CougaarCapabilityDescription"));       
         addPage(fCougaarPage);
 
         //add the java pages
