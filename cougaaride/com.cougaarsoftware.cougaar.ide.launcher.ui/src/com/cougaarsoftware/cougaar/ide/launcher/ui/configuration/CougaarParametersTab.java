@@ -31,6 +31,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
+import org.eclipse.debug.ui.ILaunchConfigurationDialog;
 import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 import org.eclipse.jdt.internal.debug.ui.JavaDebugImages;
 import org.eclipse.jdt.internal.debug.ui.launcher.JavaLaunchConfigurationTab;
@@ -230,6 +231,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
 
         fWorkingDirectoryBlock.createControl(comp);
 
+
         fParametersAddButton = createPushButton(envButtonComp,
                 LauncherUIMessages.getString(
                     "cougaarlauncher.argumenttab.parameters.button.add.text"),
@@ -331,6 +333,15 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
 
 
     /**
+     * @see org.eclipse.debug.ui.ILaunchConfigurationTab#setLaunchConfigurationDialog(ILaunchConfigurationDialog)
+     */
+    public void setLaunchConfigurationDialog(ILaunchConfigurationDialog dialog) {
+        super.setLaunchConfigurationDialog(dialog);
+        fWorkingDirectoryBlock.setLaunchConfigurationDialog(dialog);
+    }
+
+
+    /**
      * Set the enabled state of the three environment variable-related buttons
      * based on the selection in the Table widget.
      */
@@ -416,8 +427,9 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
             setProgramArguments());
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_DEFAULT_PARAMETERS,
             fArgumentsDefaultButton.getSelection());
-        setDirty(false);
         fWorkingDirectoryBlock.performApply(configuration);
+        setDirty(false);
+
         // }
     }
 
