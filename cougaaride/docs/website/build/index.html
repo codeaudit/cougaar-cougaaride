@@ -12,6 +12,18 @@ Therefore you will need to install the Eclipse SDK before attempting to build Co
 
 
 <P>
+<H3>Step 0: Setup your Eclipse Workspace to build Plugin Projects</H3>
+CougaarIDE consists of a number of plugin projects.  In order to build them (using our project files), you will need to 
+turn on Classpath Containers for PDE projects, and configure the target environment.<br>
+Go to the Window menu, select Preferences.  Now expand the Plug-In 
+Development tree.  Select the "Java Build Path Control" option, and make sure the "Use classpath containers for 
+dependant plugins" is checked.  Next click on the "Target Platform" option, and make sure all of the "org.eclipse.*" plugins
+are checked.  Finally, press the OK button.  You are now ready to build CougaarIDE.
+</P>
+
+
+
+<P>
 <H3>Step 1: Obtain the source</H3>
 CougaarIDE source is currently only available from CVS, although file releases are expected soon from <A HREF="http://cougaar.org/project/showfiles.php?group_id=19">Cougaar Forge</A>.<BR>
 In order to obtain the source from CVS, you can either get a checkout using a <A HREF="http://www.cvshome.org/">CVS program</A> or you can have eclipse do the CVS work for you. </P>
