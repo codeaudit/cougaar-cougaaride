@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+	<provider id="org.eclipse.team.cvs.core.cvsnature">
+		<project reference="1.0,:extssh:cougaar.org:/cvsroot/cougaaride,cougaaride/com.cougaarsoftware.cougaar.ide.core,com.cougaarsoftware.cougaar.ide.core"/>
+		<project reference="1.0,:extssh:cougaar.org:/cvsroot/cougaaride,cougaaride/com.cougaarsoftware.cougaar.ide.launcher.core,com.cougaarsoftware.cougaar.ide.launcher.core"/>
+		<project reference="1.0,:extssh:cougaar.org:/cvsroot/cougaaride,cougaaride/com.cougaarsoftware.cougaar.ide.launcher.ui,com.cougaarsoftware.cougaar.ide.launcher.ui"/>
+		<project reference="1.0,:extssh:cougaar.org:/cvsroot/cougaaride,cougaaride/com.cougaarsoftware.cougaar.ide.ui,com.cougaarsoftware.cougaar.ide.ui"/>
+		<project reference="1.0,:extssh:cougaar.org:/cvsroot/cougaaride,cougaaride/com.cougaarsoftware.cougaar.ide-feature,com.cougaarsoftware.cougaar.ide-feature"/>
+		<project reference="1.0,:extssh:cougaar.org:/cvsroot/cougaaride,cougaaride/com.cougaarsoftware.cougaar.ide,com.cougaarsoftware.cougaar.ide"/>
+	</provider>
+</psf>

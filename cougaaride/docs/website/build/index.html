@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"><HTML>
+<HEAD>
+<title>Building CougaarIDE</title>
+
+</HEAD>
+<BODY BGCOLOR="#ffffff">
+<H1>Building CougaarIDE</H1>
+<P><B>NOTE:</B><BR>
+As CougaarIDE is comprised of a number of Plugins for Eclipse, it currently can only be built from Eclipse. 
+Therefore you will need to install the Eclipse SDK before attempting to build CougaarIDE.
+</P>
+
+
+<P>
+<H3>Step 1: Obtain the source</H3>
+CougaarIDE is currently only available from CVS, although file releases are expected soon from <A HREF="http://cougaar.org/project/showfiles.php?group_id=19">Cougaar Forge</A>.<BR>
+In order to obtain the source from CVS, you can either get a checkout using a <A HREF="http://www.cvshome.org/">CVS program</A> or you can have eclipse do the CVS work for you. </P>
+
+<P><H4>Option 1: External CVS Program</H4>
+Download a CVS program and use the information on <A HREF="http://cougaar.org/scm/?group_id=19">this page</A> to get a checkout of all the modules under the main cougaaride module.
+</P>
+
+<P><H4>Option 2: Use Eclipse</H4>
+The easiest way to avoid a lot of typeing is to use the Eclipse project sets we have provided to automate the checkout and setup of all the CougaarIDE sub-projects.  Download one of the following:<br>
+Either:<br>
+<a href="../../projectSets/anonymous_cougaarIDE_projectSet.psf">Anonymous CVS Access</a> or<br>
+<a href="../../projectSets/developer_cougaarIDE_projectSet.psf">Developer SSH CVS Access</a><br>
+</P>
+Then use the instructions on <A HREF="import/index.html">this page</A> to import the projects.
+</P>
+
+
+
+<P>
+<H3>Step 2: Build the source</H3>
+Eclipse should automatically build all the projects for you, but it may ask you some questions, just answer yes.
+</P>
+
+
+
+<P>
+<H3>(Optional) Step 3: Run in Run-time Workbench</H3>
+In order to test the plugins, you can lauch the Run-time Workbench.
+<ol>
+	<li>Select the Menu Run -&gt; Run...</li>
+	<li>Select Run-time WorkBench and press New...</li>
+	<li>Modify any settings you want (defaults should be fine)</li>
+	<li>Press "Run"</li>
+</ol>
+
+<P>
+<img src="run.jpg" alt="Import wizard" border="0"></P>
+
+This will launch an internal eclipse runtime, that you can use to test changes to the code.
+</P>
+
+
+<P>
+<H3>Step 4: Deploy</H3>
+In Step 3 we ran Eclipse with CougaarIDE in an embedded testing Eclipse install.<br>
+In order to use CougaarIDE for actual development we want to install it into our standard Eclipse installation.<BR>
+To achieve this we will use Eclipse's Export functionality to create a zip file with everything we need in it:<br>
+<ol>
+	<li>Select the Menu File -&gt; Export...</li>
+	<li>Select "Deployable features" and press Next -&gt;</li>
+	<li>In the "Available Features" list, select "com.cougaarsoftware.cougaar.ide"</li>
+	<li>Select "a single deployable Zip file"</li>
+	<li>Browse to the file you want to export to, using the Browse... button</li>
+	<li>Press "Finish"</li>
+</ol>
+<P>
+<img src="export.jpg" alt="Import wizard" border="0"></P>
+</P>
+<P>
+You have now created a zip file that can be used to <A HREF="../install/index.html">install CougaarIDE</A> into any existing Eclipse installation.
+</P>
+
+</BODY>
+</HTML>
