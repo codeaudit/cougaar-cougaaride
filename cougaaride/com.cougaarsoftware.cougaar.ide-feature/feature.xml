@@ -2,7 +2,7 @@
 <feature
       id="com.cougaarsoftware.cougaar.ide"
       label="Cougaar Integrated Development Environment"
-      version="1.0.0"
+      version="1.0.1"
       provider-name="Cougaar Software, Inc."
       nl="en"
       image="cougaar_logo.gif">

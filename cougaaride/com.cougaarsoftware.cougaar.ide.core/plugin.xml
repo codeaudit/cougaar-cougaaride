@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.core"
    name="%Plugin.name"
-   version="1.0.0"
+   version="1.0.1"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.core.CougaarPlugin">
 
@@ -21,9 +21,9 @@
    </requires>
 
 
-<!-- VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
-<!-- Nature definition                                       -->
 <!-- ======================================================= -->
+<!-- Nature definition                                       -->
+<!-- VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
    <extension
          id="cougaarnature"
          name="Cougaar Nature"
@@ -43,9 +43,9 @@
             id="com.cougaarsoftware.cougaar.ide.core.natureimage">
       </image>
    </extension>
-<!-- VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
-<!-- Classpath Container Initializer                         -->
 <!-- ======================================================= -->
+<!-- Classpath Container Initializer                         -->
+<!-- VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
    <extension
          point="org.eclipse.jdt.core.classpathContainerInitializer">
       <classpathContainerInitializer
