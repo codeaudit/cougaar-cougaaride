@@ -68,6 +68,7 @@ import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
 import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
+import com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener;
 import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage;
 import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages;
 
@@ -78,7 +79,7 @@ import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages
  * @author mabrams
  */
 public class CougaarCapabilityConfigurationPage extends WizardPage
-    implements IAddCougaarDialogRequestor {
+    implements IAddCougaarDialogRequestor, ICougaarInstallChangeListener {
     private static final String PAGE_NAME = "CougaarCapabilityConfigurationPage"; //$NON-NLS-1$
     private Combo fCougaarCombo;
     private String cougaarVersion = "";
@@ -126,7 +127,8 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
         if (cougaarNames.length > 0) {
             fCougaarCombo.setItems(cougaarNames);
         }
-		setValues("");
+
+        setValues("");
         fCougaarCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
         fCougaarCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent evt) {
@@ -154,7 +156,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
     private void handleAddButtonSelected() {
         String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
 
-        CougaarPreferencePage page = new CougaarPreferencePage(this);
+        CougaarPreferencePage page = new CougaarPreferencePage(this, this);
         showPreferencePage(id, page);
         fCougaarCombo.update();
     }
@@ -237,11 +239,11 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
             for (int i = 0; i < count; i++) {
                 String item = fCougaarCombo.getItem(i);
                 if (item.equals(selectedVersion)) {
-                    fCougaarCombo.select(i);                   
+                    fCougaarCombo.select(i);
                     break;
                 }
             }
-        }	
+        }
     }
 
 
@@ -432,5 +434,14 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
     public void setCougaarVersion(String cougaarVersion) {
         projectCougaarVersion = cougaarVersion;
         this.getContainer().updateButtons();
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener#cougaarRemoved(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
+     */
+    public void cougaarRemoved(ICougaarInstall removed) {
+        String[] versions = getCougaarVersions();
+        fCougaarCombo.setItems(versions);
     }
 }

@@ -81,8 +81,7 @@ public class CougaarLocations {
 
         return fCougaarLocations;
     }
-
-
+    
     /**
      * DOCUMENT ME!
      *
@@ -187,7 +186,6 @@ public class CougaarLocations {
     public static String getCougaarBaseLocation(String version) {
         return (String) getCougaarLocations().get(version);
     }
-
 
     /**
      * DOCUMENT ME!

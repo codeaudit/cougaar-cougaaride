@@ -67,6 +67,7 @@ import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.ui.AddCougaarDialog;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
+import com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener;
 import com.cougaarsoftware.cougaar.ide.ui.ListContentProvider;
 
 
@@ -85,6 +86,7 @@ public class CougaarPreferencePage extends PreferencePage
     //    private Button fSearchButton;
     private List fCougaarInstalls;
     private IAddCougaarDialogRequestor requestor;
+    private ICougaarInstallChangeListener removedListener;
 
     /**
      * Creates a new CougaarPreferencePage object.
@@ -102,13 +104,15 @@ public class CougaarPreferencePage extends PreferencePage
      * Creates a new CougaarPreferencePage object.
      *
      * @param req DOCUMENT ME!
+     * @param removedListener DOCUMENT ME!
      */
-    public CougaarPreferencePage(IAddCougaarDialogRequestor req) {
+    public CougaarPreferencePage(IAddCougaarDialogRequestor req,
+        ICougaarInstallChangeListener removedListener) {
         super();
         this.requestor = req;
+        this.removedListener = removedListener;
         setTitle(CougaarPreferencesMessages.getString(
                 "CougaarPreferencePage.Installed_CougaarVersions_1"));
-
     }
 
     /**
@@ -369,8 +373,9 @@ public class CougaarPreferencePage extends PreferencePage
 
             if (o instanceof CougaarInstall) {
                 CougaarInstall cInstall = (CougaarInstall) o;
-                CougaarUI.setCougaarInstallPathLocation(cInstall.getId(),
-                    "");
+
+                CougaarUI.setCougaarInstallPathLocation(cInstall.getId(), "");
+                this.cougaarRemoved(cInstall);
             }
 
             fCougaarInstalls.remove(o);
@@ -440,5 +445,17 @@ public class CougaarPreferencePage extends PreferencePage
         }
 
         //TODO: check for default
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param cougaar DOCUMENT ME!
+     */
+    public void cougaarRemoved(ICougaarInstall cougaar) {
+        if (removedListener != null) {
+            removedListener.cougaarRemoved(cougaar);
+        }
     }
 }

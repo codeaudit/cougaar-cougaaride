@@ -57,6 +57,7 @@ import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
+import com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener;
 
 
 /**
@@ -65,7 +66,7 @@ import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
  * @author Matt Abrams
  */
 public class CougaarConfigurationBlock extends PropertyPage
-    implements IAddCougaarDialogRequestor {
+    implements IAddCougaarDialogRequestor, ICougaarInstallChangeListener {
     private Combo fCougaarCombo;
     private String cougaarVersion = "";
     private IStatusChangeListener fStatus;
@@ -186,7 +187,7 @@ public class CougaarConfigurationBlock extends PropertyPage
     private void handleAddButtonSelected() {
         String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
 
-        CougaarPreferencePage page = new CougaarPreferencePage(this);
+        CougaarPreferencePage page = new CougaarPreferencePage(this, this);
         showPreferencePage(id, page);
     }
 
@@ -278,4 +279,13 @@ public class CougaarConfigurationBlock extends PropertyPage
        	requestor.cougaarAdded(cougaar);
        }
     }
+
+	/* (non-Javadoc)
+	 * @see com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener#cougaarRemoved(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
+	 */
+	public void cougaarRemoved(ICougaarInstall removed) {
+		String[] versions = getCougaarVersions();
+		fCougaarCombo.setItems(versions);
+		
+	}
 }
