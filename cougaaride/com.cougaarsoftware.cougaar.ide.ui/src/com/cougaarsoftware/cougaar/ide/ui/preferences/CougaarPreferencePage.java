@@ -65,6 +65,7 @@ import com.cougaarsoftware.cougaar.ide.core.CougaarInstallComparer;
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.ui.AddCougaarDialog;
+import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 import com.cougaarsoftware.cougaar.ide.ui.ListContentProvider;
 
@@ -365,11 +366,14 @@ public class CougaarPreferencePage extends PreferencePage
         Iterator elements = selection.iterator();
         while (elements.hasNext()) {
             Object o = elements.next();
-            fCougaarInstalls.remove(o);
+
             if (o instanceof CougaarInstall) {
                 CougaarInstall cInstall = (CougaarInstall) o;
-				
+                CougaarUI.setCougaarInstallPathLocation(cInstall.getId(),
+                    "");
             }
+
+            fCougaarInstalls.remove(o);
         }
 
 
