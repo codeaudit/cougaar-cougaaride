@@ -23,11 +23,14 @@
 package com.cougaarsoftware.cougaar.ide.ui.preferences;
 
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -37,6 +40,8 @@ import org.eclipse.jdt.internal.ui.dialogs.StatusUtil;
 import org.eclipse.jdt.internal.ui.wizards.IStatusChangeListener;
 import org.eclipse.jdt.internal.ui.wizards.buildpaths.ArchiveFileFilter;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.PropertyPage;
@@ -44,7 +49,6 @@ import org.eclipse.ui.dialogs.PropertyPage;
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
-import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 
 
 /**
@@ -109,6 +113,8 @@ public class CougaarPropertyPage extends PropertyPage
      * Check to see if the selection is valid
      *
      * @return DOCUMENT ME!
+     *
+     * @throws InvocationTargetException DOCUMENT ME!
      */
     public boolean performOk() {
         //TODO show error messages when things go wrong. (where the return false is)
@@ -122,17 +128,39 @@ public class CougaarPropertyPage extends PropertyPage
             return false;
         }
 
+
+        ProgressMonitorDialog dialog = new ProgressMonitorDialog(getShell());
         try {
-            CougaarPlugin.updateClasspathContainer(getJavaElement()
-                                                       .getJavaProject());
-        } catch (CoreException e) {
+            dialog.run(true, true,
+                new IRunnableWithProgress() {
+                    public void run(IProgressMonitor monitor)
+                        throws InvocationTargetException {
+                        monitor.beginTask("Updating Classpath", 1);
+                        try {
+                            CougaarPlugin.updateClasspathContainer(getJavaElement()
+                                                                       .getJavaProject(),
+                                monitor);
+                        } catch (CoreException e) {
+                            throw new InvocationTargetException(e);
+                        } finally {
+                            monitor.done();
+                        }
+                    }
+                });
+        } catch (InterruptedException e) {
+            // cancelled by user
+            System.err.println();
+        } catch (InvocationTargetException e) {
             e.printStackTrace();
-            return false;
         }
 
-        CougaarPlugin.getDefault().savePluginSettings();
-
-        return super.performOk();
+        if (dialog.getReturnCode() == Dialog.OK) {
+            CougaarPlugin.getDefault().savePluginSettings();
+            return super.performOk();
+        } else {
+        	//TODO: roll back preference changes that were saved above
+            return false;
+        }
     }
 
 
@@ -170,19 +198,20 @@ public class CougaarPropertyPage extends PropertyPage
         return elem;
     }
 
-	/* (non-Javadoc)
-	 * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#isDuplicateName(java.lang.String)
-	 */
-	public boolean isDuplicateName(String name) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	/* (non-Javadoc)
-	 * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
-	 */
-	public void cougaarAdded(ICougaarInstall cougaar) {
-		// TODO Auto-generated method stub
-		
-	}
+    /* (non-Javadoc)
+     * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#isDuplicateName(java.lang.String)
+     */
+    public boolean isDuplicateName(String name) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+
+    /* (non-Javadoc)
+     * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
+     */
+    public void cougaarAdded(ICougaarInstall cougaar) {
+        // TODO Auto-generated method stub
+    }
 }

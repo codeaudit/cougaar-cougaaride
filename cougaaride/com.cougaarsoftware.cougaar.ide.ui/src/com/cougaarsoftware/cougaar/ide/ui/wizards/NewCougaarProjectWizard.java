@@ -106,7 +106,6 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
      */
     public void configure(IJavaProject javaProject)
         throws CoreException {
-        System.err.println("About to configure a Cougaar project!!!");
 
         IPath path = new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);
         IClasspathEntry conEntry = JavaCore.newContainerEntry(path, false);
@@ -154,7 +153,7 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
             }
 
             try {
-                CougaarPlugin.updateClasspathContainer(jcp.getJavaProject());
+                CougaarPlugin.updateClasspathContainer(jcp.getJavaProject(),null);
             } catch (CoreException e) {
                 e.printStackTrace();
                 return false;

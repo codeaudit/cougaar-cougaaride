@@ -19,6 +19,7 @@
  *
  */
 
+
 package com.cougaarsoftware.cougaar.ide.core;
 
 
@@ -38,18 +39,23 @@ import java.util.ResourceBundle;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IPluginDescriptor;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.internal.core.JavaProject;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
+import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 
 
 /**
@@ -243,33 +249,47 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Untested! method to update the classpath container when the cougaar
-     * install for the project changes.
+     * Updates the classpath container when the cougaar install for the project
+     * changes, and performs a full rebuild.
      *
-     * @param project
+     * @param jproject the IJavaProject
+     * @param monitor DOCUMENT ME!
      *
      * @throws CoreException
      */
-    public static void updateClasspathContainer(IJavaProject project)
-        throws CoreException {
-        if (!isCougaarProject(project.getProject())) {
+    public static void updateClasspathContainer(IJavaProject jproject,
+        IProgressMonitor monitor) throws CoreException {
+        IProject project = jproject.getProject();
+        if (!isCougaarProject(project)) {
             return;
         }
 
+
         IPath path = new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);
 
-        //TODO get install location for the project
-        String version = CougaarPlugin.getDefault().getPreferenceStore()
-                                      .getString(CougaarPlugin.DEFAULT_COUGAAR_PREFERENCE);
+        String version = CougaarPlugin.getCougaarPreference(project,
+                ICougaarConstants.COUGAAR_VERSION);
         String installPrefix = getCougaarBaseLocation(version);
 
         //had an elaborate mechanism to reuse the existing one if it existed; but javaCore doesn't update if i modify the existing one
         IClasspathContainer container = new CougaarClasspathContainer(installPrefix);
 
-        IJavaProject[] javaProjects = new IJavaProject[] { project };
+        IJavaProject[] javaProjects = new IJavaProject[] { jproject };
         IClasspathContainer[] containers = new IClasspathContainer[] { container };
+        SubProgressMonitor subMonitor = null;
+        if (monitor != null) {
+            subMonitor = new SubProgressMonitor(monitor, 1);
+        }
 
-        JavaCore.setClasspathContainer(path, javaProjects, containers, null);
+        JavaCore.setClasspathContainer(path, javaProjects, containers,
+            subMonitor);
+
+        subMonitor = null;
+        if (monitor != null) {
+            subMonitor = new SubProgressMonitor(monitor, 1);
+        }
+
+        project.build(IncrementalProjectBuilder.FULL_BUILD, subMonitor);
     }
 
 
