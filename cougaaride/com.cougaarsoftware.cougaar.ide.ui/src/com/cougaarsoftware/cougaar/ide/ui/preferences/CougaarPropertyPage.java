@@ -47,9 +47,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.PropertyPage;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
-import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
-import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 
 
 /**
@@ -58,7 +56,7 @@ import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
  * @author Matt Abrams
  */
 public class CougaarPropertyPage extends PropertyPage
-    implements IStatusChangeListener, IAddCougaarDialogRequestor {
+    implements IStatusChangeListener {
     private CougaarConfigurationBlock fCougaarConfigurationBlock;
 
     /**
@@ -82,7 +80,7 @@ public class CougaarPropertyPage extends PropertyPage
      * @see org.eclipse.jface.preference.IPreferencePage#createContents(Composite)
      */
     protected Control createContents(Composite parent) {
-        fCougaarConfigurationBlock = new CougaarConfigurationBlock(this,
+        fCougaarConfigurationBlock = new CougaarConfigurationBlock(this, null,
                 getProject());
         Control control = fCougaarConfigurationBlock.createContents(parent);
 
@@ -199,21 +197,4 @@ public class CougaarPropertyPage extends PropertyPage
         return elem;
     }
 
-
-    /* (non-Javadoc)
-     * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#isDuplicateName(java.lang.String)
-     */
-    public boolean isDuplicateName(String name) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-
-    /* (non-Javadoc)
-     * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
-     */
-    public void cougaarAdded(ICougaarInstall cougaar) {
-        // TODO Auto-generated method stub
-        System.err.println("cougaar added: " + cougaar.getId());
-    }
 }

@@ -166,7 +166,7 @@ public class CougaarPreferencePage extends PreferencePage
                 "cougaarPreferencePage.cougaarLocation")); //$NON-NLS-1$
 
         fCougaarList = new CheckboxTableViewer(table);
-		fCougaarList.setComparer(new CougaarInstallComparer());
+        fCougaarList.setComparer(new CougaarInstallComparer());
 
         fCougaarList.setSorter(new ViewerSorter() {
                 public int compare(Viewer viewer, Object e1, Object e2) {
@@ -366,7 +366,12 @@ public class CougaarPreferencePage extends PreferencePage
         while (elements.hasNext()) {
             Object o = elements.next();
             fCougaarInstalls.remove(o);
+            if (o instanceof CougaarInstall) {
+                CougaarInstall cInstall = (CougaarInstall) o;
+				
+            }
         }
+
 
         fCougaarList.refresh();
     }
@@ -394,11 +399,13 @@ public class CougaarPreferencePage extends PreferencePage
         // assume it's length one, otherwise this will not be called
         ICougaarInstall vm = (ICougaarInstall) selection.getFirstElement();
 
-		AddCougaarDialog dialog = new AddCougaarDialog(this, getShell(), vm);
-		dialog.setTitle(CougaarPreferencesMessages.getString("CougaarPreferencePage.editVersion.title"));
-		if (dialog.open() != AddCougaarDialog.OK) {
-			return;
-		}
+        AddCougaarDialog dialog = new AddCougaarDialog(this, getShell(), vm);
+        dialog.setTitle(CougaarPreferencesMessages.getString(
+                "CougaarPreferencePage.editVersion.title"));
+        if (dialog.open() != AddCougaarDialog.OK) {
+            return;
+        }
+
         fCougaarList.refresh(vm);
     }
 
@@ -407,7 +414,6 @@ public class CougaarPreferencePage extends PreferencePage
      * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#isDuplicateName(java.lang.String)
      */
     public boolean isDuplicateName(String name) {
-   
         for (int i = 0; i < fCougaarInstalls.size(); i++) {
             ICougaarInstall cougaar = (ICougaarInstall) fCougaarInstalls.get(i);
             if (cougaar.getId().equals(name)) {

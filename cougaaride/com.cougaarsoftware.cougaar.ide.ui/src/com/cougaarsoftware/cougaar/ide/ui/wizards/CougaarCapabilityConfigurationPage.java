@@ -107,7 +107,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
         if (cougaarNames.length > 0) {
             fCougaarCombo.setItems(cougaarNames);
         }
-
+		setValues("");
         fCougaarCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
         fCougaarCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent evt) {
@@ -210,6 +210,23 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
     public void cougaarAdded(ICougaarInstall cougaar) {
         String[] versions = getCougaarVersions();
         fCougaarCombo.setItems(versions);
+        setValues(cougaar.getId());
+    }
+
+
+    private void setValues(String selectedVersion) {
+        int count = fCougaarCombo.getItemCount();
+        if (count == 1) {
+            fCougaarCombo.select(0);
+        } else {
+            for (int i = 0; i < count; i++) {
+                String item = fCougaarCombo.getItem(i);
+                if (item.equals(selectedVersion)) {
+                    fCougaarCombo.select(i);                   
+                    break;
+                }
+            }
+        }	
     }
 
 

@@ -70,6 +70,7 @@ public class CougaarConfigurationBlock extends PropertyPage
     private String cougaarVersion = "";
     private IStatusChangeListener fStatus;
     private Button fAddCougaarInstall;
+    private IAddCougaarDialogRequestor requestor;
     private IProject project;
     
     private Control control;
@@ -80,8 +81,9 @@ public class CougaarConfigurationBlock extends PropertyPage
      * @param status DOCUMENT ME!
      * @param proj DOCUMENT ME!
      */
-    public CougaarConfigurationBlock(IStatusChangeListener status, IProject proj) {
-        fStatus = status;        
+    public CougaarConfigurationBlock(IStatusChangeListener status, IAddCougaarDialogRequestor req, IProject proj) {
+        fStatus = status;  
+        requestor = req;      
         project = proj;
     }
 
@@ -227,7 +229,7 @@ public class CougaarConfigurationBlock extends PropertyPage
       
         int count = fCougaarCombo.getItemCount();
         if (count == 1) {
-        	fCougaarCombo.select(1);        	
+        	fCougaarCombo.select(0);        	
         } else {
         	for (int i = 0; i < count; i++) {
             	String item = fCougaarCombo.getItem(i);
@@ -271,5 +273,9 @@ public class CougaarConfigurationBlock extends PropertyPage
     public void cougaarAdded(ICougaarInstall cougaar) {
        String[] versions = getCougaarVersions();
        fCougaarCombo.setItems(versions);
+       setValues(cougaar.getId());
+       if (requestor != null) {
+       	requestor.cougaarAdded(cougaar);
+       }
     }
 }
