@@ -26,11 +26,7 @@ package com.cougaarsoftware.cougaar.ide.ui.wizards;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.jdt.internal.ui.dialogs.StatusInfo;
-import org.eclipse.jdt.internal.ui.preferences.PreferencesMessages;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.DialogField;
-import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -51,11 +47,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
-import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
-import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
-import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage;
 import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages;
 
@@ -65,20 +58,22 @@ import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages
  *
  * @author mabrams
  */
-public class CougaarCapabilityConfigurationPage extends WizardPage implements IAddCougaarDialogRequestor {
+public class CougaarCapabilityConfigurationPage extends WizardPage {
     private static final String PAGE_NAME = "CougaarCapabilityConfigurationPage"; //$NON-NLS-1$
     private Combo fCougaarCombo;
     private String cougaarVersion = "";
     private NewCougaarProjectWizard cougaarProjectWizard;
     private Button fAddCougaarInstall;
-	private Control control;
+    private Control control;
 
     /**
      * DOCUMENT ME!
+     *
+     * @param ncpw DOCUMENT ME!
      */
     public CougaarCapabilityConfigurationPage(NewCougaarProjectWizard ncpw) {
         super(PAGE_NAME);
-		cougaarProjectWizard = ncpw;
+        cougaarProjectWizard = ncpw;
         setTitle(CougaarUIMessages.getString("CougaarCapabilityPageTitle"));
         setDescription(CougaarUIMessages.getString(
                 "CougaarCapabilityPage.description"));
@@ -90,79 +85,78 @@ public class CougaarCapabilityConfigurationPage extends WizardPage implements IA
      * @see org.eclipse.jface.dialogs.DialogPage#createControl(org.eclipse.swt.widgets.Composite)
      */
     public void createControl(Composite parent) {
-		Composite topComp = new Composite(parent, SWT.NONE);
-		GridLayout topLayout = new GridLayout();
-		topLayout.numColumns = 3;
-		topLayout.marginWidth = 0;
-		topLayout.marginHeight = 0;
-		topComp.setLayout(topLayout);
-		String[] cougaarNames = getCougaarVersions();
-		if (cougaarNames != null) {
-			if (cougaarNames.length > 0) {
-				Label cougaarSelectionLabel = new Label(topComp, SWT.NONE);
-				cougaarSelectionLabel.setText(CougaarPreferencesMessages
-					.getString("CougaarConfigurationBlock.cougaarVersion"));
-				cougaarSelectionLabel.setLayoutData(new GridData());
-
-				fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
-				fCougaarCombo.setItems(cougaarNames);
-
-				fCougaarCombo.setLayoutData(new GridData(
-						GridData.HORIZONTAL_ALIGN_FILL));
-				fCougaarCombo.addModifyListener(new ModifyListener() {
-						public void modifyText(ModifyEvent evt) {
-							handleCougaarComboBoxModified();
-						}
-					});
-			}
-		}
-
-		fAddCougaarInstall = new Button(topComp, SWT.NONE);
-		fAddCougaarInstall.setText("Add");
-		fAddCougaarInstall.setLayoutData(new GridData());
-		fAddCougaarInstall.addSelectionListener(new SelectionAdapter() {
-				public void widgetSelected(SelectionEvent evt) {
-					handleAddButtonSelected();
-				}
-			});
+        Composite topComp = new Composite(parent, SWT.NONE);
+        GridLayout topLayout = new GridLayout();
+        topLayout.numColumns = 3;
+        topLayout.marginWidth = 0;
+        topLayout.marginHeight = 0;
+        topComp.setLayout(topLayout);
+        String[] cougaarNames = getCougaarVersions();
 
 
-		DialogField.createEmptySpace(topComp, 2);
+        Label cougaarSelectionLabel = new Label(topComp, SWT.NONE);
+        cougaarSelectionLabel.setText(CougaarPreferencesMessages.getString(
+                "CougaarConfigurationBlock.cougaarVersion"));
+        cougaarSelectionLabel.setLayoutData(new GridData());
+
+        fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
+        fCougaarCombo.setItems(cougaarNames);
+
+        fCougaarCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        fCougaarCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent evt) {
+                    handleCougaarComboBoxModified();
+                }
+            });
 
 
-	   control = topComp;
-		setControl(topComp);
+        fAddCougaarInstall = new Button(topComp, SWT.NONE);
+        fAddCougaarInstall.setText("Add");
+        fAddCougaarInstall.setLayoutData(new GridData());
+        fAddCougaarInstall.addSelectionListener(new SelectionAdapter() {
+                public void widgetSelected(SelectionEvent evt) {
+                    handleAddButtonSelected();
+                }
+            });
+
+
+        DialogField.createEmptySpace(topComp, 2);
+
+
+        control = topComp;
+        setControl(topComp);
 
     }
-    
-	private void handleAddButtonSelected() {
-		 String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
-
-		 CougaarPreferencePage page = new CougaarPreferencePage();
-		 showPreferencePage(id, page);
-	 }
-	 
-	private boolean showPreferencePage(String id, IPreferencePage page) {
-			final IPreferenceNode targetNode = new PreferenceNode(id, page);
-
-			PreferenceManager manager = new PreferenceManager();
-			manager.addToRoot(targetNode);
-
-			final PreferenceDialog dialog = new PreferenceDialog(control.getShell(),
-					manager);
-			final boolean[] result = new boolean[] { false };
-			BusyIndicator.showWhile(control.getDisplay(),
-				new Runnable() {
-					public void run() {
-						dialog.create();
-						dialog.setMessage(targetNode.getLabelText());
-						result[0] = (dialog.open() == PreferenceDialog.OK);
-					}
-				});
-			return result[0];
-		}
 
 
+    private void handleAddButtonSelected() {
+        String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
+
+        CougaarPreferencePage page = new CougaarPreferencePage();
+        showPreferencePage(id, page);
+        fCougaarCombo.update();
+    }
+
+
+    private boolean showPreferencePage(String id, IPreferencePage page) {
+        final IPreferenceNode targetNode = new PreferenceNode(id, page);
+
+        PreferenceManager manager = new PreferenceManager();
+        manager.addToRoot(targetNode);
+
+        final PreferenceDialog dialog = new PreferenceDialog(control.getShell(),
+                manager);
+        final boolean[] result = new boolean[] { false };
+        BusyIndicator.showWhile(control.getDisplay(),
+            new Runnable() {
+                public void run() {
+                    dialog.create();
+                    dialog.setMessage(targetNode.getLabelText());
+                    result[0] = (dialog.open() == PreferenceDialog.OK);
+                }
+            });
+        return result[0];
+    }
 
 
     /**
@@ -190,41 +184,6 @@ public class CougaarCapabilityConfigurationPage extends WizardPage implements IA
     protected void handleCougaarComboBoxModified() {
         cougaarVersion = fCougaarCombo.getText();
         cougaarProjectWizard.setCougaarVersion(cougaarVersion);
-//		
+        //		
     }
-    
-
-	private IStatus updateCIPStatus(String cipVersion) {
-		StatusInfo status = new StatusInfo();
-
-		if (cipVersion.length() > 0) {
-			return status;
-		} else {
-			status.setWarning(PreferencesMessages.getString(
-					"Error Setting Cougaar Install Path Setting")); //$NON-NLS-1$
-			return status;
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#isDuplicateName(java.lang.String)
-	 */
-	public boolean isDuplicateName(String name) {
-		for (int i = 0; i < fCougaarCombo.getItemCount(); i++) {
-		String cougaar = (String) fCougaarCombo.getItem(i);
-		if (cougaar.equals(name)) {
-			return true;
-		}
-	}
-
-	return false;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
-	 */
-	public void cougaarAdded(ICougaarInstall cougaar) {
-		System.err.println("Cougaar Install Added");
-		
-	}
 }

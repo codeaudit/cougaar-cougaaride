@@ -18,6 +18,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
+
 package com.cougaarsoftware.cougaar.ide.ui.preferences;
 
 
@@ -75,10 +77,8 @@ public class CougaarConfigurationBlock extends PropertyPage
      *
      * @param status DOCUMENT ME!
      * @param proj DOCUMENT ME!
-     * @param c DOCUMENT ME!
      */
-    public CougaarConfigurationBlock(IStatusChangeListener status,
-        IProject proj) {
+    public CougaarConfigurationBlock(IStatusChangeListener status, IProject proj) {
         fStatus = status;
         project = proj;
     }
@@ -107,7 +107,6 @@ public class CougaarConfigurationBlock extends PropertyPage
      * @see org.eclipse.jdt.internal.ui.preferences.OptionsConfigurationBlock#createContents(org.eclipse.swt.widgets.Composite)
      */
     public Control createContents(Composite parent) {
-    	
         Composite topComp = new Composite(parent, SWT.NONE);
         GridLayout topLayout = new GridLayout();
         topLayout.numColumns = 3;
@@ -115,25 +114,21 @@ public class CougaarConfigurationBlock extends PropertyPage
         topLayout.marginHeight = 0;
         topComp.setLayout(topLayout);
         String[] cougaarNames = getCougaarVersions();
-        if (cougaarNames != null) {
-            if (cougaarNames.length > 0) {
-                Label cougaarSelectionLabel = new Label(topComp, SWT.NONE);
-                cougaarSelectionLabel.setText(CougaarPreferencesMessages
-                    .getString("CougaarConfigurationBlock.cougaarVersion"));
-                cougaarSelectionLabel.setLayoutData(new GridData());
+        Label cougaarSelectionLabel = new Label(topComp, SWT.NONE);
+        cougaarSelectionLabel.setText(CougaarPreferencesMessages.getString(
+                "CougaarConfigurationBlock.cougaarVersion"));
+        cougaarSelectionLabel.setLayoutData(new GridData());
 
-                fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
-                fCougaarCombo.setItems(cougaarNames);
+        fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
+        fCougaarCombo.setItems(cougaarNames);
 
-                fCougaarCombo.setLayoutData(new GridData(
-                        GridData.HORIZONTAL_ALIGN_FILL));
-                fCougaarCombo.addModifyListener(new ModifyListener() {
-                        public void modifyText(ModifyEvent evt) {
-                            handleCougaarComboBoxModified();
-                        }
-                    });
-            }
-        }
+        fCougaarCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        fCougaarCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent evt) {
+                    handleCougaarComboBoxModified();
+                }
+            });
+
 
         fAddCougaarInstall = new Button(topComp, SWT.NONE);
         fAddCougaarInstall.setText("Add");
@@ -146,10 +141,10 @@ public class CougaarConfigurationBlock extends PropertyPage
 
 
         DialogField.createEmptySpace(topComp, 2);
-		String defaultVersion = CougaarPlugin.getCougaarPreference(project,
-							"COUGAAR_VERSION");		
+        String defaultVersion = CougaarPlugin.getCougaarPreference(project,
+                "COUGAAR_VERSION");
 
-		setValues(defaultVersion);
+        setValues(defaultVersion);
         control = topComp;
         return topComp;
     }
@@ -229,7 +224,6 @@ public class CougaarConfigurationBlock extends PropertyPage
     private void setValues(String selectedVersion) {
         //        String defaultVersion = CougaarPlugin.getDefault().getPreferenceStore()
         //                                             .getString(CougaarPlugin.DEFAULT_COUGAAR_PREFERENCE);
-
         int count = fCougaarCombo.getItemCount();
         for (int i = 0; i < count; i++) {
             String item = fCougaarCombo.getItem(i);
@@ -245,8 +239,8 @@ public class CougaarConfigurationBlock extends PropertyPage
      * DOCUMENT ME!
      */
     public void performDefaults() {
-		String defaultVersion = CougaarPlugin.getCougaarPreference(project,
-							"COUGAAR_VERSION");
+        String defaultVersion = CougaarPlugin.getCougaarPreference(project,
+                "COUGAAR_VERSION");
         setValues(defaultVersion);
     }
 
