@@ -33,6 +33,7 @@ import org.eclipse.jdt.internal.ui.JavaPlugin;
 import org.eclipse.jdt.internal.ui.JavaPluginImages;
 import org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter;
 import org.eclipse.jdt.internal.ui.wizards.NewProjectCreationWizard;
+import org.eclipse.jdt.internal.ui.wizards.NewProjectCreationWizardPage;
 import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
@@ -75,7 +76,7 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
         super.addPages();
 
         JavaCapabilityConfigurationPage jcp = (JavaCapabilityConfigurationPage) this
-            .getPage("JavaCapabilityConfigurationPage");
+            .getPage("JavaCapabilityConfigurationPage");        
         WizardNewProjectCreationPage ncw = (WizardNewProjectCreationPage) this
             .getPage("NewProjectCreationWizard");
 

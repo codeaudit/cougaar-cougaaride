@@ -69,4 +69,6 @@ public class ICougaarLaunchConfigurationConstants {
     public static final String ATTR_CONFIGURATION_ERROR = "org.cougaar.configurationError";
     /** Cougaar Launch Constant */
     public static final String ATTR_COUGAAR_VM_PARAMETERS = "org.cougaar.launchParameters";
+	/** Cougaar Launch Constant */
+	public static final String ATTR_SOCIETY_NAME = "org.cougaar.society.fileName";
 }

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
 <plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
    name="%Plugin.name"
@@ -13,6 +14,11 @@
       </library>
    </runtime>
    <requires>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.ui"/>
@@ -36,10 +42,10 @@
          point="org.eclipse.ui.editors">
       <editor
             name="Cougaar Society XML Editor"
-            icon="icons/cougaarsociety.gif"
             extensions="xml"
-            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            icon="icons/cougaarsociety.gif"
             class="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             id="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor">
       </editor>
    </extension>
@@ -55,8 +61,8 @@
             icon="icons/cougaaride.gif"
             category="com.cougaarsoftware.cougaar.ide.ui.wizards"
             class="com.cougaarsoftware.cougaar.ide.ui.wizards.NewCougaarProjectWizard"
-            project="true"
             finalPerspective="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective"
+            project="true"
             id="com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject">
          <description>
             A New Cougaar Project Wizard
@@ -66,8 +72,8 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            objectClass="org.eclipse.core.resources.IProject"
             adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
             name="Cougaar Properties"
             class="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage"
             id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage">

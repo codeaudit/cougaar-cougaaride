@@ -106,6 +106,7 @@ public abstract class AbstractLaunchConfigurationDelegate
 		// Program & VM args
 		String pgmArgs = getProgramArguments(configuration);
 		String vmArgs = getVMArguments(configuration);
+		System.out.println(vmArgs);
 		ExecutionArguments execArgs = new ExecutionArguments(vmArgs, pgmArgs);
 
 		// VM-specific attributes

@@ -24,8 +24,11 @@ package com.cougaarsoftware.cougaar.ide.launcher.ui.configuration;
 import java.util.Enumeration;
 import java.util.HashMap;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.internal.debug.ui.JDIDebugUIPlugin;
 import org.eclipse.jdt.launching.IJavaLaunchConfigurationConstants;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.TableLayout;
@@ -262,6 +265,7 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
 	public void performApply(ILaunchConfigurationWorkingCopy configuration) {
 		// if (isDirty()) {
 		configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME, fNameText.getText());
+		configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_SOCIETY_NAME, fSocietyNameText.getText());
 		configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS, setProgramArguments());
 		setCougaarNodeName();
 		setCougaarSocietyFileName();
@@ -275,5 +279,47 @@ public class CougaarXMLParametersTab extends CougaarINIParametersTab {
 		setDirty(false);
 
 		// }
+	}
+	
+	/**
+	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#initializeFrom(ILaunchConfiguration)
+	 */
+	public void initializeFrom(ILaunchConfiguration config) {
+		boolean useDefault = true;
+		try {
+			useDefault = config.getAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_DEFAULT_PARAMETERS,
+					true);
+			fWorkingDirectoryBlock.initializeFrom(config);
+		} catch (CoreException e) {
+			JDIDebugUIPlugin.log(e);
+		}
+
+		if (config == getLaunchConfiguration()) {
+			if (!useDefault && !fArgumentsDefaultButton.getSelection()) {
+				setDirty(false);
+				return;
+			}
+		}
+
+		setLaunchConfiguration(config);
+		fArgumentsDefaultButton.setSelection(useDefault);
+
+		try {
+			fNameText.setText(config.getAttribute(
+					ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME,
+					LauncherUIMessages.getString(
+						"cougaarlauncher.argumenttab.name.defaultvalue"))); //$NON-NLS-1$
+			fSocietyNameText.setText(config.getAttribute(
+			ICougaarLaunchConfigurationConstants.ATTR_SOCIETY_NAME,
+			LauncherUIMessages.getString(
+				"cougaarlauncher.argumenttab.name.defaultvalue"))); //$NON-NLS-1$
+		} catch (CoreException ce) {
+			fNameText.setText(LauncherUIMessages.getString(
+					"cougaarlauncher.argumenttab.name.defaultvalue")); //$NON-NLS-1$
+		}
+
+		updateParametersFromConfig(config);
+		fVMParametersTable.setEnabled(!useDefault);
+		setDirty(false);
 	}
 }
