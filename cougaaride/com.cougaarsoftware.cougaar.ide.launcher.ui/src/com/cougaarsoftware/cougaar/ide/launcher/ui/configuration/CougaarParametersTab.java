@@ -451,8 +451,8 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
      * @return
      */
     private String setProgramArguments() {
-        return LauncherUIMessages.getString("cougaarLauncher.node.argument")
-        + " -n " + "\"" + fNameText.getText() + "\"";
+        return LauncherUIMessages.getString("cougaarLauncher.node.argument");
+        //+ " -n " + "\"" + fNameText.getText() + "\"";
     }
 
 

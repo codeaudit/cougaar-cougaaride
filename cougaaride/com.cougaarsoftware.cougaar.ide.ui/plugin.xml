@@ -19,6 +19,7 @@
       <import plugin="org.eclipse.jdt.core"/>
       <import plugin="org.eclipse.jdt.ui"/>
       <import plugin="com.cougaarsoftware.cougaar.ide.core"/>
+      <import plugin="org.eclipse.swt"/>
    </requires>
 
 
