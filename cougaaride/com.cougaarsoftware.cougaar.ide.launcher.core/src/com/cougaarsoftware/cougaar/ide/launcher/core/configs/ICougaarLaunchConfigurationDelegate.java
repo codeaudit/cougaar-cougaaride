@@ -20,14 +20,19 @@
  */
 
 
-package com.cougaarsoftware.cougaar.ide.launcher.core.configuration;
+package com.cougaarsoftware.cougaar.ide.launcher.core.configs;
+
+
+import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 
 /**
- * Cougaar launch delegate for Cougaar Version 10.2.x
+ * Interface for cougaar launch configuration delegates
  *
  * @author mabrams
+ *
+ * @see ILaunchConfigurationDelegate
  */
-public class CougaarLaunchConfigurationDelegate
-	extends AbstractCougaarLaunchConfigurationDelegate {
+public interface ICougaarLaunchConfigurationDelegate
+    extends ILaunchConfigurationDelegate {
 }

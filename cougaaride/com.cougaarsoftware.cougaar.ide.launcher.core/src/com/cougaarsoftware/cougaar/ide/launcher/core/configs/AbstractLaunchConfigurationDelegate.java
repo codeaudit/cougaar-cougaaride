@@ -20,7 +20,7 @@
  */
 
 
-package com.cougaarsoftware.cougaar.ide.launcher.core.configuration;
+package com.cougaarsoftware.cougaar.ide.launcher.core.configs;
 
 
 import java.io.File;
@@ -53,7 +53,7 @@ import com.cougaarsoftware.cougaar.ide.launcher.core.constants.ICougaarLaunchCon
  *
  * @author mabrams
  */
-public abstract class AbstractCougaarLaunchConfigurationDelegate
+public abstract class AbstractLaunchConfigurationDelegate
 	extends AbstractJavaLaunchConfigurationDelegate
 	implements ICougaarLaunchConfigurationDelegate {
 	/**
