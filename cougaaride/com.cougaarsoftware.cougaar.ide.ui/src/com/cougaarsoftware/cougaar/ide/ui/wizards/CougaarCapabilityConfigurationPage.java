@@ -129,7 +129,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
         }
 
         setValues("");
-        fCougaarCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        fCougaarCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         fCougaarCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent evt) {
                     handleCougaarComboBoxModified();
@@ -137,7 +137,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
             });
 
         fAddCougaarInstall = new Button(topComp, SWT.NONE);
-        fAddCougaarInstall.setText("New Cougaar Installation");
+        fAddCougaarInstall.setText(CougaarUIMessages.getString("CougaarCapabilityConfigurationPage.newInstallButton"));
         fAddCougaarInstall.setLayoutData(new GridData());
         fAddCougaarInstall.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent evt) {

@@ -127,7 +127,7 @@ public class CougaarConfigurationBlock extends PropertyPage
         fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
         fCougaarCombo.setItems(cougaarNames);
 
-        fCougaarCombo.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+        fCougaarCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
         fCougaarCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent evt) {
                     handleCougaarComboBoxModified();
@@ -136,7 +136,7 @@ public class CougaarConfigurationBlock extends PropertyPage
 
 
         fAddCougaarInstall = new Button(topComp, SWT.NONE);
-        fAddCougaarInstall.setText("Add");
+        fAddCougaarInstall.setText(CougaarPreferencesMessages.getString("CougaarConfigurationBlock.addCougaarInstallButton"));
         fAddCougaarInstall.setLayoutData(new GridData());
         fAddCougaarInstall.addSelectionListener(new SelectionAdapter() {
                 public void widgetSelected(SelectionEvent evt) {
