@@ -436,6 +436,14 @@ public class CougaarINIParametersTab extends JavaLaunchConfigurationTab {
 
         return null;
     }
+    
+    /**
+     * remove all items from the parameters table
+     *
+     */
+    protected void clearTableItems() {
+        this.fVMParametersTable.removeAll();
+    }
 
 
     /**
