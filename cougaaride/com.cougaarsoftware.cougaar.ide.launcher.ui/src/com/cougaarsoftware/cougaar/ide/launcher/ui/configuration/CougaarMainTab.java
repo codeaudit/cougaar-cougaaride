@@ -34,6 +34,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -83,7 +84,7 @@ public class CougaarMainTab extends JavaMainTab {
         projComp.setLayoutData(gd);
         projComp.setFont(font);
 
-        fProjLabel = new Label(projComp, SWT.NONE);
+        Label fProjLabel = new Label(projComp, SWT.NONE);
         fProjLabel.setText(LauncherMessages.getString("JavaMainTab.&Project__2")); //$NON-NLS-1$
         gd = new GridData();
         gd.horizontalSpan = 2;
@@ -120,7 +121,7 @@ public class CougaarMainTab extends JavaMainTab {
         mainComp.setLayoutData(gd);
         mainComp.setFont(font);
 
-        fMainLabel = new Label(mainComp, SWT.NONE);
+        Label fMainLabel = new Label(mainComp, SWT.NONE);
         fMainLabel.setText(LauncherMessages.getString(
                 "JavaMainTab.Main_cla&ss__4")); //$NON-NLS-1$
         gd = new GridData();
@@ -155,6 +156,12 @@ public class CougaarMainTab extends JavaMainTab {
                     updateLaunchConfigurationDialog();
                 }
             });
+        
+        fConsiderInheritedMainButton = createCheckButton(mainComp, LauncherMessages.getString("JavaMainTab.22")); //$NON-NLS-1$
+		gd = new GridData();
+		gd.horizontalSpan = 2;
+		fConsiderInheritedMainButton.setLayoutData(gd);
+		fConsiderInheritedMainButton.addSelectionListener(fListener);
 
         fStopInMainCheckButton = new Button(comp, SWT.CHECK);
         fStopInMainCheckButton.setText(LauncherMessages.getString(
@@ -201,4 +208,28 @@ public class CougaarMainTab extends JavaMainTab {
     public void initializeFrom(ILaunchConfiguration config) {
         super.initializeFrom(config);
     }
+    
+    /**
+	 * A listener which handles widget change events for the controls
+	 * in this tab.
+	 */
+	private class WidgetListener implements ModifyListener, SelectionListener {
+		public void modifyText(ModifyEvent e) {
+			updateLaunchConfigurationDialog();
+		}
+		public void widgetSelected(SelectionEvent e) {
+			Object source = e.getSource();
+			if (source == fProjButton) {
+				handleProjectButtonSelected();
+			} else if (source == fSearchButton) {
+				handleSearchButtonSelected();
+			} else {
+				updateLaunchConfigurationDialog();
+			}
+		}
+		public void widgetDefaultSelected(SelectionEvent e) {
+		}
+	}
+	
+	private WidgetListener fListener = new WidgetListener();
 }
