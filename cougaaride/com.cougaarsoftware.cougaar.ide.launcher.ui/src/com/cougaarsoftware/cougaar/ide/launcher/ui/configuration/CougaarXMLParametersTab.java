@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place, Suite 330, Boston, MA 02111-1307 USA
- *  
+ * 
  */
 
 package com.cougaarsoftware.cougaar.ide.launcher.ui.configuration;
@@ -152,7 +152,7 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
 
     private CougaarParamsTabListener fListener = new CougaarParamsTabListener();
 
-    //	Working directory
+    // Working directory
     protected WorkingDirectoryBlock fWorkingDirectoryBlock;
 
     private NodeSelectionComboBlock fNodeBlock;
@@ -453,7 +453,7 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
      * already present in the parameters table.
      * 
      * @param candidateName
-     *                 DOCUMENT ME!
+     *            DOCUMENT ME!
      * 
      * @return DOCUMENT ME!
      */
@@ -488,12 +488,9 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
                 String[] pair = new String[2];
                 pair[0] = (String) keys.nextElement();
 
-                if ((cip != null) && !cip.equals("")) {
-                    pair[1] = CougaarXMLParameters
-                            .getString(pair[0])
-                            .replaceAll(
-                                    ICougaarConstants.COUGAAR_INSTALL_PATH_STRING,
-                                    cip);
+                if ((cip != null) && !cip.equals("")) {                   
+                    pair[1] = replaceCIP(cip, CougaarXMLParameters
+                            .getString(pair[0]));
                 }
 
                 map.put(pair[0], pair[1]);
@@ -702,8 +699,8 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
      * results.
      * 
      * @param updateItem
-     *                 the item to update, or <code>null</code> if adding a new
-     *                 item
+     *            the item to update, or <code>null</code> if adding a new
+     *            item
      */
     private void openNewParameterDialog(NameValuePairDialog dialog,
             TableItem updateItem) {
@@ -763,9 +760,8 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
                 String cip = "";
                 cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
                 if ((cip != null) && !cip.equals("")) {
-                    nameValuePair[1] = CougaarINIParameters.getString(
-                            nameValuePair[0]).replaceAll(
-                            ICougaarConstants.COUGAAR_INSTALL_PATH_STRING, cip);
+                    nameValuePair[1] = replaceCIP(cip, CougaarXMLParameters.getString(
+                            nameValuePair[0]));                                 
                 }
 
                 map.put(nameValuePair[0], nameValuePair[1]);
@@ -787,6 +783,22 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
 
         setDirty(true);
         performApply(wc);
+    }
+
+    /**
+     * Replaces the COUGAAR_INSTALL_PATH variable with the actual value for
+     * the CIP.
+     * 
+     * @param cip
+     * @param original string
+     * @return the original string with the actual CIP
+     */
+    private String replaceCIP(String cip, String originalString) {
+        String pattern = "[\\$%]?\\{?"
+            + ICougaarConstants.COUGAAR_INSTALL_PATH_STRING
+            + "\\}?[%]?";                 
+        String tmpString = originalString.replaceAll(pattern, cip);  
+        return tmpString;
     }
 
     protected void handleLoadArgumentsFromFileButtonSelected() {
@@ -900,10 +912,8 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
                 if ((defaultVersion != null) && !defaultVersion.equals("")) {
                     String cip = "";
                     cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
-                    if ((cip != null) && !cip.equals("")) {
-                        nameValuePair[1] = nameValuePair[1].replaceAll(
-                                ICougaarConstants.COUGAAR_INSTALL_PATH_STRING,
-                                cip);
+                    if ((cip != null) && !cip.equals("")) {                        
+                        nameValuePair[1] = replaceCIP(cip, nameValuePair[1]);
                     }
 
                     map.put(nameValuePair[0], nameValuePair[1]);
@@ -968,7 +978,7 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
     /**
      * Return the IJavaProject corresponding to the project name in the project
      * name text field, or null if the text does not match a project name.
-     *  
+     * 
      */
     protected IJavaProject getJavaProject(ILaunchConfigurationWorkingCopy config) {
         String projectName = "";
@@ -981,7 +991,7 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
             e.printStackTrace();
         }
 
-        //        String projectName = fProjText.getText().trim();
+        // String projectName = fProjText.getText().trim();
         if (projectName.length() < 1) {
             return null;
         }
@@ -1066,5 +1076,5 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
     public Image getImage() {
         return JavaDebugImages.get(JavaDebugImages.IMG_VIEW_ARGUMENTS_TAB);
     }
-
+    
 }
