@@ -470,35 +470,35 @@ Public License instead of this License.
       <import plugin="org.eclipse.jdt.debug"/>
       <import plugin="org.eclipse.jdt.debug.ui"/>
    </requires>
-
-   <plugin
-         id="com.cougaarsoftware.cougaar.ide.launcher.ui"
-         download-size="0"
-         install-size="0"
-         version="1.1.0"/>
-
+   
    <plugin
          id="com.cougaarsoftware.cougaar.ide.launcher.core"
          download-size="0"
          install-size="0"
-         version="1.1.0"/>
+         version="1.2"/>
+
+<plugin
+         id="com.cougaarsoftware.cougaar.ide.launcher.ui"
+         download-size="0"
+         install-size="0"
+         version="1.2"/>         
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.ui"
          download-size="0"
          install-size="0"
-         version="1.1.0"/>
+         version="1.2"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide"
          download-size="0"
          install-size="0"
-         version="1.1.0"/>
+         version="1.2"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.core"
          download-size="0"
          install-size="0"
-         version="1.1.0"/>
+         version="1.2"/>
 
 </feature>

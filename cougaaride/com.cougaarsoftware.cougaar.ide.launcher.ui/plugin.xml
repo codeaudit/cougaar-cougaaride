@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.launcher.ui"
    name="%Plugin.name"
-   version="1.1.1"
+   version="1.2.0"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIPlugin">
 
@@ -47,12 +47,12 @@
             icon="icons/cougaaride.gif"
             configTypeID="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarLaunchConfigurationType"
             id="com.cougaarsoftware.cougaar.ide.launcher.ui.cougaarLaunchConfigurationTypeImage">
-      </launchConfigurationTypeImage>    
+      </launchConfigurationTypeImage>
       <launchConfigurationTypeImage
             icon="icons/cougaaride.gif"
             configTypeID="com.cougaarsoftware.cougaar.ide.launcher.core.configs.CougaarXMLLaunchConfigurationType"
             id="com.cougaarsoftware.cougaar.ide.launcher.ui.cougaarLaunchConfigurationTypeImage">
-      </launchConfigurationTypeImage>    
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
