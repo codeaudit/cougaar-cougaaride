@@ -885,7 +885,18 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
             Iterator iter = paramList.iterator();
             while (iter.hasNext()) {
                 String value = (String) iter.next();
-                String[] nameValuePair = value.split("=");
+                String[] nameValuePair = new String[2];
+                if (!value.startsWith("-X")) {
+                    nameValuePair = value.split("=");
+                } else {
+                    nameValuePair[0] = value;
+                    nameValuePair[1] = value;
+                }
+                if (nameValuePair[1] == null) {
+                    MessageDialog.openError(getShell(), "Invalide Argument",
+                            "There was an error parsing the argument " + value
+                                    + " from the society xml file.\n");
+                }
                 if ((defaultVersion != null) && !defaultVersion.equals("")) {
                     String cip = "";
                     cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
@@ -1026,7 +1037,7 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
             int end = 0;
             while ((end = oldPath.indexOf(prevSocietyPath, start)) != -1) {
                 sb.append(oldPath.substring(start, end)).append("");
-                start = end + prevSocietyPath.length();                             
+                start = end + prevSocietyPath.length();
             }
             sb.append(oldPath.substring(start));
             oldPath = sb.toString();
@@ -1048,12 +1059,12 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
     public boolean isValid(ILaunchConfiguration config) {
         return fWorkingDirectoryBlock.isValid(config);
     }
-    
-	/**
-	 * @see ILaunchConfigurationTab#getImage()
-	 */
-	public Image getImage() {
-	    return JavaDebugImages.get(JavaDebugImages.IMG_VIEW_ARGUMENTS_TAB);
-	}	
+
+    /**
+     * @see ILaunchConfigurationTab#getImage()
+     */
+    public Image getImage() {
+        return JavaDebugImages.get(JavaDebugImages.IMG_VIEW_ARGUMENTS_TAB);
+    }
 
 }
