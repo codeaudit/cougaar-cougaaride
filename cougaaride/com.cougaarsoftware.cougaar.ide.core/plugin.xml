@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.cougaarsoftware.cougaar.ide.core"
+   name="Cougaar Core Plug-in"
+   version="1.0.0"
+   provider-name="COUGAARSOFTWARE"
+   class="com.cougaarsoftware.cougaar.ide.core.CougaarPlugin">
+
+   <runtime>
+      <library name="cougaar-ide-core.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.apache.xerces"/>
+   </requires>
+
+
+<!-- ======================================================= -->
+<!-- Nature definition                                       -->
+<!-- VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
+   <extension
+         id="cougaarnature"
+         name="Cougaar Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="com.cougaarsoftware.cougaar.ide.core.CougaarNature">
+         </run>
+      </runtime>
+   </extension>
+<!-- Nature Image                                           -->
+   <extension
+         point="org.eclipse.ui.projectNatureImages">
+      <image
+            icon="icons/CougaarNature.gif"
+            natureId="com.cougaarsoftware.cougaar.ide.core.cougaarnature"
+            id="com.cougaarsoftware.cougaar.ide.core.natureimage">
+      </image>
+   </extension>
+<!-- ======================================================= -->
+<!-- Classpath Container Initializer                         -->
+<!-- VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV -->
+   <extension
+         point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+            class="com.cougaarsoftware.cougaar.ide.core.CougaarClasspathContainerInitializer"
+            id="com.cougaarsoftware.cougaar.ide.core.COUGAAR_CONTAINER">
+      </classpathContainerInitializer>
+   </extension>
+
+</plugin>

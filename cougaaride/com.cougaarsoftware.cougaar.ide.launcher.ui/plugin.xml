@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.cougaarsoftware.cougaar.ide.launcher.ui"
+   name="LauncherUI Plug-in"
+   version="1.0.0"
+   provider-name="COUGAARSOFTWARE"
+   class="com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIPlugin">
+
+   <runtime>
+      <library name="cougaar-ide-ui.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="com.cougaarsoftware.cougaar.ide.launcher.core"/>
+      <import plugin="com.cougaarsoftware.cougaar.ide.core"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="com.cougaarsoftware.cougaar.ide.ui"/>
+   </requires>
+
+
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            type="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.Cougaar102xLaunchConfigurationType"
+            class="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.Cougaar102xTabGroup"
+            id="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.Cougaar102xTabGroup">
+      </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            icon="icons/cougaaride.gif"
+            configTypeID="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.Cougaar102xLaunchConfigurationType"
+            id="com.cougaarsoftware.cougaar.ide.launcher.ui.cougaarLaunchConfigurationTypeImage">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            label="Cougaar Society"
+            icon="icons/cougaaride.gif"
+            modes="run, debug"
+            class="com.cougaarsoftware.cougaar.ide.launcher.ui.CougaarLaunchShortcut"
+            id="com.cougaarsoftware.cougaar.ide.launcher.ui.cougaarLaunchShortCut">
+         <perspective
+               id="org.eclipse.jdt.ui.JavaPerspective">
+         </perspective>
+         <perspective
+               id="org.eclipse.jdt.ui.JavaHierarchyPerspective">
+         </perspective>
+         <perspective
+               id="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+         </perspective>
+         <perspective
+               id="org.eclipse.debug.ui.DebugPerspective">
+         </perspective>
+      </shortcut>
+   </extension>
+
+</plugin>

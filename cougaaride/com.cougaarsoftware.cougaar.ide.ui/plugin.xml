@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin
+   id="com.cougaarsoftware.cougaar.ide.ui"
+   name="com.cougaarsoftware.cougaar.ide.ui"
+   version="1.0.0"
+   provider-name="COUGAARSOFTWARE">
+
+   <runtime>
+      <library name="cougaar-ide-ui.jar"/>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.jdt.ui"/>
+      <import plugin="com.cougaarsoftware.cougaar.ide.core"/>
+   </requires>
+
+
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="%Perspective.name"
+            icon="icons/cougaaride.gif"
+            class="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspectiveFactory"
+            id="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective">
+      </perspective>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Cougaar Society XML Editor"
+            icon="icons/cougaarsociety.gif"
+            extensions="xml"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor"
+            id="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor">
+      </editor>
+   </extension>
+<!-- Wizard to create project with Cougaar nature            -->
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Cougaar Wizards"
+            id="com.cougaarsoftware.cougaar.ide.ui.wizards">
+      </category>
+      <wizard
+            name="New Cougaar Project"
+            icon="icons/cougaaride.gif"
+            category="com.cougaarsoftware.cougaar.ide.ui.wizards"
+            class="com.cougaarsoftware.cougaar.ide.ui.wizards.NewCougaarProjectWizard"
+            project="true"
+            id="com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject">
+         <description>
+            A New Cougaar Project Wizard
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            objectClass="org.eclipse.jdt.core.IJavaProject"
+            name="Cougaar Properties"
+            class="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage"
+            id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="%com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage"
+            class="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage"
+            id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage">
+      </page>
+   </extension>
+
+</plugin>
