@@ -31,16 +31,16 @@
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTabGroups">
       <launchConfigurationTabGroup
-            type="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.Cougaar102xLaunchConfigurationType"
-            class="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.Cougaar102xTabGroup"
-            id="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.Cougaar102xTabGroup">
+            type="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.CougaarLaunchConfigurationType"
+            class="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarTabGroup"
+            id="com.cougaarsoftware.cougaar.ide.launcher.ui.configuration.CougaarTabGroup">
       </launchConfigurationTabGroup>
    </extension>
    <extension
          point="org.eclipse.debug.ui.launchConfigurationTypeImages">
       <launchConfigurationTypeImage
             icon="icons/cougaaride.gif"
-            configTypeID="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.Cougaar102xLaunchConfigurationType"
+            configTypeID="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.CougaarLaunchConfigurationType"
             id="com.cougaarsoftware.cougaar.ide.launcher.ui.cougaarLaunchConfigurationTypeImage">
       </launchConfigurationTypeImage>
    </extension>

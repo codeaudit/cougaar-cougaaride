@@ -28,6 +28,6 @@ package com.cougaarsoftware.cougaar.ide.launcher.core.configuration;
  *
  * @author mabrams
  */
-public class Cougaar102xLaunchConfigurationDelegate
+public class CougaarLaunchConfigurationDelegate
     extends AbstractCougaarLaunchConfigurationDelegate {
 }

@@ -24,10 +24,10 @@
    <extension
          point="org.eclipse.debug.core.launchConfigurationTypes">
       <launchConfigurationType
-            name="%com.cougaarsoftware.cougaar.ide.launcher.core.configuration.Cougaar102xLaunchConfigurationType"
-            delegate="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.Cougaar102xLaunchConfigurationDelegate"
+            name="%com.cougaarsoftware.cougaar.ide.launcher.core.configuration.CougaarLaunchConfigurationType"
+            delegate="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.CougaarLaunchConfigurationDelegate"
             modes="run, debug"
-            id="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.Cougaar102xLaunchConfigurationType">
+            id="com.cougaarsoftware.cougaar.ide.launcher.core.configuration.CougaarLaunchConfigurationType">
       </launchConfigurationType>
    </extension>
 
