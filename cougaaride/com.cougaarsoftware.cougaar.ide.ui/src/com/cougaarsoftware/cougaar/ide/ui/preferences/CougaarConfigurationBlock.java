@@ -31,10 +31,26 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.internal.ui.dialogs.StatusInfo;
 import org.eclipse.jdt.internal.ui.preferences.PreferencesMessages;
 import org.eclipse.jdt.internal.ui.wizards.IStatusChangeListener;
+import org.eclipse.jdt.internal.ui.wizards.dialogfields.DialogField;
+import org.eclipse.jface.preference.IPreferenceNode;
+import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.PropertyPage;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
@@ -42,8 +58,7 @@ import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
-import com.cougaarsoftware.cougaar.ide.ui.widgets.CougaarInstallSelectionWidget;
-import com.cougaarsoftware.cougaar.ide.ui.widgets.ICougaarInstallSelectionChangeListener;
+import com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener;
 
 
 /**
@@ -52,13 +67,14 @@ import com.cougaarsoftware.cougaar.ide.ui.widgets.ICougaarInstallSelectionChange
  * @author Matt Abrams
  */
 public class CougaarConfigurationBlock extends PropertyPage
-    implements IAddCougaarDialogRequestor,
-        ICougaarInstallSelectionChangeListener {
+    implements IAddCougaarDialogRequestor, ICougaarInstallChangeListener {
     private Combo fCougaarCombo;
     private String cougaarVersion = "";
     private IStatusChangeListener fStatus;
+    private Button fAddCougaarInstall;
     private IAddCougaarDialogRequestor requestor;
     private IProject project;
+    private Control control;
 
     /**
      * Creates a new CougaarConfigurationBlock object.
@@ -98,7 +114,48 @@ public class CougaarConfigurationBlock extends PropertyPage
      * @see org.eclipse.jdt.internal.ui.preferences.OptionsConfigurationBlock#createContents(org.eclipse.swt.widgets.Composite)
      */
     public Control createContents(Composite parent) {
-        return new CougaarInstallSelectionWidget(parent, SWT.NULL, this, project);
+        Composite topComp = new Composite(parent, SWT.NONE);
+        GridLayout topLayout = new GridLayout();
+        topLayout.numColumns = 3;
+        topLayout.marginWidth = 0;
+        topLayout.marginHeight = 0;
+        topComp.setLayout(topLayout);
+        String[] cougaarNames = getCougaarVersions();
+        Label cougaarSelectionLabel = new Label(topComp, SWT.NONE);
+        cougaarSelectionLabel.setText(CougaarPreferencesMessages.getString(
+                "CougaarConfigurationBlock.cougaarVersion"));
+        cougaarSelectionLabel.setLayoutData(new GridData());
+
+        fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
+        fCougaarCombo.setItems(cougaarNames);
+
+
+        fCougaarCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+        fCougaarCombo.addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent evt) {
+                    handleCougaarComboBoxModified();
+                }
+            });
+
+
+        fAddCougaarInstall = new Button(topComp, SWT.NONE);
+        fAddCougaarInstall.setText(CougaarPreferencesMessages.getString(
+                "CougaarConfigurationBlock.addCougaarInstallButton"));
+        fAddCougaarInstall.setLayoutData(new GridData());
+        fAddCougaarInstall.addSelectionListener(new SelectionAdapter() {
+                public void widgetSelected(SelectionEvent evt) {
+                    handleAddButtonSelected();
+                }
+            });
+
+
+        DialogField.createEmptySpace(topComp, 2);
+        String defaultVersion = CougaarPlugin.getCougaarPreference(project,
+                ICougaarConstants.COUGAAR_VERSION);
+
+        setValues(defaultVersion);
+        control = topComp;
+        return topComp;
     }
 
 
@@ -128,6 +185,35 @@ public class CougaarConfigurationBlock extends PropertyPage
         cougaarVersion = fCougaarCombo.getText();
         IStatus status = updateCIPStatus(cougaarVersion);
         fStatus.statusChanged(status);
+    }
+
+
+    private void handleAddButtonSelected() {
+        String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
+
+        CougaarPreferencePage page = new CougaarPreferencePage(this);
+        showPreferencePage(id, page);
+    }
+
+
+    private boolean showPreferencePage(String id, IPreferencePage page) {
+        final IPreferenceNode targetNode = new PreferenceNode(id, page);
+
+        PreferenceManager manager = new PreferenceManager();
+        manager.addToRoot(targetNode);
+
+        final PreferenceDialog dialog = new PreferenceDialog(control.getShell(),
+                manager);
+        final boolean[] result = new boolean[] { false };
+        BusyIndicator.showWhile(control.getDisplay(),
+            new Runnable() {
+                public void run() {
+                    dialog.create();
+                    dialog.setMessage(targetNode.getLabelText());
+                    result[0] = (dialog.open() == Window.OK);
+                }
+            });
+        return result[0];
     }
 
 
@@ -196,11 +282,10 @@ public class CougaarConfigurationBlock extends PropertyPage
 
 
     /* (non-Javadoc)
-     * @see com.cougaarsoftware.cougaar.ide.ui.widgets.ICougaarInstallSelectionChangeListener#handleCougaarInstallSelected(java.lang.String)
+     * @see com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener#cougaarRemoved(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
      */
-    public void handleCougaarInstallSelected(String version) {
-        String[] versions = getCougaarVersions();
-        fCougaarCombo.setItems(versions);
-
+    public void cougaarRemoved(ICougaarInstall removed) {
+        String[] versions = getCougaarVersions();				
+        fCougaarCombo.setItems(versions);                    
     }
 }
