@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
    id="com.cougaarsoftware.cougaar.ide.launcher.ui"
-   name="Cougaar LauncherUI Plug-in"
+   name="Cougaar Launcher UI Plug-in"
    version="1.0.0"
    provider-name="COUGAARSOFTWARE"
    class="com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIPlugin">
