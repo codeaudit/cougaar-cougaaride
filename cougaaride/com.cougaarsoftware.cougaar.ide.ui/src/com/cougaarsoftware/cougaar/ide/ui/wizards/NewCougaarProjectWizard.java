@@ -113,9 +113,26 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
         IClasspathEntry conEntry = JavaCore.newContainerEntry(path, false);
 
         IClasspathEntry[] entries = javaProject.getRawClasspath();
-        IClasspathEntry[] newentries = new IClasspathEntry[entries.length + 1];
-        System.arraycopy(entries, 0, newentries, 0, entries.length);
-        newentries[newentries.length - 1] = conEntry;
+        IClasspathEntry[] newentries;
+		int index=entries.length;
+		//look for the entry already in the classpath
+        for (int i = 0; i < entries.length; i++) {
+			if(entries[i].equals(conEntry)){
+				index=i;
+				break;
+			}
+		}
+		
+		//if we didnt find an existing entry
+		if(index==entries.length){
+			newentries = new IClasspathEntry[entries.length + 1];
+			System.arraycopy(entries, 0, newentries, 0, entries.length);
+			newentries[newentries.length - 1] = conEntry;
+		}else{
+			newentries=entries;
+		}
+		
+
 
         IJavaModelStatus validation = JavaConventions.validateClasspath(javaProject,
                 newentries, javaProject.getOutputLocation());
