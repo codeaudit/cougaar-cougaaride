@@ -34,7 +34,6 @@ import org.eclipse.jdt.internal.ui.JavaPluginImages;
 import org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter;
 import org.eclipse.jdt.internal.ui.wizards.JavaProjectWizard;
 import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
-import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 import com.cougaarsoftware.cougaar.ide.core.CoreMessages;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
@@ -76,15 +75,9 @@ public class NewCougaarProjectWizard extends JavaProjectWizard {
 
         JavaCapabilityConfigurationPage jcp = (JavaCapabilityConfigurationPage) this
             .getPage("JavaCapabilityConfigurationPage");        
-        WizardNewProjectCreationPage ncw = (WizardNewProjectCreationPage) this
-            .getPage("NewProjectCreationWizard");
 
         jcp.setTitle(CougaarUIMessages.getString("CougaarCapabilityTitle"));
         jcp.setDescription(CougaarUIMessages.getString(
-                "CougaarCapabilityDescription"));
-
-        ncw.setTitle(CougaarUIMessages.getString("CougaarCapabilityTitle"));
-        ncw.setDescription(CougaarUIMessages.getString(
                 "CougaarCapabilityDescription"));
     }
 
