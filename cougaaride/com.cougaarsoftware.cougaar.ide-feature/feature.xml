@@ -2,7 +2,7 @@
 <feature
       id="com.cougaarsoftware.cougaar.ide"
       label="Cougaar Integrated Development Environment"
-      version="1.0.3"
+      version="1.1.0"
       provider-name="Cougaar Software, Inc."
       nl="en"
       image="cougaar_logo.gif">
@@ -474,30 +474,32 @@ Public License instead of this License.
          id="com.cougaarsoftware.cougaar.ide"
          download-size="0"
          install-size="0"
-         version="1.0.3"/>
+         version="1.1.0"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.core"
          download-size="0"
          install-size="0"
-         version="1.0.3"/>
+         version="1.1.0"/>
+   
+   <plugin
+         id="com.cougaarsoftware.cougaar.ide.ui"
+         download-size="0"
+         install-size="0"
+         version="1.1.0"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.launcher.core"
          download-size="0"
          install-size="0"
-         version="1.0.3"/>
+         version="1.1.0"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.launcher.ui"
          download-size="0"
          install-size="0"
-         version="1.0.3"/>
+         version="1.1.0"/>
 
-   <plugin
-         id="com.cougaarsoftware.cougaar.ide.ui"
-         download-size="0"
-         install-size="0"
-         version="1.0.3"/>
+
 
 </feature>

@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
    name="%Plugin.name"
-   version="1.0.3"
+   version="1.1.0"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.ui.CougaarUIPlugin">
 
@@ -129,7 +129,7 @@
             name="Cougaar Views"
             id="com.cougaarsoftware.cougaar.ide.ui">
       </category>
-     <view
+      <view
             name="Cougaar Society Viewer"
             icon="icons/cougaaride.gif"
             category="com.cougaarsoftware.cougaar.ide.ui"
