@@ -61,6 +61,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarInstall;
+import com.cougaarsoftware.cougaar.ide.core.CougaarInstallComparer;
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
 import com.cougaarsoftware.cougaar.ide.ui.AddCougaarDialog;
@@ -165,7 +166,7 @@ public class CougaarPreferencePage extends PreferencePage
                 "cougaarPreferencePage.cougaarLocation")); //$NON-NLS-1$
 
         fCougaarList = new CheckboxTableViewer(table);
-
+		fCougaarList.setComparer(new CougaarInstallComparer());
 
         fCougaarList.setSorter(new ViewerSorter() {
                 public int compare(Viewer viewer, Object e1, Object e2) {
@@ -364,19 +365,10 @@ public class CougaarPreferencePage extends PreferencePage
         Iterator elements = selection.iterator();
         while (elements.hasNext()) {
             Object o = elements.next();
-            fCougaarList.remove(o);
+            fCougaarInstalls.remove(o);
         }
 
         fCougaarList.refresh();
-
-
-        // this is order dependent. Must first refresh to work with 
-        // the new state of affairs
-        //		if (getCurrentDefaultVM() == null) {
-        //			if (fVMList.getTable().getItemCount() > 0) {
-        //				verifyDefaultVM((IVMInstall)fVMList.getElementAt(0));
-        //			}
-        //		}
     }
 
 
@@ -402,11 +394,11 @@ public class CougaarPreferencePage extends PreferencePage
         // assume it's length one, otherwise this will not be called
         ICougaarInstall vm = (ICougaarInstall) selection.getFirstElement();
 
-        //	AddVMDialog dialog= new AddVMDialog(this, getShell(), fVMTypes, vm);
-        //		dialog.setTitle(LauncherMessages.getString("vmPreferencePage.editJRE.title")); //$NON-NLS-1$
-        //		if (dialog.open() != AddVMDialog.OK) {
-        //			return;
-        //		}
+		AddCougaarDialog dialog = new AddCougaarDialog(this, getShell(), vm);
+		dialog.setTitle(CougaarPreferencesMessages.getString("CougaarPreferencePage.editVersion.title"));
+		if (dialog.open() != AddCougaarDialog.OK) {
+			return;
+		}
         fCougaarList.refresh(vm);
     }
 

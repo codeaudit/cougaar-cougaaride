@@ -23,6 +23,9 @@
 package com.cougaarsoftware.cougaar.ide.core;
 
 
+import java.io.IOException;
+
+
 /**
  * Represents a Cougaar installation
  *
@@ -37,5 +40,38 @@ public class CougaarInstall extends AbstractCougaarInstall {
      */
     public CougaarInstall(String id, String location) {
         super(id, location);
+    }
+
+    /* (non-Javadoc)
+     * @see com.cougaarsoftware.cougaar.ide.core.ICougaarInstall#hashCode(java.lang.Object)
+     */
+    public int hashCode() {
+       return this.getId().hashCode();
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param obj DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
+    public boolean equals(Object obj) {
+        if (obj instanceof CougaarInstall) {
+            CougaarInstall c2 = (CougaarInstall) obj;
+
+            try {
+                if ((this.getId().equals(c2.getId()))
+                    && (this.getInstallLocation().getCanonicalPath().equals(c2.getInstallLocation()
+                                                                              .getCanonicalPath()))) {
+                    return true;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 }

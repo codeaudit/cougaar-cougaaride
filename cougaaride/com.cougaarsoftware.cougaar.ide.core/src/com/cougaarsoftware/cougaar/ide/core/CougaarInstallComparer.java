@@ -23,46 +23,26 @@
 package com.cougaarsoftware.cougaar.ide.core;
 
 
-import java.io.File;
+import org.eclipse.jface.viewers.IElementComparer;
 
 
 /**
- * The interface for representing Cougaar Installations
- *
+ * Compares two <code>CougaarInstall</code> objects
  * @author mabrams
  */
-public interface ICougaarInstall {
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    String getId();
+public class CougaarInstallComparer implements IElementComparer {
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IElementComparer#equals(java.lang.Object, java.lang.Object)
+	 */
+	public boolean equals(Object a, Object b) {	
+		return a.equals(b);
+	}
 
-    /**
-     * DOCUMENT ME!
-     *
-     * @param id DOCUMENT ME!
-     */
-    void setId(String id);
-
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     */
-    File getInstallLocation();
-
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param installLocation DOCUMENT ME!
-     */
-    void setInstallLocation(File installLocation);
-    
-    public boolean equals(Object obj);
-    public int hashCode();
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IElementComparer#hashCode(java.lang.Object)
+	 */
+	public int hashCode(Object element) {		
+		return element.hashCode();		
+	}
 }
