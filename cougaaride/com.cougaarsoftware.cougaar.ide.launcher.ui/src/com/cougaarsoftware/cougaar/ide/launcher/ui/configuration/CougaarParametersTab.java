@@ -451,13 +451,14 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
      * @return
      */
     private String setProgramArguments() {
-        return LauncherUIMessages.getString("cougaarLauncher.node.argument");
-        //+ " -n " + "\"" + fNameText.getText() + "\"";
+        return LauncherUIMessages.getString("cougaarLauncher.node.argument")
+        	+ " -n " + "\"" + fNameText.getText() + "\"";
     }
 
 
     private Map getMapFromParametersTable() {
         TableItem[] items = fVMParametersTable.getItems();
+        
         if (items.length == 0) {
             return null;
         }
@@ -465,7 +466,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         Map map = new HashMap(items.length);
         for (int i = 0; i < items.length; i++) {
             TableItem item = items[i];
-            String key = item.getText(0);
+            String key = item.getText(0);           
             String value = item.getText(1);
             map.put(key, value);
         }
