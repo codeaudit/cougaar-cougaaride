@@ -168,7 +168,7 @@ public class CougaarClasspathContainer implements IClasspathContainer {
             String string = filenamearr[i];
             jarList.add(JavaCore.newLibraryEntry(
                     new Path(dir.getPath() + File.separatorChar + string),
-                    null, null, false));
+			new Path(installPrefix), null, false));
         }
     }
 
