@@ -52,13 +52,13 @@ import com.cougaarsoftware.cougaar.ide.ui.widgets.ICougaarInstallSelectionChange
  * @author Matt Abrams
  */
 public class CougaarConfigurationBlock extends PropertyPage
-    implements IAddCougaarDialogRequestor, ICougaarInstallSelectionChangeListener {
+    implements IAddCougaarDialogRequestor,
+        ICougaarInstallSelectionChangeListener {
     private Combo fCougaarCombo;
     private String cougaarVersion = "";
-    private IStatusChangeListener fStatus; 
+    private IStatusChangeListener fStatus;
     private IAddCougaarDialogRequestor requestor;
     private IProject project;
-
 
     /**
      * Creates a new CougaarConfigurationBlock object.
@@ -97,8 +97,8 @@ public class CougaarConfigurationBlock extends PropertyPage
     /* (non-Javadoc)
      * @see org.eclipse.jdt.internal.ui.preferences.OptionsConfigurationBlock#createContents(org.eclipse.swt.widgets.Composite)
      */
-    public Control createContents(Composite parent) {       
-        return new CougaarInstallSelectionWidget(parent, SWT.NULL, this, project);        
+    public Control createContents(Composite parent) {
+        return new CougaarInstallSelectionWidget(parent, SWT.NULL, this, project);
     }
 
 
@@ -130,10 +130,6 @@ public class CougaarConfigurationBlock extends PropertyPage
         fStatus.statusChanged(status);
     }
 
-
-    
-
-  
 
     private IStatus updateCIPStatus(String cipVersion) {
         StatusInfo status = new StatusInfo();
@@ -197,14 +193,14 @@ public class CougaarConfigurationBlock extends PropertyPage
             requestor.cougaarAdded(cougaar);
         }
     }
-   
 
-	/* (non-Javadoc)
-	 * @see com.cougaarsoftware.cougaar.ide.ui.widgets.ICougaarInstallSelectionChangeListener#handleCougaarInstallSelected(java.lang.String)
-	 */
-	public void handleCougaarInstallSelected(String version) {
-		String[] versions = getCougaarVersions();				
-	   fCougaarCombo.setItems(versions);       
-		
-	}
+
+    /* (non-Javadoc)
+     * @see com.cougaarsoftware.cougaar.ide.ui.widgets.ICougaarInstallSelectionChangeListener#handleCougaarInstallSelected(java.lang.String)
+     */
+    public void handleCougaarInstallSelected(String version) {
+        String[] versions = getCougaarVersions();
+        fCougaarCombo.setItems(versions);
+
+    }
 }

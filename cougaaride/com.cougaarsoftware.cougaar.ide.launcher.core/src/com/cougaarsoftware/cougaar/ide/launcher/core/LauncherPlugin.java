@@ -35,7 +35,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 /**
  * Cougaar Launcher Plugin
  *
- * @author mabrams 
+ * @author mabrams
  */
 public class LauncherPlugin extends AbstractUIPlugin {
     /** The shared instance */

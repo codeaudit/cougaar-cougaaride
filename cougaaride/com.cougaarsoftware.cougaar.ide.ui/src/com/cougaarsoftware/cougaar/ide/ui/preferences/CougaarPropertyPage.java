@@ -197,5 +197,4 @@ public class CougaarPropertyPage extends PropertyPage
 
         return elem;
     }
-
 }

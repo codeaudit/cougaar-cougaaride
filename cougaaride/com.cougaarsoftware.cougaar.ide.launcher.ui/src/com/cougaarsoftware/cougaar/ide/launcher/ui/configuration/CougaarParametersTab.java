@@ -287,7 +287,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         }
 
         fVMParametersTable.setEnabled(!useDefault);
-		setParametersButtonsEnableState();
+        setParametersButtonsEnableState();
         updateLaunchConfigurationDialog();
 
     }
@@ -302,7 +302,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
 
 
     private void handleParametersAddButtonSelected() {
-    	//TODO: 2.1 -> 3.0 this constructor takes a boolean in 3.0 
+        //TODO: 2.1 -> 3.0 this constructor takes a boolean in 3.0 
         NameValuePairDialog dialog = new NameValuePairDialog(getShell(),
                 LauncherUIMessages.getString(
                     "cougaarlauncher.argumenttab.parameters.dialog.add.title"), //$NON-NLS-1$
@@ -322,7 +322,8 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         TableItem selectedItem = this.fVMParametersTable.getSelection()[0];
         String name = selectedItem.getText(0);
         String value = selectedItem.getText(1);
-		//TODO: 2.1 -> 3.0 this constructor takes a boolean in 3.0
+
+        //TODO: 2.1 -> 3.0 this constructor takes a boolean in 3.0
         NameValuePairDialog dialog = new NameValuePairDialog(getShell(),
                 LauncherUIMessages.getString(
                     "cougaarlauncher.argumenttab.parameters.dialog.edit.title"), //$NON-NLS-1$
@@ -359,25 +360,28 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
      */
     private void setParametersButtonsEnableState() {
         int selectCount = this.fVMParametersTable.getSelectionIndices().length;
-		TableItem[] tableItems = fVMParametersTable.getSelection();
-		TableItem tableItem = null;
-		if (tableItems.length == 1) {
-			tableItem = fVMParametersTable.getItem(fVMParametersTable.getSelectionIndex());
-		}
-		if (selectCount < 1 || (tableItem != null && tableItem.getText(0).equals(COUGAAR_NODE_NAME))) {
+        TableItem[] tableItems = fVMParametersTable.getSelection();
+        TableItem tableItem = null;
+        if (tableItems.length == 1) {
+            tableItem = fVMParametersTable.getItem(fVMParametersTable
+                    .getSelectionIndex());
+        }
+
+        if ((selectCount < 1)
+            || ((tableItem != null)
+            && tableItem.getText(0).equals(COUGAAR_NODE_NAME))) {
             fParametersEditButton.setEnabled(false);
             fParametersRemoveButton.setEnabled(false);
             fParametersAddButton.setEnabled(false);
         } else {
             fParametersRemoveButton.setEnabled(true);
-            
-            if (selectCount == 1) {                        
+
+            if (selectCount == 1) {
                 fParametersEditButton.setEnabled(true);
             } else {
                 fParametersEditButton.setEnabled(false);
             }
         }
-      
     }
 
 
@@ -439,9 +443,9 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         // if (isDirty()) {
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME,
             fNameText.getText());
-		configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
-			setProgramArguments());      
-		setCougaarNodeName();      
+        configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
+            setProgramArguments());
+        setCougaarNodeName();
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS,
             getMapFromParametersTable());
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_DEFAULT_PARAMETERS,
@@ -451,14 +455,18 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
 
         // }
     }
-    
+
+
     private void setCougaarNodeName() {
-    	TableItem nodeNameItem = getTableItemForName(COUGAAR_NODE_NAME);
-    	if (nodeNameItem == null) {
-			nodeNameItem = new TableItem(this.fVMParametersTable, SWT.NONE);
-    	}
-		String[] nameValuePair = new String[] {COUGAAR_NODE_NAME, fNameText.getText()};
-    	nodeNameItem.setText(nameValuePair);
+        TableItem nodeNameItem = getTableItemForName(COUGAAR_NODE_NAME);
+        if (nodeNameItem == null) {
+            nodeNameItem = new TableItem(this.fVMParametersTable, SWT.NONE);
+        }
+
+        String[] nameValuePair = new String[] {
+                COUGAAR_NODE_NAME, fNameText.getText()
+            };
+        nodeNameItem.setText(nameValuePair);
     }
 
 
@@ -469,13 +477,13 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
      */
     private String setProgramArguments() {
         return LauncherUIMessages.getString("cougaarLauncher.node.argument");
-//        	+ " -n " + "\"" + fNameText.getText() + "\"";
+        //        	+ " -n " + "\"" + fNameText.getText() + "\"";
     }
 
 
     private Map getMapFromParametersTable() {
         TableItem[] items = fVMParametersTable.getItems();
-        
+
         if (items.length == 0) {
             return null;
         }
@@ -483,7 +491,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         Map map = new HashMap(items.length);
         for (int i = 0; i < items.length; i++) {
             TableItem item = items[i];
-            String key = item.getText(0);           
+            String key = item.getText(0);
             String value = item.getText(1);
             map.put(key, value);
         }
@@ -515,15 +523,16 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
         if (project != null) {
             String defaultVersion = CougaarPlugin.getCougaarPreference(project
                     .getProject(), ICougaarConstants.COUGAAR_VERSION);
-			String cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
+            String cip = CougaarPlugin.getCougaarBaseLocation(defaultVersion);
             while (keys.hasMoreElements()) {
                 String[] pair = new String[2];
                 pair[0] = (String) keys.nextElement();
-               
+
                 if ((cip != null) && !cip.equals("")) {
                     pair[1] = CougaarParameters.getString(pair[0]).replaceAll(ICougaarConstants.COUGAAR_INSTALL_PATH_STRING,
                             cip);
-                }				
+                }
+
                 map.put(pair[0], pair[1]);
             }
         }
@@ -567,7 +576,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
                 if ((cip != null) && !cip.equals("")) {
                     nameValuePair[1] = CougaarParameters.getString(nameValuePair[0])
                                                         .replaceAll(ICougaarConstants.COUGAAR_INSTALL_PATH_STRING,
-					cip);
+                            cip);
                 }
 
 

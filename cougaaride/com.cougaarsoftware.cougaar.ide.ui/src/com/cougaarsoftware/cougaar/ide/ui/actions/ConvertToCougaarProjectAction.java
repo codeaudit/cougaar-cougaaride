@@ -62,7 +62,8 @@ public class ConvertToCougaarProjectAction extends ResourceAction {
         IJavaProject jproject = (IJavaProject) selectedObject;
         Shell shell = CougaarUIPlugin.getDefault().getWorkbench()
                                      .getActiveWorkbenchWindow().getShell();
-        SelectCougaarInstallDialog dlg = new SelectCougaarInstallDialog(shell, jproject.getProject());
+        SelectCougaarInstallDialog dlg = new SelectCougaarInstallDialog(shell,
+                jproject.getProject());
         dlg.open();
 
         if (dlg.getReturnCode() != Window.OK) {
@@ -75,8 +76,8 @@ public class ConvertToCougaarProjectAction extends ResourceAction {
             return;
         }
 
-        CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION, version,
-            jproject.getProject());
+        CougaarPlugin.savePreference(ICougaarConstants.COUGAAR_VERSION,
+            version, jproject.getProject());
 
         try {
             IRunnableWithProgress op = new CougaarConversionWithProgress(jproject);

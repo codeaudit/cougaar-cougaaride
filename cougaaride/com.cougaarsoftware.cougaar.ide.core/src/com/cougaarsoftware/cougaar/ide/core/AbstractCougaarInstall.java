@@ -28,7 +28,7 @@ import java.io.File;
 
 /**
  * An abstract implementation of <code>ICougaarInstall</code> providing utility
- * methods for subclasses implementing the <code>ICougaarInstall</code> 
+ * methods for subclasses implementing the <code>ICougaarInstall</code>
  * interface
  *
  * @author mabrams
@@ -42,6 +42,8 @@ public abstract class AbstractCougaarInstall implements ICougaarInstall {
      *
      * @param id DOCUMENT ME!
      * @param location DOCUMENT ME!
+     *
+     * @throws IllegalArgumentException DOCUMENT ME!
      */
     public AbstractCougaarInstall(String id, String location) {
         if (id == null) {

@@ -18,6 +18,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
+
+
 package com.cougaarsoftware.cougaar.ide.ui.preferences;
 
 
@@ -125,8 +127,6 @@ public class CougaarPreferencePage extends PreferencePage
      */
     public void init(IWorkbench workbench) {
     }
-
-
 
 
     /* (non-Javadoc)
@@ -425,6 +425,11 @@ public class CougaarPreferencePage extends PreferencePage
     }
 
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param cougaar DOCUMENT ME!
+     */
     public void setCheckedCougaar(ICougaarInstall cougaar) {
         if (cougaar == null) {
             setSelection(new StructuredSelection());
@@ -434,6 +439,11 @@ public class CougaarPreferencePage extends PreferencePage
     }
 
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @param selection DOCUMENT ME!
+     */
     public void setSelection(ISelection selection) {
         if (selection instanceof IStructuredSelection) {
             if (!selection.equals(fPrevSelection)) {
@@ -461,6 +471,11 @@ public class CougaarPreferencePage extends PreferencePage
     }
 
 
+    /**
+     * DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
     public ISelection getSelection() {
         return new StructuredSelection(fCougaarList.getCheckedElements());
     }

@@ -185,7 +185,7 @@ public abstract class AbstractCougaarLaunchConfigurationDelegate
                 }
             }
         }
-        
+
 
         return ret.trim();
     }

@@ -96,8 +96,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
     }
 
     /**
-     * Method Stub.  Does nothing specific, but supports immediate integration of plug-in
-     * into the running Workbench.
+     * Method Stub.  Does nothing specific, but supports immediate integration
+     * of plug-in into the running Workbench.
      *
      * @see org.eclipse.ui.IStartup#earlyStartup()
      */
@@ -146,7 +146,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
      * @param e the exception to be logged
      */
     public static void log(Throwable e) {
-        log(new Status(IStatus.ERROR, getUniqueIdentifier(), 0, "Internal Error", e)); //$NON-NLS-1$
+        log(new Status(IStatus.ERROR, getUniqueIdentifier(), 0,
+                "Internal Error", e)); //$NON-NLS-1$
     }
 
 
@@ -167,13 +168,14 @@ public class CougaarPlugin extends AbstractUIPlugin {
      * @param throwable Throwable to log
      */
     public static void logError(String message, Throwable throwable) {
-        log(new Status(IStatus.ERROR, getUniqueIdentifier(), 0, message, throwable));
+        log(new Status(IStatus.ERROR, getUniqueIdentifier(), 0, message,
+                throwable));
     }
 
 
     /**
-     * Returns the workspace instance using the platform  implementation of the Resources
-     * plugin. (names happen to be the same).
+     * Returns the workspace instance using the platform  implementation of the
+     * Resources plugin. (names happen to be the same).
      *
      * @return DOCUMENT ME!
      */
@@ -183,7 +185,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Returns the string from the plugin's resource bundle, or 'key' if not found.
+     * Returns the string from the plugin's resource bundle, or 'key' if not
+     * found.
      *
      * @param key DOCUMENT ME!
      *
@@ -251,8 +254,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Updates the classpath container when the cougaar install for the project changes,
-     * and performs a full rebuild.
+     * Updates the classpath container when the cougaar install for the project
+     * changes, and performs a full rebuild.
      *
      * @param jproject the IJavaProject
      * @param monitor DOCUMENT ME!
@@ -284,7 +287,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
             subMonitor.setTaskName("Setting classpath");
         }
 
-        JavaCore.setClasspathContainer(path, javaProjects, containers, subMonitor);
+        JavaCore.setClasspathContainer(path, javaProjects, containers,
+            subMonitor);
 
         subMonitor = null;
         if (monitor != null) {
@@ -297,9 +301,9 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Convert an existing javaproject to a cougaar project.  Does nothing if its already
-     * a cougaar project; aborts if no cougaar version preference is set for the
-     * project.
+     * Convert an existing javaproject to a cougaar project.  Does nothing if
+     * its already a cougaar project; aborts if no cougaar version preference
+     * is set for the project.
      *
      * @param jproject java project to convert
      * @param monitor progress monitor
@@ -314,7 +318,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
         }
 
         //abort if no cougaar version is found
-        String version = getCougaarPreference(project, ICougaarConstants.COUGAAR_VERSION);
+        String version = getCougaarPreference(project,
+                ICougaarConstants.COUGAAR_VERSION);
         if (version == null) {
             throw new CoreException(null);
         }
@@ -347,7 +352,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
         }
 
         newentries = new IClasspathEntry[keptEntries.size()];
-        System.arraycopy(keptEntries.toArray(), 0, newentries, 0, keptEntries.size());
+        System.arraycopy(keptEntries.toArray(), 0, newentries, 0,
+            keptEntries.size());
 
         //make sure we didn't screw up the classpath
         IJavaModelStatus validation = JavaConventions.validateClasspath(jproject,
@@ -377,8 +383,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
      *
      * @throws CoreException
      */
-    public static boolean addCougaarNature(IProject project, IProgressMonitor monitor)
-        throws CoreException {
+    public static boolean addCougaarNature(IProject project,
+        IProgressMonitor monitor) throws CoreException {
         IProjectDescription description = project.getDescription();
         String[] natures = description.getNatureIds();
         String[] newNatures = new String[natures.length + 1];
@@ -460,7 +466,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Initializes a preference store with default preference values  for this plug-in.
+     * Initializes a preference store with default preference values  for this
+     * plug-in.
      *
      * @param store DOCUMENT ME!
      */
@@ -485,7 +492,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
      * @param value DOCUMENT ME!
      * @param project DOCUMENT ME!
      */
-    public static void savePreference(String preference, String value, IProject project) {
+    public static void savePreference(String preference, String value,
+        IProject project) {
         if (!JavaProject.hasJavaNature(project)) {
             return; // ignore
         }
@@ -517,8 +525,8 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 
     /**
-     * Returns the project custom preference pool. Project preferences may include custom
-     * encoding.
+     * Returns the project custom preference pool. Project preferences may
+     * include custom encoding.
      *
      * @param project DOCUMENT ME!
      * @param key DOCUMENT ME!
@@ -559,23 +567,35 @@ public class CougaarPlugin extends AbstractUIPlugin {
         return null;
     }
 
-	/**
-	 * @param string
-	 */
-	public static void log(String string) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	/**
-	 * @param string
-	 * @return
-	 */
-	public static boolean isDefaultCougaarVersion(String version) {
-		return CougaarLocations.isDefaultVersion(version);
-	}
-	
-	public static void setDefaultCougaarVersion(String version) {
-		CougaarLocations.setDefaultVersion(version);
-	}
+    /**
+     * DOCUMENT ME!
+     *
+     * @param string
+     */
+    public static void log(String string) {
+        // TODO Auto-generated method stub
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param version
+     *
+     * @return
+     */
+    public static boolean isDefaultCougaarVersion(String version) {
+        return CougaarLocations.isDefaultVersion(version);
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param version DOCUMENT ME!
+     */
+    public static void setDefaultCougaarVersion(String version) {
+        CougaarLocations.setDefaultVersion(version);
+    }
 }

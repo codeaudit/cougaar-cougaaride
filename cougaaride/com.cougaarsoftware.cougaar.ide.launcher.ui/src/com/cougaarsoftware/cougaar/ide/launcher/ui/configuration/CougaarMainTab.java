@@ -54,7 +54,7 @@ import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 public class CougaarMainTab extends JavaMainTab {
     /** DOCUMENT ME! */
     public static String projectName = "";
-    
+
     /**
      * DOCUMENT ME!
      *
@@ -178,7 +178,7 @@ public class CougaarMainTab extends JavaMainTab {
         cougaarComp.setLayoutData(gd);
         cougaarComp.setFont(font);
 
-      
+
     }
 
 
@@ -193,17 +193,12 @@ public class CougaarMainTab extends JavaMainTab {
     }
 
 
-
-
     /**
      * DOCUMENT ME!
      *
      * @param config DOCUMENT ME!
      */
     public void initializeFrom(ILaunchConfiguration config) {
-        super.initializeFrom(config);		
+        super.initializeFrom(config);
     }
-
-
-    
 }

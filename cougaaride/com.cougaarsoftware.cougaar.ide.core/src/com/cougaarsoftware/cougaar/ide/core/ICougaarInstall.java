@@ -62,21 +62,22 @@ public interface ICougaarInstall {
      * @param installLocation the cougaar install location
      */
     void setInstallLocation(File installLocation);
-    
+
+
     /**
      * Compares two ICougaarInstall objects
-     * 
-     * @param obj  the comparison object
-     * 
+     *
+     * @param obj the comparison object
+     *
      * @return true if the two objects are equal
      */
     public boolean equals(Object obj);
-    
+
+
     /**
      * returns the hash code for this object
-     * 
+     *
      * @return the integer hash code
      */
     public int hashCode();
-   
 }

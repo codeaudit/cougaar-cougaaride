@@ -68,7 +68,7 @@ public class CougaarInstallSelectionWidget extends Composite
     private Button fAddCougaarInstall;
     private Combo fCougaarCombo;
     private ICougaarInstallSelectionChangeListener listener;
-	private IProject project;
+    private IProject project;
 
     /**
      * DOCUMENT ME!
@@ -76,10 +76,11 @@ public class CougaarInstallSelectionWidget extends Composite
      * @param parent
      * @param style
      * @param listener DOCUMENT ME!
+     * @param proj DOCUMENT ME!
      */
     public CougaarInstallSelectionWidget(Composite parent, int style,
         ICougaarInstallSelectionChangeListener listener, IProject proj) {
-        super(parent, style);        
+        super(parent, style);
         this.listener = listener;
         this.project = proj;
         GridLayout topLayout = new GridLayout();
@@ -119,10 +120,10 @@ public class CougaarInstallSelectionWidget extends Composite
 
         DialogField.createEmptySpace(this, 2);
 
-		String defaultVersion = CougaarPlugin.getCougaarPreference(project,
-				ICougaarConstants.COUGAAR_VERSION);
+        String defaultVersion = CougaarPlugin.getCougaarPreference(project,
+                ICougaarConstants.COUGAAR_VERSION);
 
-		setValues(defaultVersion);
+        setValues(defaultVersion);
     }
 
     /**
@@ -221,7 +222,8 @@ public class CougaarInstallSelectionWidget extends Composite
         PreferenceManager manager = new PreferenceManager();
         manager.addToRoot(targetNode);
 
-        final PreferenceDialog dialog = new PreferenceDialog(this.getShell(), manager);
+        final PreferenceDialog dialog = new PreferenceDialog(this.getShell(),
+                manager);
         final boolean[] result = new boolean[] { false };
         BusyIndicator.showWhile(this.getDisplay(),
             new Runnable() {

@@ -26,7 +26,7 @@ package com.cougaarsoftware.cougaar.ide.launcher.core.constants;
 /**
  * Cougaar launch configuration constants
  *
- * @author mabrams 
+ * @author mabrams
  */
 public class ICougaarLaunchConfigurationConstants {
     /** Cougaar Launch Constant */

@@ -50,7 +50,6 @@ public class CougaarInstallBlock {
      * the constructor
      */
     public CougaarInstallBlock() {
-        
     }
 
     /**

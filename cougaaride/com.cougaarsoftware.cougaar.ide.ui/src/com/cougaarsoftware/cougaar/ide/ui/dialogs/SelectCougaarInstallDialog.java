@@ -45,16 +45,17 @@ import com.cougaarsoftware.cougaar.ide.ui.widgets.ICougaarInstallSelectionChange
 public class SelectCougaarInstallDialog extends StatusDialog
     implements ICougaarInstallSelectionChangeListener {
     private static final String TITLE_KEY = "SelectCougaarInstallDialog.title";
+    private static final String INVALID_SELECTION_KEY = "SelectCougaarInstallDialog.invalidSelection";
     private IStatus[] fStatus;
     private CougaarInstallSelectionWidget control;
     private String installVersion;
-    private static final String INVALID_SELECTION_KEY="SelectCougaarInstallDialog.invalidSelection";
     private IProject project;
 
     /**
      * Constructor
      *
      * @param parent the parent Shell
+     * @param _project DOCUMENT ME!
      */
     public SelectCougaarInstallDialog(Shell parent, IProject _project) {
         super(parent);
@@ -62,6 +63,7 @@ public class SelectCougaarInstallDialog extends StatusDialog
         for (int i = 0; i < fStatus.length; i++) {
             fStatus[i] = new StatusInfo();
         }
+
         this.project = _project;
         this.setTitle(CougaarUIMessages.getString(TITLE_KEY));
     }
@@ -74,8 +76,9 @@ public class SelectCougaarInstallDialog extends StatusDialog
      * @return the control
      */
     protected Control createDialogArea(Composite ancestor) {
-        Composite composite = (Composite)super.createDialogArea(ancestor);		
-        this.control = new CougaarInstallSelectionWidget(composite, SWT.NULL, this, project);
+        Composite composite = (Composite) super.createDialogArea(ancestor);
+        this.control = new CougaarInstallSelectionWidget(composite, SWT.NULL,
+                this, project);
         return this.control;
     }
 
@@ -132,8 +135,7 @@ public class SelectCougaarInstallDialog extends StatusDialog
         StatusInfo status = new StatusInfo();
 
         if ((version == null) || (version.trim().length() == 0)) {
-            status.setWarning(CougaarUIMessages.getString(
-                    INVALID_SELECTION_KEY)); //$NON-NLS-1$
+            status.setWarning(CougaarUIMessages.getString(INVALID_SELECTION_KEY)); //$NON-NLS-1$
         } else {
             //TODO what?
         }

@@ -19,7 +19,9 @@
  *
  */
 
+
 package com.cougaarsoftware.cougaar.ide.core;
+
 
 import java.io.File;
 import java.io.FileReader;
@@ -53,251 +55,279 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+
 /**
  * Persists and reads cougaar locations associated with the workspace
  *
  * @author Matt Abrams
  */
 public class CougaarLocations {
-	private static String STORE_FILE = "cougaarlocations.xml";
-	private static Map fCougaarLocations = null;
-	private static final String NODE_ROOT = "cougaarlocation";
-	private static final String NODE_PATH = "path";
-	private static final String NODE_VERSION = "version";
-	private static final String NODE_DEFAULT = "default";
-	private static final String NODE_ENTRY = "location_01";
-	private static String defaultVersion = "";
+    private static String STORE_FILE = "cougaarlocations.xml";
+    private static Map fCougaarLocations = null;
+    private static final String NODE_ROOT = "cougaarlocation";
+    private static final String NODE_PATH = "path";
+    private static final String NODE_VERSION = "version";
+    private static final String NODE_DEFAULT = "default";
+    private static final String NODE_ENTRY = "location_01";
+    private static String defaultVersion = "";
 
-	private static Map getCougaarLocations() {
-		if (fCougaarLocations == null) {
-			fCougaarLocations = new HashMap();
-			try {
-				initCougaarLocations();
-			} catch (CoreException e) {
-				CougaarPlugin.log(e);
-			}
-		}
+    private static Map getCougaarLocations() {
+        if (fCougaarLocations == null) {
+            fCougaarLocations = new HashMap();
+            try {
+                initCougaarLocations();
+            } catch (CoreException e) {
+                CougaarPlugin.log(e);
+            }
+        }
 
-		return fCougaarLocations;
-	}
+        return fCougaarLocations;
+    }
 
-	/**
-	 * Returns all cougaar locations
-	 *
-	 * @return a <code>Map</code> of all cougaar locations
-	 */
-	public static Map getAllCougaarLocations() {
-		Map map = new HashMap();
-		if (fCougaarLocations == null) {
-			map = getCougaarLocations();
-		} else {
-			map = new HashMap(fCougaarLocations);
-		}
 
-		return map;
-	}
+    /**
+     * Returns all cougaar locations
+     *
+     * @return a <code>Map</code> of all cougaar locations
+     */
+    public static Map getAllCougaarLocations() {
+        Map map = new HashMap();
+        if (fCougaarLocations == null) {
+            map = getCougaarLocations();
+        } else {
+            map = new HashMap(fCougaarLocations);
+        }
 
-	private static synchronized void initCougaarLocations()
-		throws CoreException {
-		loadFromFile();
+        return map;
+    }
 
-	}
 
-	private static boolean loadFromFile() throws CoreException {
-		File file = getStoreFile();
-		if (file.exists()) {
-			Reader reader = null;
-			try {
-				reader = new FileReader(getStoreFile());
-				loadFromStream(reader);
-				return true;
-			} catch (IOException e) {
-				CougaarPlugin.log(e); //$NON-NLS-1$
-			} finally {
-				try {
-					if (reader != null) {
-						reader.close();
-					}
-				} catch (IOException e) {
-				}
-			}
-		}
+    private static synchronized void initCougaarLocations()
+        throws CoreException {
+        loadFromFile();
 
-		return false;
-	}
+    }
 
-	private static void loadFromStream(Reader reader) throws CoreException {
-		Element cpElement;
-		try {
-			DocumentBuilder parser =
-				DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			cpElement =
-				parser.parse(new InputSource(reader)).getDocumentElement();
-		} catch (SAXException e) {
-			CougaarPlugin.log(e);
-			return;
-		} catch (ParserConfigurationException e) {
-			CougaarPlugin.log(e);
-			return;
-		} catch (IOException e) {
-			CougaarPlugin.log(e);
-			return;
-		}
 
-		if (cpElement == null) {
-			return;
-		}
+    private static boolean loadFromFile() throws CoreException {
+        File file = getStoreFile();
+        if (file.exists()) {
+            Reader reader = null;
+            try {
+                reader = new FileReader(getStoreFile());
+                loadFromStream(reader);
+                return true;
+            } catch (IOException e) {
+                CougaarPlugin.log(e); //$NON-NLS-1$
+            } finally {
+                try {
+                    if (reader != null) {
+                        reader.close();
+                    }
+                } catch (IOException e) {
+                }
+            }
+        }
 
-		if (!cpElement.getNodeName().equalsIgnoreCase(NODE_ROOT)) {
-			return;
-		}
+        return false;
+    }
 
-		NodeList list = cpElement.getChildNodes();
-		int length = list.getLength();
-		for (int i = 0; i < length; ++i) {
-			Node node = list.item(i);
-			short type = node.getNodeType();
-			if (type == Node.ELEMENT_NODE) {
-				Element element = (Element) node;
-				if (element.getNodeName().equalsIgnoreCase(NODE_ENTRY)) {
-					String varPath = element.getAttribute(NODE_PATH);
-					String varVersion = element.getAttribute(NODE_VERSION);
-					boolean isDefault =
-						element.getAttribute(NODE_DEFAULT).equalsIgnoreCase(
-							"true");
 
-					setCougaarBaseLocation(varVersion, varPath, false);
-					if (isDefault) {
-						setDefaultVersion(varVersion);
-					}
+    private static void loadFromStream(Reader reader)
+        throws CoreException {
+        Element cpElement;
+        try {
+            DocumentBuilder parser = DocumentBuilderFactory.newInstance()
+                                                           .newDocumentBuilder();
+            cpElement = parser.parse(new InputSource(reader))
+                              .getDocumentElement();
+        } catch (SAXException e) {
+            CougaarPlugin.log(e);
+            return;
+        } catch (ParserConfigurationException e) {
+            CougaarPlugin.log(e);
+            return;
+        } catch (IOException e) {
+            CougaarPlugin.log(e);
+            return;
+        }
 
-				}
-			}
-		}
-	}
+        if (cpElement == null) {
+            return;
+        }
 
-	/**
-	 * Get the cougaar base location for the specified version
-	 *
-	 * @param version the version of the cougaar base location to retreive
-	 *
-	 * @return the cougaar base location for the specified version
-	 */
-	public static String getCougaarBaseLocation(String version) {
-		return (String) getCougaarLocations().get(version);
-	}
+        if (!cpElement.getNodeName().equalsIgnoreCase(NODE_ROOT)) {
+            return;
+        }
 
-	/**
-	 * Sets the cougaar base location for the specified version
-	 *
-	 * @param version the version for the specified location
-	 * @param path the path to the cougaar base location
-	 */
-	public static void setCougaarLocation(String version, String path) {
-		setCougaarBaseLocation(version, path.replace('\\', '/'), true);
-	}
+        NodeList list = cpElement.getChildNodes();
+        int length = list.getLength();
+        for (int i = 0; i < length; ++i) {
+            Node node = list.item(i);
+            short type = node.getNodeType();
+            if (type == Node.ELEMENT_NODE) {
+                Element element = (Element) node;
+                if (element.getNodeName().equalsIgnoreCase(NODE_ENTRY)) {
+                    String varPath = element.getAttribute(NODE_PATH);
+                    String varVersion = element.getAttribute(NODE_VERSION);
+                    boolean isDefault = element.getAttribute(NODE_DEFAULT)
+                                               .equalsIgnoreCase("true");
 
-	private static void setCougaarBaseLocation(
-		String version,
-		String path,
-		boolean save) {
-		boolean needsSave;
-		if (path.equals("")) {
-			Object old = getCougaarLocations().remove(version);
-			needsSave = save && (old != null);
-		} else {
-			Object old = getCougaarLocations().put(version, path);
-			needsSave = save && (!path.equals(old));
-		}
+                    setCougaarBaseLocation(varVersion, varPath, false);
+                    if (isDefault) {
+                        setDefaultVersion(varVersion);
+                    }
+                }
+            }
+        }
+    }
 
-		if (needsSave) {
-			try {
-				storeLocations();
-			} catch (CoreException e) {
-				CougaarPlugin.log(e);
-			}
-		}
-	}
 
-	private static File getStoreFile() {
-		IPath path = CougaarPlugin.getDefault().getStateLocation();
-		path = path.append(STORE_FILE);
-		return path.toFile();
-	}
+    /**
+     * Get the cougaar base location for the specified version
+     *
+     * @param version the version of the cougaar base location to retreive
+     *
+     * @return the cougaar base location for the specified version
+     */
+    public static String getCougaarBaseLocation(String version) {
+        return (String) getCougaarLocations().get(version);
+    }
 
-	private static synchronized void storeLocations() throws CoreException {
-		Writer writer = null;
-		try {
-			writer = new FileWriter(getStoreFile());
-			saveToStream(fCougaarLocations, writer);
-		} catch (IOException e) {
-			CougaarPlugin.log(e);
-		} finally {
-			try {
-				if (writer != null) {
-					writer.close();
-				}
-			} catch (IOException e) {
-				// ignore
-			}
-		}
-	}
 
-	private static void saveToStream(Map locations, Writer writer)
-		throws CoreException {
-		Document document = new DocumentImpl();
-		Element rootElement = document.createElement(NODE_ROOT);
-		document.appendChild(rootElement);
+    /**
+     * Sets the cougaar base location for the specified version
+     *
+     * @param version the version for the specified location
+     * @param path the path to the cougaar base location
+     */
+    public static void setCougaarLocation(String version, String path) {
+        setCougaarBaseLocation(version, path.replace('\\', '/'), true);
+    }
 
-		Iterator iter = locations.keySet().iterator();
 
-		while (iter.hasNext()) {
-			String version = (String) iter.next();
-			String path = getCougaarBaseLocation(version);
+    private static void setCougaarBaseLocation(String version, String path,
+        boolean save) {
+        boolean needsSave;
+        if (path.equals("")) {
+            Object old = getCougaarLocations().remove(version);
+            needsSave = save && (old != null);
+        } else {
+            Object old = getCougaarLocations().put(version, path);
+            needsSave = save && (!path.equals(old));
+        }
 
-			Element varElement = document.createElement(NODE_ENTRY);
-			varElement.setAttribute(NODE_PATH, path);
-			varElement.setAttribute(NODE_VERSION, version);
-			String def = "false";
-			if (isDefaultVersion(version)) {
-				def = "true";
-			}
-			varElement.setAttribute(NODE_DEFAULT, def);
-			rootElement.appendChild(varElement);
-		}
+        if (needsSave) {
+            try {
+                storeLocations();
+            } catch (CoreException e) {
+                CougaarPlugin.log(e);
+            }
+        }
+    }
 
-		try {
-			OutputFormat format = new OutputFormat();
-			format.setIndenting(true);
-			Serializer serializer =
-				SerializerFactory.getSerializerFactory(
-					Method.XML).makeSerializer(
-					writer,
-					format);
-			serializer.asDOMSerializer().serialize(document);
-		} catch (IOException e) {
-			CougaarPlugin.log(e);
-		}
-	}
 
-	public static void setDefaultVersion(String version) {
-		//TODO: add error checking
-		String prevDef = defaultVersion;
-		defaultVersion = version;
-		if (!defaultVersion.equals(prevDef)) {
-			try {
-				storeLocations();
-			} catch (CoreException e) {
-				CougaarPlugin.log(e);
-			}
-		}
-	}
+    private static File getStoreFile() {
+        IPath path = CougaarPlugin.getDefault().getStateLocation();
+        path = path.append(STORE_FILE);
+        return path.toFile();
+    }
 
-	public static String getDefaultVersion() {
-		return defaultVersion;
-	}
 
-	public static boolean isDefaultVersion(String version) {
-		return defaultVersion.equals(version);
-	}
+    private static synchronized void storeLocations()
+        throws CoreException {
+        Writer writer = null;
+        try {
+            writer = new FileWriter(getStoreFile());
+            saveToStream(fCougaarLocations, writer);
+        } catch (IOException e) {
+            CougaarPlugin.log(e);
+        } finally {
+            try {
+                if (writer != null) {
+                    writer.close();
+                }
+            } catch (IOException e) {
+                // ignore
+            }
+        }
+    }
+
+
+    private static void saveToStream(Map locations, Writer writer)
+        throws CoreException {
+        Document document = new DocumentImpl();
+        Element rootElement = document.createElement(NODE_ROOT);
+        document.appendChild(rootElement);
+
+        Iterator iter = locations.keySet().iterator();
+
+        while (iter.hasNext()) {
+            String version = (String) iter.next();
+            String path = getCougaarBaseLocation(version);
+
+            Element varElement = document.createElement(NODE_ENTRY);
+            varElement.setAttribute(NODE_PATH, path);
+            varElement.setAttribute(NODE_VERSION, version);
+            String def = "false";
+            if (isDefaultVersion(version)) {
+                def = "true";
+            }
+
+            varElement.setAttribute(NODE_DEFAULT, def);
+            rootElement.appendChild(varElement);
+        }
+
+        try {
+            OutputFormat format = new OutputFormat();
+            format.setIndenting(true);
+            Serializer serializer = SerializerFactory.getSerializerFactory(Method.XML)
+                                                     .makeSerializer(writer,
+                    format);
+            serializer.asDOMSerializer().serialize(document);
+        } catch (IOException e) {
+            CougaarPlugin.log(e);
+        }
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param version DOCUMENT ME!
+     */
+    public static void setDefaultVersion(String version) {
+        //TODO: add error checking
+        String prevDef = defaultVersion;
+        defaultVersion = version;
+        if (!defaultVersion.equals(prevDef)) {
+            try {
+                storeLocations();
+            } catch (CoreException e) {
+                CougaarPlugin.log(e);
+            }
+        }
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
+    public static String getDefaultVersion() {
+        return defaultVersion;
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param version DOCUMENT ME!
+     *
+     * @return DOCUMENT ME!
+     */
+    public static boolean isDefaultVersion(String version) {
+        return defaultVersion.equals(version);
+    }
 }

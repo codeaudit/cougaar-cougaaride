@@ -66,8 +66,8 @@ import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages
 
 
 /**
- * Capability page for cougaar projects
- * TODO:  this should be almost completely replaced with CougaarInstallSelectionWidget
+ * Capability page for cougaar projects TODO:  this should be almost completely
+ * replaced with CougaarInstallSelectionWidget
  *
  * @author mabrams soster
  */

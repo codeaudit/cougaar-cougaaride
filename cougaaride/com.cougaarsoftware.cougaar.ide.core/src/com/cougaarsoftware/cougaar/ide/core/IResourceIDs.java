@@ -23,9 +23,11 @@
 package com.cougaarsoftware.cougaar.ide.core;
 
 
-/*
-   /**
- * Definition of common strings that were used as plug-in extension ids.
+/**
+ * DOCUMENT ME!
+ *
+ * @version $Revision: 1.2 $
+ * @author $author$
  */
 public interface IResourceIDs {
     /** DOCUMENT ME! */

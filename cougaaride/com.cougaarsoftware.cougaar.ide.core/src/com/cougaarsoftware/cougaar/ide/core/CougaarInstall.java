@@ -46,7 +46,7 @@ public class CougaarInstall extends AbstractCougaarInstall {
      * @see com.cougaarsoftware.cougaar.ide.core.ICougaarInstall#hashCode(java.lang.Object)
      */
     public int hashCode() {
-       return this.getId().hashCode();
+        return this.getId().hashCode();
     }
 
 
@@ -75,5 +75,4 @@ public class CougaarInstall extends AbstractCougaarInstall {
 
         return false;
     }
-
 }

@@ -107,7 +107,6 @@ public class CougaarClasspathContainerInitializer
         throws CoreException {
         IProject project = javaProject.getProject();
         if (CougaarPlugin.isCougaarProject(project)) {
-          
             String version = CougaarPlugin.getCougaarPreference(project,
                     ICougaarConstants.COUGAAR_VERSION);
             String installPrefix = CougaarPlugin.getCougaarBaseLocation(version);

@@ -35,10 +35,9 @@ import org.eclipse.ui.IPerspectiveFactory;
  * @author soster, mabrams
  */
 public class CougaarPerspectiveFactory implements IPerspectiveFactory {
-	
-	/** the id for the cougaar society viewer component */
-	public static String ID_COUGAAR_SOCIETY = "com.cougaarsoftware.cougaar.ide.ui.views.SocietyViewer";
-	
+    /** the id for the cougaar society viewer component */
+    public static String ID_COUGAAR_SOCIETY = "com.cougaarsoftware.cougaar.ide.ui.views.SocietyViewer";
+
     /**
      * Creates a new CougaarPerspectiveFactory object.
      */
@@ -60,12 +59,12 @@ public class CougaarPerspectiveFactory implements IPerspectiveFactory {
         folder.addView(JavaUI.ID_PACKAGES);
         folder.addView(JavaUI.ID_TYPE_HIERARCHY);
         folder.addPlaceholder(IPageLayout.ID_RES_NAV);
-		folder.addView(CougaarPerspectiveFactory.ID_COUGAAR_SOCIETY);
+        folder.addView(CougaarPerspectiveFactory.ID_COUGAAR_SOCIETY);
 
         IFolderLayout outputfolder = layout.createFolder("bottom",
                 IPageLayout.BOTTOM, (float) 0.75, editorArea);
         outputfolder.addView(IPageLayout.ID_TASK_LIST);
-        
+
 
         //layout.addView(IPageLayout.ID_OUTLINE, IPageLayout.RIGHT, (float) 0.75, editorArea);
         // views - java

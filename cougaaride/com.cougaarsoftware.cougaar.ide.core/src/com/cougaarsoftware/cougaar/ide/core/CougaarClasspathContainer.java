@@ -90,7 +90,7 @@ public class CougaarClasspathContainer implements IClasspathContainer {
             return;
         }
 
-		//check for a valid prefix
+        //check for a valid prefix
         File installHome = new File(installPrefix);
         if (installHome.exists() && installHome.isDirectory()
             && installHome.canRead()) {
@@ -102,13 +102,13 @@ public class CougaarClasspathContainer implements IClasspathContainer {
 
         }
 
-		//look in the sys dir
+        //look in the sys dir
         File sys = null;
         try {
             sys = new File(installHome.getCanonicalPath() + File.separatorChar
                     + "sys");
 
-			//get a list of jars and zips and add them to the container
+            //get a list of jars and zips and add them to the container
             if (sys.exists() && sys.isDirectory() && sys.canRead()) {
                 String[] filenamearr = sys.list(new FilenameFilter() {
                             public boolean accept(File dir, String name) {
@@ -129,13 +129,13 @@ public class CougaarClasspathContainer implements IClasspathContainer {
             CougaarPlugin.log(e);
         }
 
-		//get the lib dir
+        //get the lib dir
         File lib = null;
         try {
             lib = new File(installHome.getCanonicalPath() + File.separatorChar
                     + "lib");
 
-			//get a list of jars and add them to the container
+            //get a list of jars and add them to the container
             if (lib.exists() && lib.isDirectory() && lib.canRead()) {
                 String[] filenamearr = lib.list(new FilenameFilter() {
                             public boolean accept(File dir, String name) {
@@ -168,7 +168,7 @@ public class CougaarClasspathContainer implements IClasspathContainer {
             String string = filenamearr[i];
             jarList.add(JavaCore.newLibraryEntry(
                     new Path(dir.getPath() + File.separatorChar + string),
-			new Path(installPrefix), null, false));
+                    new Path(installPrefix), null, false));
         }
     }
 

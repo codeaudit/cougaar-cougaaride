@@ -472,19 +472,7 @@ Public License instead of this License.
    </requires>
 
    <plugin
-         id="com.cougaarsoftware.cougaar.ide"
-         download-size="0"
-         install-size="0"
-         version="1.1.0"/>
-
-   <plugin
-         id="com.cougaarsoftware.cougaar.ide.core"
-         download-size="0"
-         install-size="0"
-         version="1.1.0"/>
-
-   <plugin
-         id="com.cougaarsoftware.cougaar.ide.ui"
+         id="com.cougaarsoftware.cougaar.ide.launcher.ui"
          download-size="0"
          install-size="0"
          version="1.1.0"/>
@@ -496,7 +484,19 @@ Public License instead of this License.
          version="1.1.0"/>
 
    <plugin
-         id="com.cougaarsoftware.cougaar.ide.launcher.ui"
+         id="com.cougaarsoftware.cougaar.ide.ui"
+         download-size="0"
+         install-size="0"
+         version="1.1.0"/>
+
+   <plugin
+         id="com.cougaarsoftware.cougaar.ide"
+         download-size="0"
+         install-size="0"
+         version="1.1.0"/>
+
+   <plugin
+         id="com.cougaarsoftware.cougaar.ide.core"
          download-size="0"
          install-size="0"
          version="1.1.0"/>

@@ -33,8 +33,8 @@ import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
  */
 public interface IAddCougaarDialogRequestor {
     /**
-     * Check to see if the user is trying to add a cougaar name that
-     * is already in the system
+     * Check to see if the user is trying to add a cougaar name that is already
+     * in the system
      *
      * @param name the name to check
      *

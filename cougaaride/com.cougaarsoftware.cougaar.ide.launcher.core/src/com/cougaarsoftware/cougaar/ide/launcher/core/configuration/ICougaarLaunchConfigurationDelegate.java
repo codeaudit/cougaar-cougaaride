@@ -28,10 +28,10 @@ import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 /**
  * Interface for cougaar launch configuration delegates
- * 
- * @see ILaunchConfigurationDelegate
  *
  * @author mabrams
+ *
+ * @see ILaunchConfigurationDelegate
  */
 public interface ICougaarLaunchConfigurationDelegate
     extends ILaunchConfigurationDelegate {
