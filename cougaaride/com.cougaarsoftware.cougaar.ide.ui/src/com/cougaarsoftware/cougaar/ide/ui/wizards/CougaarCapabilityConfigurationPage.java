@@ -77,13 +77,13 @@ import com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencesMessages
 /**
  * Capability page for cougaar projects
  *
- * @author mabrams
+ * @author mabrams soster
  */
 public class CougaarCapabilityConfigurationPage extends WizardPage
     implements IAddCougaarDialogRequestor, ICougaarInstallChangeListener {
+        
     private static final String PAGE_NAME = "CougaarCapabilityConfigurationPage"; //$NON-NLS-1$
     private Combo fCougaarCombo;
-    private String cougaarVersion = "";
     private NewCougaarProjectWizard cougaarProjectWizard;
     private Button fAddCougaarInstall;
     private Control control;
@@ -208,9 +208,10 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
      * called when the user makes a selection from the combo box
      */
     protected void handleCougaarComboBoxModified() {
-        cougaarVersion = fCougaarCombo.getText();
-        if ((cougaarVersion != null) && !cougaarVersion.trim().equals("")) {
-            setCougaarVersion(cougaarVersion);
+        String version= fCougaarCombo.getText();
+        if ((version != null) && !version.trim().equals("")) {
+            projectCougaarVersion = version;
+            this.getContainer().updateButtons();
         }
     }
 
@@ -255,7 +256,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
      *
      */
     public boolean isPageComplete() {
-        return super.isPageComplete() && !cougaarVersion.trim().equals("");
+        return super.isPageComplete() && projectCougaarVersion!=null && !projectCougaarVersion.trim().equals("");
     }
 
 
@@ -428,18 +429,6 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
             MessageDialog.openInformation(getShell(), title, msg);
         }
     }
-
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param cougaarVersion
-     */
-    public void setCougaarVersion(String cougaarVersion) {
-        projectCougaarVersion = cougaarVersion;
-        this.getContainer().updateButtons();
-    }
-
 
     /* (non-Javadoc)
      * @see com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener#cougaarRemoved(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
