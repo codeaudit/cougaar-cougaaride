@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.launcher.ui"
    name="%Plugin.name"
-   version="1.2.1"
+   version="1.2.2"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIPlugin">
 
@@ -59,8 +59,8 @@
       <shortcut
             label="Cougaar Society"
             icon="icons/cougaaride.gif"
-            modes="run, debug"
             class="com.cougaarsoftware.cougaar.ide.launcher.ui.CougaarLaunchShortcut"
+            modes="run, debug"
             id="com.cougaarsoftware.cougaar.ide.launcher.ui.cougaarLaunchShortCut">
          <perspective
                id="org.eclipse.jdt.ui.JavaPerspective">

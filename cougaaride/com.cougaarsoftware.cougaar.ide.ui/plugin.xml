@@ -3,7 +3,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
    name="%Plugin.name"
-   version="1.2.1"
+   version="1.2.2"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.ui.CougaarUIPlugin">
 
@@ -41,10 +41,10 @@
          point="org.eclipse.ui.editors">
       <editor
             name="Cougaar Society XML Editor"
-            extensions="xml"
             icon="icons/cougaarsociety.gif"
-            class="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor"
+            extensions="xml"
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            class="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor"
             id="com.cougaarsoftware.cougaar.ide.ui.editors.society.SocietyXMLEditor">
       </editor>
    </extension>
@@ -60,8 +60,8 @@
             icon="icons/cougaaride.gif"
             category="com.cougaarsoftware.cougaar.ide.ui.wizards"
             class="com.cougaarsoftware.cougaar.ide.ui.wizards.NewCougaarProjectWizard"
-            finalPerspective="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective"
             project="true"
+            finalPerspective="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective"
             id="com.cougaarsoftware.cougaar.ide.ui.wizards.CougaarProject">
          <description>
             A New Cougaar Project Wizard
@@ -71,8 +71,8 @@
    <extension
          point="org.eclipse.ui.propertyPages">
       <page
-            adaptable="true"
             objectClass="org.eclipse.core.resources.IProject"
+            adaptable="true"
             name="Cougaar Properties"
             class="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage"
             id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage">
