@@ -23,6 +23,7 @@
 package com.cougaarsoftware.cougaar.ide.ui.dialogs;
 
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jdt.internal.ui.dialogs.StatusDialog;
 import org.eclipse.jdt.internal.ui.dialogs.StatusInfo;
@@ -48,19 +49,20 @@ public class SelectCougaarInstallDialog extends StatusDialog
     private CougaarInstallSelectionWidget control;
     private String installVersion;
     private static final String INVALID_SELECTION_KEY="SelectCougaarInstallDialog.invalidSelection";
+    private IProject project;
 
     /**
      * Constructor
      *
      * @param parent the parent Shell
      */
-    public SelectCougaarInstallDialog(Shell parent) {
+    public SelectCougaarInstallDialog(Shell parent, IProject _project) {
         super(parent);
         fStatus = new IStatus[5];
         for (int i = 0; i < fStatus.length; i++) {
             fStatus[i] = new StatusInfo();
         }
-
+        this.project = _project;
         this.setTitle(CougaarUIMessages.getString(TITLE_KEY));
     }
 
@@ -72,9 +74,8 @@ public class SelectCougaarInstallDialog extends StatusDialog
      * @return the control
      */
     protected Control createDialogArea(Composite ancestor) {
-        Composite composite = (Composite)super.createDialogArea(ancestor);
-
-        this.control = new CougaarInstallSelectionWidget(composite, SWT.NULL, this);
+        Composite composite = (Composite)super.createDialogArea(ancestor);		
+        this.control = new CougaarInstallSelectionWidget(composite, SWT.NULL, this, project);
         return this.control;
     }
 

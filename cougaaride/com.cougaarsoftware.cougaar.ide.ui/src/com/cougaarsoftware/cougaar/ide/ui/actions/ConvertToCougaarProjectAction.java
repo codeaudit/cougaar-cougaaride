@@ -62,7 +62,7 @@ public class ConvertToCougaarProjectAction extends ResourceAction {
         IJavaProject jproject = (IJavaProject) selectedObject;
         Shell shell = CougaarUIPlugin.getDefault().getWorkbench()
                                      .getActiveWorkbenchWindow().getShell();
-        SelectCougaarInstallDialog dlg = new SelectCougaarInstallDialog(shell);
+        SelectCougaarInstallDialog dlg = new SelectCougaarInstallDialog(shell, jproject.getProject());
         dlg.open();
 
         if (dlg.getReturnCode() != Window.OK) {

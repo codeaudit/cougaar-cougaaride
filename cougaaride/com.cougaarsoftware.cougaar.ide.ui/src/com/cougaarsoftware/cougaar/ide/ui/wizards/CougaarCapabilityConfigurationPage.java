@@ -149,7 +149,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
     private void handleAddButtonSelected() {
         String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
 
-        CougaarPreferencePage page = new CougaarPreferencePage(this, this);
+        CougaarPreferencePage page = new CougaarPreferencePage(this);
         showPreferencePage(id, page);
         fCougaarCombo.update();
     }

@@ -26,6 +26,7 @@ package com.cougaarsoftware.cougaar.ide.ui.widgets;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.internal.ui.wizards.dialogfields.DialogField;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -46,7 +47,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
+import com.cougaarsoftware.cougaar.ide.core.constants.ICougaarConstants;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
 import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
@@ -65,6 +68,7 @@ public class CougaarInstallSelectionWidget extends Composite
     private Button fAddCougaarInstall;
     private Combo fCougaarCombo;
     private ICougaarInstallSelectionChangeListener listener;
+	private IProject project;
 
     /**
      * DOCUMENT ME!
@@ -74,9 +78,10 @@ public class CougaarInstallSelectionWidget extends Composite
      * @param listener DOCUMENT ME!
      */
     public CougaarInstallSelectionWidget(Composite parent, int style,
-        ICougaarInstallSelectionChangeListener listener) {
+        ICougaarInstallSelectionChangeListener listener, IProject proj) {
         super(parent, style);        
         this.listener = listener;
+        this.project = proj;
         GridLayout topLayout = new GridLayout();
         topLayout.numColumns = 3;
         topLayout.marginWidth = 0;
@@ -114,7 +119,10 @@ public class CougaarInstallSelectionWidget extends Composite
 
         DialogField.createEmptySpace(this, 2);
 
-        setValues("");
+		String defaultVersion = CougaarPlugin.getCougaarPreference(project,
+				ICougaarConstants.COUGAAR_VERSION);
+
+		setValues(defaultVersion);
     }
 
     /**
@@ -129,7 +137,7 @@ public class CougaarInstallSelectionWidget extends Composite
     private void handleAddButtonSelected() {
         String id = "com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPreferencePage";
 
-        CougaarPreferencePage page = new CougaarPreferencePage(this, this);
+        CougaarPreferencePage page = new CougaarPreferencePage(this);
         showPreferencePage(id, page);
         fCougaarCombo.update();
     }
