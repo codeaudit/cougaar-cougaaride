@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
-   name="com.cougaarsoftware.cougaar.ide.ui"
+   name="Cougaar UI Plugin-in"
    version="1.0.0"
    provider-name="COUGAARSOFTWARE">
 
