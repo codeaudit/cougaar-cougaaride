@@ -41,6 +41,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 import com.cougaarsoftware.cougaar.ide.core.CoreMessages;
+import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.IResourceIDs;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
 
@@ -52,6 +53,8 @@ import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
  * @see org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard
  */
 public class NewCougaarProjectWizard extends NewProjectCreationWizard {
+    private String projectCougaarVersion;
+
     // switch to control write of trace data
     private boolean traceEnabled = false;
     private CougaarCapabilityConfigurationPage fCougaarPage;
@@ -71,7 +74,8 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
      */
     public void addPages() {
         super.addPages();
-        fCougaarPage = new CougaarCapabilityConfigurationPage();
+
+        fCougaarPage = new CougaarCapabilityConfigurationPage(this);
         fCougaarPage.setTitle(CougaarUIMessages.getString(
                 "CougaarCapabilityTitle"));
         fCougaarPage.setDescription(CougaarUIMessages.getString(
@@ -135,6 +139,9 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
             this.addCustomNature(jcp.getJavaProject().getProject());
 
             this.configure(jcp.getJavaProject());
+
+            CougaarPlugin.savePreference("COUGAAR_VERSION",
+                projectCougaarVersion, jcp.getJavaProject().getProject());
 
         } catch (CoreException e) {
             // TODO Auto-generated catch block
@@ -203,5 +210,16 @@ public class NewCougaarProjectWizard extends NewProjectCreationWizard {
             // user interaction response
             MessageDialog.openError(getShell(), title, msg);
         }
+    }
+
+
+    /**
+     * DOCUMENT ME!
+     *
+     * @param cougaarVersion
+     */
+    public void setCougaarVersion(String cougaarVersion) {
+        projectCougaarVersion = cougaarVersion;
+
     }
 }

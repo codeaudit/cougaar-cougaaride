@@ -78,10 +78,9 @@ public class CougaarConfigurationBlock extends PropertyPage
      * @param c DOCUMENT ME!
      */
     public CougaarConfigurationBlock(IStatusChangeListener status,
-        IProject proj, Control c) {
+        IProject proj) {
         fStatus = status;
         project = proj;
-        control = c;
     }
 
     /**
@@ -107,7 +106,8 @@ public class CougaarConfigurationBlock extends PropertyPage
     /* (non-Javadoc)
      * @see org.eclipse.jdt.internal.ui.preferences.OptionsConfigurationBlock#createContents(org.eclipse.swt.widgets.Composite)
      */
-    protected Control createContents(Composite parent) {
+    public Control createContents(Composite parent) {
+    	
         Composite topComp = new Composite(parent, SWT.NONE);
         GridLayout topLayout = new GridLayout();
         topLayout.numColumns = 3;
@@ -146,9 +146,11 @@ public class CougaarConfigurationBlock extends PropertyPage
 
 
         DialogField.createEmptySpace(topComp, 2);
+		String defaultVersion = CougaarPlugin.getCougaarPreference(project,
+							"COUGAAR_VERSION");		
 
-
-        setValues();
+		setValues(defaultVersion);
+        control = topComp;
         return topComp;
     }
 
@@ -224,15 +226,14 @@ public class CougaarConfigurationBlock extends PropertyPage
     }
 
 
-    private void setValues() {
+    private void setValues(String selectedVersion) {
         //        String defaultVersion = CougaarPlugin.getDefault().getPreferenceStore()
         //                                             .getString(CougaarPlugin.DEFAULT_COUGAAR_PREFERENCE);
-        String defaultVersion = CougaarPlugin.getCougaarPreference(project,
-                "COUGAAR_VERSION");
+
         int count = fCougaarCombo.getItemCount();
         for (int i = 0; i < count; i++) {
             String item = fCougaarCombo.getItem(i);
-            if (item.equals(defaultVersion)) {
+            if (item.equals(selectedVersion)) {
                 fCougaarCombo.select(i);
                 break;
             }
@@ -244,7 +245,9 @@ public class CougaarConfigurationBlock extends PropertyPage
      * DOCUMENT ME!
      */
     public void performDefaults() {
-        setValues();
+		String defaultVersion = CougaarPlugin.getCougaarPreference(project,
+							"COUGAAR_VERSION");
+        setValues(defaultVersion);
     }
 
 
@@ -267,8 +270,6 @@ public class CougaarConfigurationBlock extends PropertyPage
      * @see com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor#cougaarAdded(com.cougaarsoftware.cougaar.ide.core.ICougaarInstall)
      */
     public void cougaarAdded(ICougaarInstall cougaar) {
-        fCougaarCombo.setItems(getCougaarVersions());
-        setValues();
-        fCougaarCombo.redraw();
+        //TODO
     }
 }

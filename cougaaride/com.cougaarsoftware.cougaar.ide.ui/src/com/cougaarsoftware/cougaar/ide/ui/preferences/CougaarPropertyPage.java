@@ -73,7 +73,7 @@ public class CougaarPropertyPage extends PropertyPage
      * @see org.eclipse.jface.preference.IPreferencePage#createContents(Composite)
      */
     protected Control createContents(Composite parent) {
-        fCougaarConfigurationBlock = new CougaarConfigurationBlock(this, getProject(), getControl().getShell());
+        fCougaarConfigurationBlock = new CougaarConfigurationBlock(this, getProject());
         Control control = fCougaarConfigurationBlock.createContents(parent);
 
         control.setVisible(true);
