@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
+import com.cougaarsoftware.cougaar.ide.ui.dialogs.*;
 
 
 /**

@@ -65,11 +65,11 @@ import com.cougaarsoftware.cougaar.ide.core.CougaarInstall;
 import com.cougaarsoftware.cougaar.ide.core.CougaarInstallComparer;
 import com.cougaarsoftware.cougaar.ide.core.CougaarPlugin;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
-import com.cougaarsoftware.cougaar.ide.ui.AddCougaarDialog;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
 import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 import com.cougaarsoftware.cougaar.ide.ui.ICougaarInstallChangeListener;
 import com.cougaarsoftware.cougaar.ide.ui.ListContentProvider;
+import com.cougaarsoftware.cougaar.ide.ui.dialogs.AddCougaarDialog;
 
 
 /**

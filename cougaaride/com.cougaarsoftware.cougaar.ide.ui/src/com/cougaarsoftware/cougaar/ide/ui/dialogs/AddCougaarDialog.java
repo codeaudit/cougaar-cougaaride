@@ -20,7 +20,7 @@
  */
 
 
-package com.cougaarsoftware.cougaar.ide.ui;
+package com.cougaarsoftware.cougaar.ide.ui.dialogs;
 
 
 import java.io.File;
@@ -50,6 +50,10 @@ import org.eclipse.swt.widgets.Text;
 
 import com.cougaarsoftware.cougaar.ide.core.CougaarInstall;
 import com.cougaarsoftware.cougaar.ide.core.ICougaarInstall;
+import com.cougaarsoftware.cougaar.ide.ui.CougaarInstallBlock;
+import com.cougaarsoftware.cougaar.ide.ui.CougaarUI;
+import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
+import com.cougaarsoftware.cougaar.ide.ui.IAddCougaarDialogRequestor;
 
 
 /**
