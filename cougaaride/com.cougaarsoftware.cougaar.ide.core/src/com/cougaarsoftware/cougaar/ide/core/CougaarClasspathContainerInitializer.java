@@ -34,7 +34,9 @@ import org.eclipse.jdt.core.JavaCore;
 
 
 /**
+ * Initializes the cougaar classpath container
  *
+ * @author soster
  */
 public class CougaarClasspathContainerInitializer
     extends ClasspathContainerInitializer {
@@ -48,10 +50,10 @@ public class CougaarClasspathContainerInitializer
     /**
      * Signal this is able to update itself.
      *
-     * @param containerPath DOCUMENT ME!
-     * @param project DOCUMENT ME!
+     * @param containerPath classpath container path
+     * @param project cougaar project
      *
-     * @return DOCUMENT ME!
+     * @return true
      */
     public boolean canUpdateClasspathContainer(IPath containerPath,
         IJavaProject project) {
@@ -63,11 +65,11 @@ public class CougaarClasspathContainerInitializer
      * Re-read the project properties and rebuild the cp based on the cougaar
      * install path
      *
-     * @param containerPath DOCUMENT ME!
-     * @param project DOCUMENT ME!
-     * @param containerSuggestion DOCUMENT ME!
+     * @param containerPath classpath container path
+     * @param project cougaar project
+     * @param containerSuggestion NA
      *
-     * @throws CoreException DOCUMENT ME!
+     * @throws CoreException when JavaCore has problems
      */
     public void requestClasspathContainerUpdate(IPath containerPath,
         IJavaProject project, IClasspathContainer containerSuggestion)
@@ -77,12 +79,13 @@ public class CougaarClasspathContainerInitializer
 
 
     /**
-     * DOCUMENT ME!
+     * Read the project properties and rebuild the cp based on the cougaar
+     * install path
      *
-     * @param containerPath DOCUMENT ME!
-     * @param javaProject DOCUMENT ME!
+     * @param containerPath classpath container path
+     * @param javaProject cougaar project
      *
-     * @throws CoreException DOCUMENT ME!
+     * @throws CoreException when JavaCore has problems
      */
     public void initialize(IPath containerPath, IJavaProject javaProject)
         throws CoreException {
@@ -90,12 +93,21 @@ public class CougaarClasspathContainerInitializer
     }
 
 
+    /**
+     * Get the project's cougaar version and create a cougaar classpath
+     * container for it
+     *
+     * @param javaProject cougaar project
+     *
+     * @throws CoreException when JavaCore has problems
+     */
     private void populateCougaarContainer(IJavaProject javaProject)
         throws CoreException {
         IProject project = javaProject.getProject();
         if (CougaarPlugin.isCougaarProject(project)) {
-            //TODO: need to get version from project
-            String version = "10.2";
+            //TODO: matt: make a constant for this
+            String version = CougaarPlugin.getCougaarPreference(project,
+                    "COUGAAR_VERSION");
             String installPrefix = CougaarPlugin.getCougaarBaseLocation(version);
 
             IPath path = new Path(IResourceIDs.CLASSPATH_CONTAINER_ID);
