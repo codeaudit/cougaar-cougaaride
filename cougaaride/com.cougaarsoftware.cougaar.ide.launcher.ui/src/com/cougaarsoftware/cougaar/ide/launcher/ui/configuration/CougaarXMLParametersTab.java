@@ -898,12 +898,7 @@ public class CougaarXMLParametersTab extends JavaLaunchConfigurationTab {
             while (iter.hasNext()) {
                 String value = (String) iter.next();
                 String[] nameValuePair = new String[2];
-                if (!value.startsWith("-X")) {
-                    nameValuePair = value.split("=");
-                } else {
-                    nameValuePair[0] = value;
-                    nameValuePair[1] = value;
-                }
+                nameValuePair = value.split("=");
                 if (nameValuePair[1] == null) {
                     MessageDialog.openError(getShell(), "Invalide Argument",
                             "There was an error parsing the argument " + value
