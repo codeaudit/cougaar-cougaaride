@@ -46,6 +46,7 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
@@ -177,7 +178,7 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
                 public void run() {
                     dialog.create();
                     dialog.setMessage(targetNode.getLabelText());
-                    result[0] = (dialog.open() == PreferenceDialog.OK);
+                    result[0] = (dialog.open() == Window.OK);
                 }
             });
         return result[0];

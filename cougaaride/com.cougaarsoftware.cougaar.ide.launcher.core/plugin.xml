@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
    id="com.cougaarsoftware.cougaar.ide.launcher.core"
-   name="Cougaar Launcher Plug-in"
+   name="%Plugin.name"
    version="1.0.0"
-   provider-name="COUGAARSOFTWARE"
+   provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.launcher.core.LauncherPlugin">
 
    <runtime>

@@ -37,6 +37,7 @@ import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.ModifyEvent;
@@ -209,7 +210,7 @@ public class CougaarConfigurationBlock extends PropertyPage
                 public void run() {
                     dialog.create();
                     dialog.setMessage(targetNode.getLabelText());
-                    result[0] = (dialog.open() == PreferenceDialog.OK);
+                    result[0] = (dialog.open() == Window.OK);
                 }
             });
         return result[0];
@@ -257,7 +258,7 @@ public class CougaarConfigurationBlock extends PropertyPage
      */
     public boolean isDuplicateName(String name) {
         for (int i = 0; i < fCougaarCombo.getItemCount(); i++) {
-            String cougaar = (String) fCougaarCombo.getItem(i);
+            String cougaar = fCougaarCombo.getItem(i);
             if (cougaar.equals(name)) {
                 return true;
             }

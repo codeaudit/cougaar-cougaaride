@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
-   name="Cougaar UI Plugin-in"
+   name="%Plugin.name"
    version="1.0.0"
-   provider-name="COUGAARSOFTWARE"
+   provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.ui.CougaarUIPlugin">
 
    <runtime>
       <library name="cougaar-ide-ui.jar">
          <export name="*"/>
+         <packages prefixes="com.cougaarsoftware.cougaar.ide.ui"/>
       </library>
    </runtime>
    <requires>
@@ -65,7 +66,7 @@
          point="org.eclipse.ui.propertyPages">
       <page
             objectClass="org.eclipse.core.resources.IProject"
-            adaptable="true"         
+            adaptable="true"
             name="Cougaar Properties"
             class="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage"
             id="com.cougaarsoftware.cougaar.ide.ui.preferences.CougaarPropertyPage">

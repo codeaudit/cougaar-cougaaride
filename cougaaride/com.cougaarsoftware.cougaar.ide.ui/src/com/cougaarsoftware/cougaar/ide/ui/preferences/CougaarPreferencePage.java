@@ -39,6 +39,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -356,7 +357,7 @@ public class CougaarPreferencePage extends PreferencePage
         AddCougaarDialog dialog = new AddCougaarDialog(this, getShell(), null);
         dialog.setTitle(CougaarPreferencesMessages.getString(
                 "cougaarPreferencePage.addCougaar.title")); //$NON-NLS-1$
-        if (dialog.open() != AddCougaarDialog.OK) {
+        if (dialog.open() != Window.OK) {
             return;
         }
 
@@ -411,7 +412,7 @@ public class CougaarPreferencePage extends PreferencePage
         AddCougaarDialog dialog = new AddCougaarDialog(this, getShell(), vm);
         dialog.setTitle(CougaarPreferencesMessages.getString(
                 "CougaarPreferencePage.editVersion.title"));
-        if (dialog.open() != AddCougaarDialog.OK) {
+        if (dialog.open() != Window.OK) {
             return;
         }
 

@@ -42,6 +42,7 @@ import org.eclipse.jdt.internal.ui.wizards.buildpaths.ArchiveFileFilter;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.dialogs.PropertyPage;
@@ -153,7 +154,7 @@ public class CougaarPropertyPage extends PropertyPage
             e.printStackTrace();
         }
 
-        if (dialog.getReturnCode() == Dialog.OK) {
+        if (dialog.getReturnCode() == Window.OK) {
             CougaarPlugin.getDefault().savePluginSettings();
             return super.performOk();
         } else {

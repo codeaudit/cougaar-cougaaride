@@ -431,7 +431,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
     public void performApply(ILaunchConfigurationWorkingCopy configuration) {
         // if (isDirty()) {
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_NODE_NAME,
-            (String) fNameText.getText());
+            fNameText.getText());
         configuration.setAttribute(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS,
             getMapFromParametersTable());
         configuration.setAttribute(IJavaLaunchConfigurationConstants.ATTR_PROGRAM_ARGUMENTS,
@@ -529,7 +529,7 @@ public class CougaarParametersTab extends JavaLaunchConfigurationTab {
             JDIDebugUIPlugin.log(e);
         }
 
-        IJavaProject javaProject = (IJavaProject) getJavaProject(wc);
+        IJavaProject javaProject = getJavaProject(wc);
 
         IProject project = null;
         String defaultVersion = "";
