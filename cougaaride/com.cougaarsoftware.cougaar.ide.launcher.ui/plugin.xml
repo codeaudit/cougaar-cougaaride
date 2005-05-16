@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.launcher.ui"
    name="%Plugin.name"
-   version="1.3.1.1"
+   version="1.4.0"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIPlugin">
 
