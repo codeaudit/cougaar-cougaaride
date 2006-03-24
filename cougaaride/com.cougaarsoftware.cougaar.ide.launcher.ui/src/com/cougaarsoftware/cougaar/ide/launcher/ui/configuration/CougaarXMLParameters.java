@@ -49,7 +49,7 @@ public class CougaarXMLParameters {
      *
      * @return DOCUMENT ME!
      */
-    public static Enumeration getKeys() {
+    public static Enumeration<String> getKeys() {
         return RESOURCE_BUNDLE.getKeys();
     }
 

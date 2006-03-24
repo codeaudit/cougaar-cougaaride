@@ -29,15 +29,6 @@
    </requires>
 
    <extension
-         point="org.eclipse.ui.perspectives">
-      <perspective
-            name="%Perspective.name"
-            icon="icons/cougaaride.gif"
-            class="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspectiveFactory"
-            id="com.cougaarsoftware.cougaar.ide.ui.CougaarPerspective">
-      </perspective>
-   </extension>
-   <extension
          point="org.eclipse.ui.editors">
       <editor
             name="Cougaar Society XML Editor"

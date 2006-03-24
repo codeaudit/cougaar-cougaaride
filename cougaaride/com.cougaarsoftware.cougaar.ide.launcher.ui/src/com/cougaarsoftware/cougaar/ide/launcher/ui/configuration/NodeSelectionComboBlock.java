@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.jface.util.ListenerList;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -37,7 +37,7 @@ import com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIMessages;
  * 
  * @author mabrams
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class NodeSelectionComboBlock implements ISelectionProvider {
 
@@ -45,11 +45,6 @@ public class NodeSelectionComboBlock implements ISelectionProvider {
      * This block's control
      */
     private Composite fControl;
-
-    /**
-     * The title used for the Node Name block
-     */
-    private String fTitle = null;
 
     /**
      * The main control
