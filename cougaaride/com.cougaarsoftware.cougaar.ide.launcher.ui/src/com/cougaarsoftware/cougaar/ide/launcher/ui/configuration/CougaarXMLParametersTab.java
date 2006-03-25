@@ -175,6 +175,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		Composite comp = new Composite(parent, parent.getStyle());
 		setControl(comp);
 		GridLayout layout = new GridLayout(1, true);
+		layout.verticalSpacing = 0;
 		comp.setLayout(layout);
 		comp.setFont(font);
 
@@ -192,12 +193,13 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		fSocietyXMLFileLabel.setText(LauncherUIMessages
 				.getString("CougaarXMLParametersTab.SocietyFile"));
 		GridData gd = new GridData(SWT.LEFT);
+		gd.grabExcessHorizontalSpace = false;	
 		fSocietyXMLFileLabel.setLayoutData(gd);
 
 		fSocietyXMLFileText = new Text(group, SWT.SINGLE | SWT.WRAP
 				| SWT.BORDER);
 		fSocietyXMLFileText.setEditable(false);
-		gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		gd = new GridData(SWT.CENTER, SWT.CENTER, true, true);
 		fSocietyXMLFileText.setLayoutData(gd);
 		fSocietyXMLFileText.setFont(font);
 		fSocietyXMLFileText.addModifyListener(new ModifyListener() {
@@ -238,12 +240,11 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 			}
 		});
 		Control control = fNodeBlock.getControl();
-		gd = new GridData(SWT.FILL, SWT.NONE, true, true);
+		gd = new GridData(SWT.FILL, SWT.CENTER, true, true);
 		control.setLayoutData(gd);
 
-		createVerticalSpacer(comp, 1);
-
 		Composite parametersComp = new Composite(comp, SWT.NONE);
+	
 		gd = new GridData(GridData.FILL_BOTH);
 		parametersComp.setLayoutData(gd);
 		GridLayout parametersLayout = new GridLayout();
@@ -252,20 +253,12 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		parametersLayout.marginWidth = 0;
 		parametersComp.setLayout(parametersLayout);
 		parametersComp.setFont(font);
+		
 
-		Label parameterLabel = new Label(parametersComp, SWT.NONE);
-		parameterLabel.setText(LauncherUIMessages
-				.getString("cougaarlauncher.argumenttab.parameterslabel.text"));
-		gd = new GridData();
-		gd.horizontalSpan = 2;
-		parameterLabel.setLayoutData(gd);
-		parameterLabel.setFont(font);
-
-		fParametersTable = new Table(parametersComp, SWT.BORDER | SWT.SINGLE
-				| SWT.V_SCROLL);
+		fParametersTable = new Table(parametersComp, SWT.BORDER);
 		fParametersTable
 				.setData(ICougaarLaunchConfigurationConstants.ATTR_COUGAAR_VM_PARAMETERS);
-		TableLayout tableLayout = new TableLayout();
+		final TableLayout tableLayout = new TableLayout();
 		fParametersTable.setLayout(tableLayout);
 		gd = new GridData(GridData.FILL_BOTH);
 		fParametersTable.setLayoutData(gd);
@@ -278,9 +271,10 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		column2
 				.setText(LauncherUIMessages
 						.getString("cougaarlauncher.argumenttab.parameterscolumn.value.text"));
-		//$NON-NLS-1$
+
 		tableLayout.addColumnData(new ColumnWeightData(50));
 		tableLayout.addColumnData(new ColumnWeightData(50));
+
 		fParametersTable.setHeaderVisible(true);
 		fParametersTable.setLinesVisible(true);
 		fParametersTable.addSelectionListener(fListener);
@@ -294,14 +288,15 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 				}
 			}
 		});
-
-		Composite envButtonComp = new Composite(parametersComp, SWT.NONE);
-		GridLayout envButtonLayout = new GridLayout();
+		Composite envButtonComp = new Composite(comp, SWT.NONE);
+	
+		GridLayout envButtonLayout = new GridLayout(5, false);
 		envButtonLayout.marginHeight = 0;
 		envButtonLayout.marginWidth = 0;
+		envButtonLayout.horizontalSpacing = 0;
 		envButtonComp.setLayout(envButtonLayout);
-		gd = new GridData(GridData.VERTICAL_ALIGN_BEGINNING
-				| GridData.HORIZONTAL_ALIGN_FILL);
+		gd = new GridData(GridData.VERTICAL_ALIGN_CENTER
+				| GridData.HORIZONTAL_ALIGN_END);
 		envButtonComp.setLayoutData(gd);
 		envButtonComp.setFont(font);
 
@@ -371,7 +366,6 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 			}
 		});
 
-		createVerticalSpacer(comp, 1);
 		fWorkingDirectoryBlock.createControl(comp);
 	}
 
