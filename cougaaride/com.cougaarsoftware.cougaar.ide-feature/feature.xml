@@ -2,7 +2,7 @@
 <feature
       id="com.cougaarsoftware.cougaar.ide"
       label="Cougaar Integrated Development Environment"
-      version="1.4.0"
+      version="1.5.0"
       provider-name="Cougaar Software, Inc."
       nl="en"
       image="cougaar_logo.gif">
@@ -35,51 +35,51 @@ Foundation
    </license>
 
    <requires>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.jdt.core"/>
+      <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.jdt.launching"/>
+      <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.jdt.debug.ui"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.jdt.ui"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="org.eclipse.jdt.launching"/>
-      <import plugin="org.eclipse.debug.core"/>
-      <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="org.eclipse.jdt.debug"/>
-      <import plugin="org.eclipse.jdt.debug.ui"/>
    </requires>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide"
          download-size="0"
          install-size="0"
-         version="1.4.0"/>
+         version="1.5.0"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.core"
          download-size="0"
          install-size="0"
-         version="1.4.0"/>
+         version="1.5.0"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.launcher.core"
          download-size="0"
          install-size="0"
-         version="1.4.0"/>
+         version="1.5.0"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.launcher.ui"
          download-size="0"
          install-size="0"
-         version="1.4.0"/>
+         version="1.5.0"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.ui"
          download-size="0"
          install-size="0"
-         version="1.4.0"/>
+         version="1.5.0"/>
 
 </feature>

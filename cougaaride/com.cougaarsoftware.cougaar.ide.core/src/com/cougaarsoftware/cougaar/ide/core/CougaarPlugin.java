@@ -77,9 +77,7 @@ public class CougaarPlugin extends AbstractUIPlugin {
 
 	/**
 	 * The constructor.
-	 * 
-	 * @param descriptor
-	 *            DOCUMENT ME!
+	 *
 	 */
 	public CougaarPlugin(IPluginDescriptor descriptor) {
 		super();
@@ -359,10 +357,10 @@ public class CougaarPlugin extends AbstractUIPlugin {
 		jproject.setRawClasspath(newentries, subMonitor);
 
 		//add the cougaar classpath container
-		addCougaarClasspathContainer(jproject, subMonitor);
+		CougaarPlugin.addCougaarClasspathContainer(jproject, subMonitor);
 
 		//finally populate the cougaar CP container and rebuild
-		updateClasspathContainer(jproject, subMonitor);
+		CougaarPlugin.updateClasspathContainer(jproject, subMonitor);
 	}
 
 	/**

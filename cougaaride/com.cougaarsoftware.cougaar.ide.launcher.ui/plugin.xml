@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.launcher.ui"
    name="%Plugin.name"
-   version="1.4.0"
+   version="1.5.0"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.launcher.ui.LauncherUIPlugin">
 
@@ -19,10 +19,8 @@
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="org.eclipse.jdt.debug"/>
       <import plugin="org.eclipse.jdt.debug.ui"/>
       <import plugin="org.eclipse.jdt.launching"/>
-      <import plugin="org.eclipse.jdt.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="com.cougaarsoftware.cougaar.ide.core"/>
       <import plugin="com.cougaarsoftware.cougaar.ide.launcher.core"/>

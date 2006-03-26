@@ -124,7 +124,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 			setDirty(true);
 		}
 
-		@Override
+		
 		public void widgetSelected(SelectionEvent e) {
 			Object source = e.getSource();
 			if (source == fParametersTable) {
@@ -199,7 +199,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		fSocietyXMLFileText = new Text(group, SWT.SINGLE | SWT.WRAP
 				| SWT.BORDER);
 		fSocietyXMLFileText.setEditable(false);
-		gd = new GridData(SWT.CENTER, SWT.CENTER, true, true);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
 		fSocietyXMLFileText.setLayoutData(gd);
 		fSocietyXMLFileText.setFont(font);
 		fSocietyXMLFileText.addModifyListener(new ModifyListener() {
@@ -218,7 +218,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 				false, false));
 		browseSocietyButton.addSelectionListener(new SelectionAdapter() {
 
-			@Override
+			
 			public void widgetSelected(SelectionEvent e) {
 				FileDialog dialog = new FileDialog(getShell());
 				String newPath = dialog.open();
@@ -280,7 +280,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		fParametersTable.addSelectionListener(fListener);
 		fParametersTable.addMouseListener(new MouseAdapter() {
 
-			@Override
+			
 			public void mouseDoubleClick(MouseEvent e) {
 				setParametersButtonsEnableState();
 				if (fParametersEditButton.isEnabled()) {
@@ -291,9 +291,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		Composite envButtonComp = new Composite(comp, SWT.NONE);
 	
 		GridLayout envButtonLayout = new GridLayout(5, false);
-		envButtonLayout.marginHeight = 0;
-		envButtonLayout.marginWidth = 0;
-		envButtonLayout.horizontalSpacing = 0;
+		
 		envButtonComp.setLayout(envButtonLayout);
 		gd = new GridData(GridData.VERTICAL_ALIGN_CENTER
 				| GridData.HORIZONTAL_ALIGN_END);
@@ -307,7 +305,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 				null); //$NON-NLS-1$
 		fParametersAddButton.addSelectionListener(new SelectionAdapter() {
 
-			@Override
+			
 			public void widgetSelected(SelectionEvent evt) {
 				handleParametersAddButtonSelected();
 			}
@@ -320,7 +318,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 				null); //$NON-NLS-1$
 		fParametersEditButton.addSelectionListener(new SelectionAdapter() {
 
-			@Override
+			
 			public void widgetSelected(SelectionEvent evt) {
 				handleParametersEditButtonSelected();
 			}
@@ -333,7 +331,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 				null); //$NON-NLS-1$
 		fParametersRemoveButton.addSelectionListener(new SelectionAdapter() {
 
-			@Override
+			
 			public void widgetSelected(SelectionEvent evt) {
 				handleParametersRemoveButtonSelected();
 			}
@@ -348,7 +346,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		fLoadDefaultArgumentsButton
 				.addSelectionListener(new SelectionAdapter() {
 
-					@Override
+					
 					public void widgetSelected(SelectionEvent evt) {
 						displayDefaultCougaarParameters();
 					}
@@ -360,7 +358,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 				null);
 		fLoadXMLArgumentsButton.addSelectionListener(new SelectionAdapter() {
 
-			@Override
+			
 			public void widgetSelected(SelectionEvent evt) {
 				handleLoadArgumentsFromFileButtonSelected();
 			}
@@ -475,8 +473,8 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 	 * @see org.eclipse.debug.ui.ILaunchConfigurationTab#setDefaults(org.eclipse.debug.core.ILaunchConfigurationWorkingCopy)
 	 */
 	public void setDefaults(ILaunchConfigurationWorkingCopy configuration) {
-		HashMap<String, String> map = new HashMap<String, String>();
-		Enumeration<String> keys = CougaarXMLParameters.getKeys();
+		HashMap map = new HashMap();
+		Enumeration keys = CougaarXMLParameters.getKeys();
 		IJavaProject project = getJavaProject(configuration);
 		if (project != null) {
 			String defaultVersion = CougaarPlugin.getCougaarPreference(project
@@ -602,7 +600,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 			return null;
 		}
 
-		Map<String, String> map = new HashMap<String, String>(items.length);
+		Map map = new HashMap(items.length);
 		for (int i = 0; i < items.length; i++) {
 			TableItem item = items[i];
 			String key = item.getText(0);
@@ -649,10 +647,10 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		setDirty(true);
 	}
 
-	protected List<String> getNodeNameList(File societyXMLFile) {
+	protected List getNodeNameList(File societyXMLFile) {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db;
-		List<String> nodeNameList = null;
+		List nodeNameList = null;
 		try {
 			db = dbf.newDocumentBuilder();
 			Document doc = db.parse(societyXMLFile);
@@ -665,7 +663,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 					nodeNameList = getNodeNameList(node.getChildNodes());
 				} else if (nodeName.equalsIgnoreCase("node")) {
 					if (nodeNameList == null) {
-						nodeNameList = new ArrayList<String>();
+						nodeNameList = new ArrayList();
 					}
 					NamedNodeMap nnMap = node.getAttributes();
 					Node nameNode = nnMap.getNamedItem("name");
@@ -682,8 +680,8 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		return nodeNameList;
 	}
 
-	protected List<String> getNodeNameList(NodeList nodeList) {
-		List<String> nodeNameList = null;
+	protected List getNodeNameList(NodeList nodeList) {
+		List nodeNameList = null;
 		if (nodeList != null) {
 			for (int j = 0; j < nodeList.getLength(); j++) {
 				Node childNode = nodeList.item(j);
@@ -701,7 +699,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 					NamedNodeMap nnMap = childNode.getAttributes();
 					Node nameNode = nnMap.getNamedItem("name");
 					if (nodeNameList == null) {
-						nodeNameList = new ArrayList<String>();
+						nodeNameList = new ArrayList();
 					}
 					nodeNameList.add(nameNode.getNodeValue());
 				}
@@ -767,8 +765,8 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 					.getProject(), ICougaarConstants.COUGAAR_VERSION);
 		}
 
-		HashMap<String, String> map = new HashMap<String, String>();
-		Enumeration<String> keys = CougaarXMLParameters.getKeys();
+		HashMap map = new HashMap();
+		Enumeration keys = CougaarXMLParameters.getKeys();
 		while (keys.hasMoreElements()) {
 			String[] nameValuePair = new String[2];
 			nameValuePair[0] = (String) keys.nextElement();
@@ -910,7 +908,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 			defaultVersion = CougaarPlugin.getCougaarPreference(project
 					.getProject(), ICougaarConstants.COUGAAR_VERSION);
 		}
-		HashMap<String, String> map = new HashMap<String, String>();
+		HashMap map = new HashMap();
 		if (paramList != null) {
 			Iterator iter = paramList.iterator();
 			while (iter.hasNext()) {
@@ -954,8 +952,8 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 	/**
 	 * @param nodeList
 	 */
-	private List<String> getNodeVMParams(NodeList nodeList, String nodeName) {
-		List<String> paramList = new ArrayList<String>();
+	private List getNodeVMParams(NodeList nodeList, String nodeName) {
+		List paramList = new ArrayList();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node node = nodeList.item(i);
 			if (node.getNodeName().equalsIgnoreCase("host")) {
@@ -963,7 +961,7 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 				if (paramList == null) {
 					paramList = getNodeVMParams(nList, nodeName);
 				} else {
-					List<String> tmpList = getNodeVMParams(nList, nodeName);
+					List tmpList = getNodeVMParams(nList, nodeName);
 					if (tmpList != null) {
 						paramList.addAll(tmpList);
 					}
@@ -975,8 +973,8 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		return paramList;
 	}
 
-	private List<String> getNodeVMParams(Node node, String nodeName) {
-		List<String> paramList = new ArrayList<String>();
+	private List getNodeVMParams(Node node, String nodeName) {
+		List paramList = new ArrayList();
 		NamedNodeMap nnMap = node.getAttributes();
 		Node nameNode = nnMap.getNamedItem("name");
 		if (nameNode.getNodeValue().equalsIgnoreCase(nodeName)) {
@@ -1088,12 +1086,12 @@ public class CougaarXMLParametersTab extends JavaLaunchTab {
 		}
 	}
 
-	@Override
+	
 	public boolean isValid(ILaunchConfiguration config) {
 		return fWorkingDirectoryBlock.isValid(config);
 	}
 
-	@Override
+	
 	public Image getImage() {
 		return JavaDebugImages.get(JavaDebugImages.IMG_VIEW_ARGUMENTS_TAB);
 	}

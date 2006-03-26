@@ -121,8 +121,6 @@ public class CougaarMainTab extends SharedJavaMainTab {
 		updateMainTypeFromConfig(config);
 	}
 
-
-	@Override
 	protected void handleSearchButtonSelected() {
 		// TODO Auto-generated method stub
 		

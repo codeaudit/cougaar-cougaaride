@@ -19,7 +19,6 @@
  *
  */
 
-
 /**
  * Copyright (c) 2000, 2003 IBM Corporation and others. All rights reserved.
  * This program and the accompanying materials  are made available under the
@@ -29,43 +28,36 @@
  */
 package com.cougaarsoftware.cougaar.ide.ui.editors.society;
 
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
-import org.eclipse.jface.text.rules.DefaultPartitioner;
+import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
-
-/**
- * DOCUMENT ME!
- *
- * @author $author$
- * @version $Revision: 1.1 $
- */
 public class XMLDocumentProvider extends FileDocumentProvider {
-    /**
-     * DOCUMENT ME!
-     *
-     * @param element DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws CoreException DOCUMENT ME!
-     */
-    protected IDocument createDocument(Object element)
-        throws CoreException {
-        IDocument document = super.createDocument(element);
-        if (document != null) {
-            IDocumentPartitioner partitioner = new DefaultPartitioner(new XMLPartitionScanner(),
-                    new String[] {
-                        XMLPartitionScanner.XML_TAG,
-                        XMLPartitionScanner.XML_COMMENT
-                    });
-            partitioner.connect(document);
-            document.setDocumentPartitioner(partitioner);
-        }
+	/**
+	 * DOCUMENT ME!
+	 * 
+	 * @param element
+	 *            DOCUMENT ME!
+	 * 
+	 * @return DOCUMENT ME!
+	 * 
+	 * @throws CoreException
+	 *             DOCUMENT ME!
+	 */
+	protected IDocument createDocument(Object element) throws CoreException {
+		IDocument document = super.createDocument(element);
+		if (document != null) {
 
-        return document;
-    }
+			IDocumentPartitioner partitioner = new FastPartitioner(
+					new XMLPartitionScanner(), new String[] {
+							XMLPartitionScanner.XML_TAG,
+							XMLPartitionScanner.XML_COMMENT });
+			partitioner.connect(document);
+			document.setDocumentPartitioner(partitioner);
+		}
+
+		return document;
+	}
 }

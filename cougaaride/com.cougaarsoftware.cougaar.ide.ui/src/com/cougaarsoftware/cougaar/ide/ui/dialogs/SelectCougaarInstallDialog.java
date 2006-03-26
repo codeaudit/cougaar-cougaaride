@@ -55,7 +55,7 @@ public class SelectCougaarInstallDialog extends StatusDialog
      * Constructor
      *
      * @param parent the parent Shell
-     * @param _project DOCUMENT ME!
+     * @param _project 
      */
     public SelectCougaarInstallDialog(Shell parent, IProject _project) {
         super(parent);
@@ -105,31 +105,15 @@ public class SelectCougaarInstallDialog extends StatusDialog
         updateButtonsEnableState(max);
     }
 
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @return
-     */
     public String getValue() {
         return installVersion;
     }
 
-
-    /**
-     * DOCUMENT ME!
-     */
     protected void okPressed() {
         installVersion = this.control.getSelectedCougaarInstall();
         super.okPressed();
     }
 
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param version DOCUMENT ME!
-     */
     public void handleCougaarInstallSelected(String version) {
         //set status
         StatusInfo status = new StatusInfo();

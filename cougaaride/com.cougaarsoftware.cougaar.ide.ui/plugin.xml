@@ -3,7 +3,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
    name="%Plugin.name"
-   version="1.4.0"
+   version="1.5.0"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.ui.CougaarUIPlugin">
 

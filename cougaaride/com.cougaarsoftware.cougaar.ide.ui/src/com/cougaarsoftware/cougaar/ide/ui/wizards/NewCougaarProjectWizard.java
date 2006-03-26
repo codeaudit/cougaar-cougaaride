@@ -35,7 +35,6 @@ import org.eclipse.jdt.internal.ui.actions.WorkbenchRunnableAdapter;
 import org.eclipse.jdt.internal.ui.wizards.JavaProjectWizard;
 import org.eclipse.jdt.ui.wizards.JavaCapabilityConfigurationPage;
 
-import com.cougaarsoftware.cougaar.ide.core.CoreMessages;
 import com.cougaarsoftware.cougaar.ide.ui.CougaarUIMessages;
 
 
@@ -55,7 +54,7 @@ public class NewCougaarProjectWizard extends JavaProjectWizard {
         super();
         setDefaultPageImageDescriptor(JavaPluginImages.DESC_WIZBAN_NEWJPRJ);
         setDialogSettings(JavaPlugin.getDefault().getDialogSettings());
-        setWindowTitle(CoreMessages.getString("NewCougaarProjectCreationWizard")); //$NON-NLS-1$
+        setWindowTitle(CougaarUIMessages.getString("NewCougaarProjectCreationWizard")); //$NON-NLS-1$
     }
 
     /*

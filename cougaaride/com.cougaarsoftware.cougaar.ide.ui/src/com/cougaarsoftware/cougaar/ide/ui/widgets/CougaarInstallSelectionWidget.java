@@ -88,7 +88,7 @@ public class CougaarInstallSelectionWidget extends Composite
         topLayout.marginWidth = 0;
         topLayout.marginHeight = 0;
         this.setLayout(topLayout);
-        String[] cougaarNames = getCougaarVersions();
+        
 
         Label cougaarSelectionLabel = new Label(this, SWT.NONE);
         cougaarSelectionLabel.setText(CougaarPreferencesMessages.getString(
@@ -96,14 +96,29 @@ public class CougaarInstallSelectionWidget extends Composite
         cougaarSelectionLabel.setLayoutData(new GridData());
 
         fCougaarCombo = new Combo(this, SWT.READ_ONLY);
+        String[] cougaarNames = getCougaarVersions();
+        
+        String defaultVersion = CougaarPlugin.getCougaarPreference(project,
+                ICougaarConstants.COUGAAR_VERSION);
+        setValues(defaultVersion);
+        
+        if (cougaarNames.length > 0) {
+            fCougaarCombo.setItems(cougaarNames);
+         
+            int index = fCougaarCombo.indexOf(defaultVersion);
+            if (index < 0) {
+            	index = 0;
+            }
+            fCougaarCombo.select(index);
+        }
+
+        
         fCougaarCombo.addModifyListener(new ModifyListener() {
                 public void modifyText(ModifyEvent evt) {
                     handleCougaarComboBoxModified();
                 }
             });
-        if (cougaarNames.length > 0) {
-            fCougaarCombo.setItems(cougaarNames);
-        }
+       
 
 
         fCougaarCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -120,10 +135,7 @@ public class CougaarInstallSelectionWidget extends Composite
 
         DialogField.createEmptySpace(this, 2);
 
-        String defaultVersion = CougaarPlugin.getCougaarPreference(project,
-                ICougaarConstants.COUGAAR_VERSION);
-
-        setValues(defaultVersion);
+      
     }
 
     /**

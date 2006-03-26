@@ -116,9 +116,13 @@ public class CougaarCapabilityConfigurationPage extends WizardPage
         cougaarSelectionLabel.setLayoutData(new GridData());
 
         fCougaarCombo = new Combo(topComp, SWT.READ_ONLY);
+      
         if (cougaarNames.length > 0) {
             fCougaarCombo.setItems(cougaarNames);
+            fCougaarCombo.select(0);
+            handleCougaarComboBoxModified();
         }
+    
 
 
         fCougaarCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

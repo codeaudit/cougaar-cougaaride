@@ -23,7 +23,6 @@
 package com.cougaarsoftware.cougaar.ide.ui;
 
 
-import org.eclipse.core.runtime.IPluginDescriptor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -39,19 +38,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 public class CougaarUIPlugin extends AbstractUIPlugin {
     /** The shared instance. */
     private static CougaarUIPlugin plugin;
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param descriptor
-     */
-    public CougaarUIPlugin(IPluginDescriptor descriptor) {
-        super(descriptor);       
-        plugin = this;
-    }
     
     public CougaarUIPlugin() {
-        super();
         plugin = this;
     }
 
@@ -71,14 +59,7 @@ public class CougaarUIPlugin extends AbstractUIPlugin {
      * @return The unique indentifier value
      */
     public static String getUniqueIdentifier() {
-        if (getDefault() == null) {
-            // If the default instance is not yet initialized,
-            // return a static identifier. This identifier must
-            // match the plugin id defined in plugin.xml
-            return "com.cougaarsoftware.cougaar.ide.ui";
-        }
-
-        return getDefault().getDescriptor().getUniqueIdentifier();
+        return CougaarUIPlugin.getUniqueIdentifier();
     }
 
 
