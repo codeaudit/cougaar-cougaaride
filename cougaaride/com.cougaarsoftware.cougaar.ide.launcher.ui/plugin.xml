@@ -24,6 +24,7 @@
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="com.cougaarsoftware.cougaar.ide.core"/>
       <import plugin="com.cougaarsoftware.cougaar.ide.launcher.core"/>
+      <import plugin="org.eclipse.jdt.ui"/>
    </requires>
 
    <extension
