@@ -3,7 +3,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide.ui"
    name="%Plugin.name"
-   version="1.5.0"
+   version="1.5.1"
    provider-name="%Provider.name"
    class="com.cougaarsoftware.cougaar.ide.ui.CougaarUIPlugin">
 
@@ -26,6 +26,7 @@
       <import plugin="com.cougaarsoftware.cougaar.ide.core"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.ui.cheatsheets"/>
    </requires>
 
    <extension
@@ -130,6 +131,18 @@
             class="com.cougaarsoftware.cougaar.ide.ui.views.SocietyViewer"
             id="com.cougaarsoftware.cougaar.ide.ui.views.SocietyViewer">
       </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <category
+            id="com.cougaarsoftware.cougaar.ide.ui.category"
+            name="Cougaar Tutorials"/>
+      <cheatsheet
+            category="com.cougaarsoftware.cougaar.ide.ui.category"
+            composite="false"
+            contentFile="src/com/cougaarsoftware/cougaar/ide/ui/content.xml"
+            id="com.cougaarsoftware.cougaar.ide.ui.cheatsheet"
+            name="Cougaar Project Tutorial"/>
    </extension>
 
 </plugin>

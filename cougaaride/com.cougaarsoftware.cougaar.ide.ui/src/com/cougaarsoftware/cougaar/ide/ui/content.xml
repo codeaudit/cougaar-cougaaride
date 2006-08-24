@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Cougaar Society Tutorial">
+    <intro>
+        <description>This tutorial guides you through the creation of a simple Cougaar Society with
+            one agent and two plugins.</description>
+    </intro>
+    <item title="Open the Java Perspective">
+        <description>Select Window->Open Perspective->Java in the menubar at the top of the
+            workbench. This step changes the perspective to set up the Eclipse workbench for Java
+            development.</description>
+    </item>
+    <item title="Set up Cougaar Installation preferences." skip="true">
+        <description> The first thing you will need to do is tell Eclipse about the Cougaar
+            installations on your machine. If you have already set up your Cougaar Installations in
+            the Eclipse preferences you may skip this step by clicking the "Click to Skip" button.
+            This tutorial assumes you have already downloaded and installed Cougaar on your machine,
+            if not goto http://cougaar.org and follow the instructions for downloading and
+            installing Cougaar before continuing with this tutorial. If not, select
+            Windown->Preferences. This will bring up the Eclipse preferences window. Now select
+            "Cougaar Installations" and then click the "Add" button. Choose a name for your Cougaar
+            installation, i.e. 12_0, and then click the browse button and locate the base directory
+            of your Cougaar installation, i.e. /usr/local/cougaar. Click "OK" to close the Eclipse
+            preferences window. </description>
+    </item>
+    <item title="Create a Cougaar project" skip="true">
+        <description>The next thing you will need is a Cougaar Project. If you already have a
+            Cougaar project in your workspace that you would like to use, you may skip this step by
+            clicking the "Click to Skip" button. If not, select File->New->Project... and choose
+            Cougaar Project in the list. Complete the subsequent pages as required. Note, by default
+            eclipse will include the base directory of your project in the build path, since we will
+            need some configuration files it will be better to tell Eclipse to make a source folder,
+            i.e. src</description>
+    </item>
+    <item title="Create the Society.xml file">
+        <description>Cougaar Nodes and the Societies they are a part of are defined in XML
+            configuration files. In this step we will create a simple XML file that defines our
+            society. Create a new folder at the base of your project called "configs". We will use
+            Exercise1 from the Cougaar Tutorials project as our example, so copy Exercise1.xml from
+            the tutorials project and place it in the "configs" directory of your Cougaar project.
+        </description>
+    </item>
+    <item title="Create the plugins" skip="true">
+        <description>We need to get the plugins into your Cougaar project so either copy the source,
+            including the packages, from the Exercie1 solutions in the Cougaar Tutorials project
+            into the src directory of your Cougaar project. </description>
+    </item>
+    <item title="Create the library model classes">
+        <description>Now you should be set up for creating your library model. The library model
+            consists of three Java classes, a library class, a writer class and a book class. Use
+            the Java class wizard by selecting File ->New->Class. Repeat this for every
+        class.</description>
+    </item>
+    <item title="Package your classes into an archive">
+        <description>In the last step of this tutorial you will package the created classes into a
+            Java archive or JAR file. Therefore, right-click your Java project and select the
+            "Export..." action. In the wizard select "JAR file" and click the "Next" button. On the
+            next page specify a location and name for the JAR file and click "Finish". You have now
+            successfully created a little Java model and packaged that into a JAR
+        file.</description>
+    </item>
+</cheatsheet>

@@ -2,7 +2,7 @@
 <plugin
    id="com.cougaarsoftware.cougaar.ide"
    name="%pluginName"
-   version="1.5.0"
+   version="1.5.1"
    provider-name="%providerName">
 
 </plugin>
