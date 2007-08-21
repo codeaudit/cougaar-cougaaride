@@ -83,7 +83,7 @@ public abstract class AbstractLaunchConfigurationDelegate extends
         abort(
             MessageFormat
                 .format(
-                    LaunchingMessages.JavaLocalApplicationLaunchConfigurationDelegate_1,
+                    LaunchingMessages.JavaLocalApplicationLaunchConfigurationDelegate_Verifying_launch_attributes____1,
                     new String[] { vm.getName()}), null,
             IJavaLaunchConfigurationConstants.ERR_VM_RUNNER_DOES_NOT_EXIST); //$NON-NLS-1$
       } else {

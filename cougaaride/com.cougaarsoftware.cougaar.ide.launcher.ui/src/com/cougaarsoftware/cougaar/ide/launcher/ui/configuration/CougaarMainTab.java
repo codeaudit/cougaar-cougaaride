@@ -109,9 +109,10 @@ public class CougaarMainTab extends SharedJavaMainTab {
 		gd = new GridData();
 		fStopInMainCheckButton.setLayoutData(gd);
 		fStopInMainCheckButton.addSelectionListener(getDefaultListener());
-		createMainTypeEditor(comp, LauncherMessages.JavaMainTab_Main_cla_ss__4,
-				new Button[] { fSearchExternalJarsCheckButton,
-						fConsiderInheritedMainButton, fStopInMainCheckButton });
+		createMainTypeEditor(comp, LauncherMessages.JavaMainTab_Main_cla_ss__4);
+//		,
+//				new Button[] { fSearchExternalJarsCheckButton,
+//						fConsiderInheritedMainButton, fStopInMainCheckButton });
 
 	}
 
