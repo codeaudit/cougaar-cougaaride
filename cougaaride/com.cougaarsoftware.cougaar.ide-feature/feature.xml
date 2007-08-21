@@ -2,7 +2,7 @@
 <feature
       id="com.cougaarsoftware.cougaar.ide"
       label="Cougaar Integrated Development Environment"
-      version="1.5.1"
+      version="1.5.3"
       provider-name="Cougaar Software, Inc."
       nl="en"
       image="cougaar_logo.gif">
@@ -12,7 +12,7 @@
    </description>
 
    <copyright>
-      Copyright (C) 2003, Cougaar Software, Inc.
+      Copyright (C) 2003-2007, Cougaar Software, Inc.
    </copyright>
 
    <license url="LICENSE.txt">
@@ -56,7 +56,7 @@ Foundation
          id="com.cougaarsoftware.cougaar.ide"
          download-size="0"
          install-size="0"
-         version="1.5.1"/>
+         version="0.0.0"/>
 
    <plugin
          id="com.cougaarsoftware.cougaar.ide.core"
