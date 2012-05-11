@@ -138,7 +138,6 @@ public class CougaarVMArgumentsBlock extends VMArgumentsBlock {
     cougaarVMArgs += (ICougaarConstants.COUGAAR_HTTP_PORT + "8800 ");
     cougaarVMArgs += (ICougaarConstants.COUGAAR_HTTPS_PORT + "-1 ");
     cougaarVMArgs += (ICougaarConstants.COUGAAR_CLIENT_AUTH + "true ");
-    cougaarVMArgs += (ICougaarConstants.COUGAAR_XBOOT_CLASSPATH + cougaarHome + "/lib/javaiopatch.jar ");
     cougaarVMArgs += (ICougaarConstants.COUGAAR_CLASSPATH + cougaarHome + "/lib/bootstrap.jar ");
     return cougaarVMArgs;
   }
